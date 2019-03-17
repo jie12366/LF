@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>发布公告</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="../static/vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="../static/vendor/font-awesome/css/font-awesome.min.css">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="../static/css/fontastic.css">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="../static/css/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="../static/css/custom.css">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="../static/img/favicon.ico">
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <style>
+      .form-size{
+        padding-top: 50px;
+        margin: auto;
+        width: 500px;
+        height: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <!-- Main Navbar-->
+      <header th:replace="header::header"></header>
+      <div class="page-content d-flex align-items-stretch">
+        <nav class="side-navbar" th:fragment="navbar">
+          <!-- Sidebar Header-->
+          <div class="sidebar-header d-flex align-items-center">
+            <div class="avatar"><img src="../static/img/pikaqiu.jpg" alt="..." class="img-fluid rounded-circle"></div>
+            <div class="title">
+              <h1 class="h4">Monkey_jie</h1>
+              <p>管理员</p>
+            </div>
+          </div>
+          <!-- Sidebar Navidation Menus--><span class="heading">主目录</span>
+          <ul class="list-unstyled">
+            <li><a href="/admin"> <i class="icon-home"></i>主界面 </a></li>
+            <li class="active"><a href="/announce"> <i class="icon-padnote"></i>公告栏 </a></li>
+            <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>表格 </a>
+              <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
+                <li><a href="/table1">会员信息</a></li>
+                <li><a href="/table2">比赛报名</a></li>
+                <li><a href="/table3">招新报名</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+        <div class="content-inner">
+          <!-- Page Header-->
+          <header class="page-header">
+            <div class="container-fluid">
+              <h2 class="no-margin-bottom">新增公告</h2>
+            </div>
+          </header>
+          <!-- Breadcrumb-->
+          <div class="breadcrumb-holder container-fluid">
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/admin">主界面</a></li>
+              <li class="breadcrumb-item"><a href="/announce">公告栏 </a></li>
+              <li class="breadcrumb-item active">新增公告   </li>
+            </ul>
+          </div>
+          <!-- Forms Section-->
+          <div class="form-size">
+            <form action="/addContent" method="post">
+              <div class="form-group">
+                <label for="content" class="label-material">内容</label>
+                <input type="text" id="content" name="content" required data-msg="请输入内容" class="input-material">
+              </div>
+              <input type="submit" class="btn btn-primary" value="发布">
+            </form>
+          </div>
+          <!-- Page Footer-->
+          <footer class="main-footer">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6">
+                  <p>Copyright &copy; 2019.Company name All rights reserved.<a target="_blank" href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a></p>
+                </div>
+                <div class="col-sm-6 text-right">
+                  <p></p>
+                  <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
+                </div>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+    <!-- JavaScript files-->
+    <script src="../static/vendor/jquery/jquery.min.js"></script>
+    <script src="../static/vendor/popper.js/umd/popper.min.js"> </script>
+    <script src="../static/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../static/vendor/jquery.cookie/jquery.cookie.js"> </script>
+    <script src="../static/vendor/chart.js/Chart.min.js"></script>
+    <script src="../static/vendor/jquery-validation/jquery.validate.min.js"></script>
+    <!-- Main File-->
+    <script src="../static/js/front.js"></script>
+  </body>
+</html>
