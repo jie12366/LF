@@ -25,4 +25,32 @@ public interface AnnounceService {
      * @return List<Announce>
      */
     List<Announce> getAllResult();
+
+    /**
+     * 根据id获取记录
+     * @param id int
+     * @return Announce
+     */
+    Announce getAnnounceById(int id);
+
+    /**
+     * 根据id删除记录
+     * @param id int
+     * @return 删除是否成功
+     */
+    int deleteAnnounce(int id);
+
+    /**
+     * 根据id更新记录
+     * @param announce Announce
+     * @return 是否更新成功
+     */
+    int updateAnnounce(Announce announce);
+
+    /**
+     * 批量删除
+     * @param announces 传入的一组id
+     * @return 是否成功
+     */
+    int batchDelete(List<Announce> announces);
 }

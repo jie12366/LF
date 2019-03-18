@@ -28,7 +28,6 @@ public class AnnounceServiceImpl implements AnnounceService {
         Date date = new Date();
         Timestamp date1 = new Timestamp(date.getTime());
         announce.setDate(date1);
-        System.out.println(announce);
         if (announce != null){
             return announceMapper.save(announce.getContent(),announce.getDate());
         }
@@ -38,5 +37,37 @@ public class AnnounceServiceImpl implements AnnounceService {
     @Override
     public List<Announce> getAllResult(){
          return announceMapper.getAllResult();
+    }
+
+    @Override
+    public Announce getAnnounceById(int id){
+        if(id > 0){
+            return announceMapper.getAnnounceById(id);
+        }
+        return null;
+    }
+
+    @Override
+    public int deleteAnnounce(int id){
+        if(id > 0){
+            return announceMapper.deleteAnnounce(id);
+        }
+        return 0;
+    }
+
+    @Override
+    public int batchDelete(List<Announce> announces){
+        return announceMapper.batchDelete(announces);
+    }
+
+    @Override
+    public int updateAnnounce(Announce announce){
+        Date date = new Date();
+        Timestamp date2 = new Timestamp(date.getTime());
+        announce.setDate(date2);
+        if(announce != null){
+            return announceMapper.updateAnnounce(announce.getContent(),announce.getDate(),announce.getId());
+        }
+        return 0;
     }
 }

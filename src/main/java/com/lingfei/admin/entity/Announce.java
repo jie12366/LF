@@ -25,7 +25,7 @@ public class Announce extends BaseModel {
     @Column(name = "id",type = MySqlTypeConstant.INT, length = 10,isKey = true,isAutoIncrement = true)
     private int id;
 
-    @Column(name = "content",type = MySqlTypeConstant.VARCHAR,length = 200)
+    @Column(name = "content",type = MySqlTypeConstant.VARCHAR,length = 400)
     private String content;
 
     @Column(name = "date",type = MySqlTypeConstant.DATETIME)
