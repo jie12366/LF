@@ -7,6 +7,8 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="../static/css/custom.css">
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="../static/vendor/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome CSS-->
@@ -17,8 +19,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
     <!-- theme stylesheet-->
     <link rel="stylesheet" href="../static/css/style.default.css" id="theme-stylesheet">
-    <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="../static/css/custom.css">
     <!-- Favicon-->
     <link rel="shortcut icon" href="../static/img/favicon.ico">
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
@@ -56,7 +56,7 @@
                     <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
                         <li><a href="/table1">会员信息</a></li>
                         <li><a href="/table2">比赛报名</a></li>
-                        <li><a href="/table3">招新报名</a></li>
+                        <li><a href="/table3">预约记录</a></li>
                     </ul>
                 </li>
             </ul>
@@ -83,7 +83,7 @@
                             <div class="dropdown">
                                 <button type="button" id="closeCard3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
                                 <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow">
-                                    <a href="#" class="dropdown-item"> <i class="fa fa-mail-forward"></i>导出</a>
+                                    <a href="/getExcel" class="dropdown-item"> <i class="fa fa-mail-forward"></i>导出</a>
                                     <a href="/form" class="dropdown-item"> <i class="fa fa-plus"></i>增加</a>
                                     <button onclick="DelSelect()" class="dropdown-item button-color"><i class="fa fa-times"></i>&nbsp;&nbsp;&nbsp;删除</button>
                                 </div>
@@ -132,45 +132,7 @@
     </div>
 </div>
 <!-- JavaScript files-->
-<script>
-    //全选
-    function ckAll(){
-        var flag=document.getElementById("allChecks").checked;
-        var cks=document.getElementsByName("check");
-        for(var i = 0;i<cks.length;i++){
-            cks[i].checked=flag;
-        }
-    }
-
-    //批量删除
-    function DelSelect() {
-        var Checkbox = false;
-        $("input[name='check']").each(function() {
-            if (this.checked == true) {
-                Checkbox = true;
-            }
-        });
-        if (Checkbox) {
-            var t = confirm("您确认要删除选中的内容吗？");
-            if (t == false) {
-                return false;
-            } else {
-                var checkedID="";
-                $("input[name='check']").each(function() {
-                    if (this.checked == true) {
-                        checkedID += this.value + ",";
-
-                    }
-                });
-                checkedID = checkedID.substring(0,checkedID.length-1);
-                window.location.replace("/deleteContent?id="+checkedID);
-            }
-        } else {
-            alert("请选择您要删除的内容!");
-            return false;
-        }
-    }
-</script>
+<script src="../static/js/my.js"></script>
 <script src="../static/vendor/jquery/jquery.min.js"></script>
 <script src="../static/vendor/popper.js/umd/popper.min.js"> </script>
 <script src="../static/vendor/bootstrap/js/bootstrap.min.js"></script>
