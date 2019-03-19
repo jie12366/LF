@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>编辑公告</title>
+    <title>群发邮件</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
@@ -43,7 +43,7 @@
             <!-- Page Header-->
             <header class="page-header">
                 <div class="container-fluid">
-                    <h2 class="no-margin-bottom">编辑公告</h2>
+                    <h2 class="no-margin-bottom">邮件发送</h2>
                 </div>
             </header>
             <!-- Breadcrumb-->
@@ -51,18 +51,21 @@
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/admin">主界面</a></li>
                     <li class="breadcrumb-item"><a href="/announce">公告栏 </a></li>
-                    <li class="breadcrumb-item active">编辑公告   </li>
+                    <li class="breadcrumb-item active">群发邮件   </li>
                 </ul>
             </div>
             <!-- Forms Section-->
             <div class="form-size">
-                <form action="/updateContent" method="post">
+                <form action="/addEmail" method="post">
                     <div class="form-group">
-                        <label for="content" class="label-material">内容(两百字以内)</label>
-                        <input type="text" id="content" name="content" th:value="${announce.content}" class="input-material">
-                        <input type="hidden" name="id" th:value="${announce.id}">
+                        <label for="email-theme">主题</label>
+                        <input id="email-theme" type="text" name="theme" required data-msg="请输入主题" class="input-material">
                     </div>
-                    <input type="submit" class="btn btn-primary" value="提交修改">
+                    <div class="form-group purple-border">
+                        <label for="content">内容(一百字以内)</label>
+                        <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="发送">
                 </form>
             </div>
             <!-- Page Footer-->

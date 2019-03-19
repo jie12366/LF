@@ -5,13 +5,19 @@ import com.github.pagehelper.PageInfo;
 import com.lingfei.admin.entity.Announce;
 import com.lingfei.admin.service.impl.AnnounceServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.MailMessage;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,6 +109,38 @@ public class AdminManageControl {
      */
     @GetMapping("/admin")
     public String index(){
+        return "admin";
+    }
+
+    @GetMapping("/toEmail")
+    public String toEmail(){
+        return "sendEmail";
+    }
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @PostMapping("/addEmail")
+    public String  addEmail(HttpServletRequest request) throws Exception{
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message,true);
+
+        String[] emails = new String[100];
+
+        String theme = request.getParameter("theme");
+        String text = request.getParameter("content");
+
+        System.out.println(theme + text);
+
+        helper.setFrom("2263509062@qq.com");
+        helper.setTo("1937084278@qq.com");
+        /*message.setTo(emails);*/
+        helper.setSubject(theme);
+        helper.setText(text);
+
+        System.out.println(message);
+
+        mailSender.send(message);
         return "admin";
     }
 }

@@ -39,28 +39,7 @@
     <!-- Main Navbar-->
     <header th:replace="header::header"></header>
     <div class="page-content d-flex align-items-stretch">
-        <nav class="side-navbar" th:fragment="navbar">
-            <!-- Sidebar Header-->
-            <div class="sidebar-header d-flex align-items-center">
-                <div class="avatar"><img src="../static/img/pikaqiu.jpg" alt="..." class="img-fluid rounded-circle"></div>
-                <div class="title">
-                    <h1 class="h4">Monkey_jie</h1>
-                    <p>管理员</p>
-                </div>
-            </div>
-            <!-- Sidebar Navidation Menus--><span class="heading">主目录</span>
-            <ul class="list-unstyled">
-                <li><a href="/admin"> <i class="icon-home"></i>主界面 </a></li>
-                <li class="active"><a href="/announce"> <i class="icon-padnote"></i>公告栏 </a></li>
-                <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>表格 </a>
-                    <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
-                        <li><a href="/table1">会员信息</a></li>
-                        <li><a href="/table2">比赛报名</a></li>
-                        <li><a href="/table3">预约记录</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
+        <nav th:replace="navbar2::navbar2"></nav>
         <div class="content-inner">
             <!-- Page Header-->
             <header class="page-header">
@@ -83,9 +62,10 @@
                             <div class="dropdown">
                                 <button type="button" id="closeCard3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
                                 <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow">
-                                    <a href="/getExcel" class="dropdown-item"> <i class="fa fa-mail-forward"></i>导出</a>
+                                    <a href="/getExcel1" class="dropdown-item"> <i class="fa fa-mail-forward"></i>导出</a>
                                     <a href="/form" class="dropdown-item"> <i class="fa fa-plus"></i>增加</a>
                                     <button onclick="DelSelect()" class="dropdown-item button-color"><i class="fa fa-times"></i>&nbsp;&nbsp;&nbsp;删除</button>
+                                    <a href="/toEmail" class="dropdown-item"> <i class="fa fa-envelope-o"></i>邮件</a>
                                 </div>
                             </div>
                         </div>
