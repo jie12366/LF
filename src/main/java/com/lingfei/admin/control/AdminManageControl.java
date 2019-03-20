@@ -3,21 +3,16 @@ package com.lingfei.admin.control;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lingfei.admin.entity.Announce;
+import com.lingfei.admin.entity.User;
 import com.lingfei.admin.service.impl.AnnounceServiceImpl;
+import com.lingfei.admin.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.MailMessage;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMailMessage;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +40,7 @@ public class AdminManageControl {
         List<Announce> lists =  announceService.getAllResult();
         PageInfo<Announce> pageInfo = new PageInfo<>(lists);
         model.addAttribute("pages",pageInfo);
-        return "announce";
+        return "announce/announce";
     }
 
     /**
@@ -70,7 +65,7 @@ public class AdminManageControl {
         Announce announce = announceService.getAnnounceById(id);
         if(announce != null){
             model.addAttribute("announce",announce);
-            return "editContent";
+            return "announce/editContent";
         }
         return "redirect:announce";
     }
@@ -114,33 +109,43 @@ public class AdminManageControl {
 
     @GetMapping("/toEmail")
     public String toEmail(){
-        return "sendEmail";
+        return "announce/sendEmail";
     }
 
-    @Autowired
-    private JavaMailSender mailSender;
-
-    @PostMapping("/addEmail")
+    @RequestMapping("/addEmail")
     public String  addEmail(HttpServletRequest request) throws Exception{
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message,true);
-
-        String[] emails = new String[100];
 
         String theme = request.getParameter("theme");
         String text = request.getParameter("content");
-
-        System.out.println(theme + text);
-
-        helper.setFrom("2263509062@qq.com");
-        helper.setTo("1937084278@qq.com");
-        /*message.setTo(emails);*/
-        helper.setSubject(theme);
-        helper.setText(text);
-
-        System.out.println(message);
-
-        mailSender.send(message);
+        HttpSession session = request.getSession();
+        String emails = session.getAttribute("tos").toString();
+        String[] to = emails.split(",");
+        announceService.sendEmail(theme,text,to);
         return "admin";
+    }
+
+    @Autowired
+    private UserServiceImpl userService;
+
+    @GetMapping("/selectUser")
+    public String selectUser(Model model, @RequestParam(value = "start",defaultValue = "1") int start, @RequestParam(value = "size",defaultValue = "5") int size){
+        List<User> users = userService.listUser();
+        PageHelper.startPage(start,size,"id asc");
+        PageInfo<User> pageInfo = new PageInfo<>(users);
+        model.addAttribute("pages",pageInfo);
+        return "announce/selectUser";
+    }
+
+    @GetMapping("/getSelect")
+    public String getSelect(String id, HttpSession session){
+        String[] ids = id.split(",");
+        StringBuilder sb = new StringBuilder();
+        for(String id1 : ids){
+            int id2 = Integer.parseInt(id1);
+            sb.append(userService.getUser(id2).getEmail()).append(",");
+        }
+        String  emails = sb.toString().substring(0,sb.length() - 1);
+        session.setAttribute("tos",emails);
+        return "announce/sendEmail";
     }
 }

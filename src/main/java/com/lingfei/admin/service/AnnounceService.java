@@ -53,4 +53,12 @@ public interface AnnounceService {
      * @return 是否成功
      */
     int batchDelete(List<Announce> announces);
+
+    /**
+     * 群发邮件的接口
+     * @param tos 群发对象
+     * @param theme 邮件主题
+     * @param content 邮件内容
+     */
+    void sendEmail(String theme,String content,String... tos);
 }

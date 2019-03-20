@@ -51,25 +51,21 @@ public class AdminLoginControl {
 
     @GetMapping("/form")
     public String forms(){
-        return "forms";
+        return "announce/forms";
     }
 
     /**
      * 转到三个表
      * @return 表的路径
      */
-    @GetMapping("/table1")
-    public String table1(){
-        return "table1";
-    }
 
     @GetMapping("/table2")
     public String table2(){
-        return "table2";
+        return "table2/table2";
     }
 
     @GetMapping("/table3")
     public String table3(){
-        return "table3";
+        return "table3/table3";
     }
 }

@@ -4,6 +4,8 @@ import com.lingfei.admin.entity.Announce;
 import com.lingfei.admin.mapper.AnnounceMapper;
 import com.lingfei.admin.service.AnnounceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +59,7 @@ public class AnnounceServiceImpl implements AnnounceService {
 
     @Override
     public int batchDelete(List<Announce> announces){
-        return announceMapper.batchDelete(announces);
+        return announceMapper.batchDeleteAnnounce(announces);
     }
 
     @Override
@@ -69,5 +71,20 @@ public class AnnounceServiceImpl implements AnnounceService {
             return announceMapper.updateAnnounce(announce.getContent(),announce.getDate(),announce.getId());
         }
         return 0;
+    }
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Override
+    public void sendEmail(String theme,String content,String... tos){
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setFrom("2263509062@qq.com");
+        message.setTo(tos);
+        message.setSubject(theme);
+        message.setText(content);
+
+        mailSender.send(message);
     }
 }

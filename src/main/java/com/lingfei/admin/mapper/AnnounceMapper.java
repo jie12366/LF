@@ -53,8 +53,8 @@ public interface AnnounceMapper {
      * @param announces 一组记录
      * @return 是否成功
      */
-    @DeleteProvider(type = Provide.class,method = "batchDelete")
-    int batchDelete(List<Announce> announces);
+    @DeleteProvider(type = Provide.class,method = "batchDeleteAnnounce")
+    int batchDeleteAnnounce(List<Announce> announces);
 
     /**
      * 根据id更新记录
@@ -64,5 +64,5 @@ public interface AnnounceMapper {
      * @return 是否更新成功
      */
     @Update("update announce set content = #{content},date = #{date} where id = #{id}")
-    int updateAnnounce(@Param("content") String content,@Param("date") Timestamp date,@Param("id") int id);
+    int updateAnnounce(String content,Timestamp date,int id);
 }
