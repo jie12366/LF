@@ -3,9 +3,12 @@ package com.lingfei.admin.control;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lingfei.admin.entity.Announce;
+import com.lingfei.admin.entity.CountVisitor;
 import com.lingfei.admin.entity.User;
+import com.lingfei.admin.service.VisitorService;
 import com.lingfei.admin.service.impl.AnnounceServiceImpl;
 import com.lingfei.admin.service.impl.UserServiceImpl;
+import com.lingfei.admin.service.impl.VisitorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -98,20 +101,50 @@ public class AdminManageControl {
         return "redirect:announce";
     }
 
+    @Autowired
+    VisitorServiceImpl visitorService;
     /**
      * 直接跳转
      * @return admin.html
      */
     @GetMapping("/admin")
-    public String index(){
+    public String index(Model model){
+        CountVisitor visitor = visitorService.getVisitorByDate();
+        int totalVisitor = visitorService.getAllVisitor();
+        int totalUser = userService.listUser().size();
+        if(visitor == null){
+            model.addAttribute("visitor",0);
+        }else {
+            model.addAttribute("visitor",visitor.getVisitor());
+        }
+        if (totalVisitor == 0){
+            model.addAttribute("totalVisitor",0);
+        }else {
+            model.addAttribute("totalVisitor",totalVisitor);
+        }
+        if(totalUser == 0){
+            model.addAttribute("totalUser",0);
+        }else {
+            model.addAttribute("totalUser",totalUser);
+        }
         return "admin";
     }
 
+    /**
+     * 直接跳转
+     * @return sendEmail.html
+     */
     @GetMapping("/toEmail")
     public String toEmail(){
         return "announce/sendEmail";
     }
 
+    /**
+     * 添加发送邮件的信息
+     * @param request HttpServletRequest
+     * @return 服务端跳转到/announce
+     * @throws Exception
+     */
     @RequestMapping("/addEmail")
     public String  addEmail(HttpServletRequest request) throws Exception{
 
@@ -121,12 +154,19 @@ public class AdminManageControl {
         String emails = session.getAttribute("tos").toString();
         String[] to = emails.split(",");
         announceService.sendEmail(theme,text,to);
-        return "admin";
+        return "redirect:announce";
     }
 
     @Autowired
     private UserServiceImpl userService;
 
+    /**
+     * 选择要群发邮件的对象
+     * @param model Model
+     * @param start 开始页
+     * @param size 每页的大小
+     * @return selectUser.html
+     */
     @GetMapping("/selectUser")
     public String selectUser(Model model, @RequestParam(value = "start",defaultValue = "1") int start, @RequestParam(value = "size",defaultValue = "5") int size){
         List<User> users = userService.listUser();
@@ -136,6 +176,12 @@ public class AdminManageControl {
         return "announce/selectUser";
     }
 
+    /**
+     * 获取要刚刚选择的群发的对象
+     * @param id int
+     * @param session HttpSession
+     * @return sendEmail.html
+     */
     @GetMapping("/getSelect")
     public String getSelect(String id, HttpSession session){
         String[] ids = id.split(",");

@@ -66,37 +66,37 @@
                 <!-- Item -->
                 <div class="col-xl-3 col-sm-6">
                   <div class="item d-flex align-items-center">
-                    <div class="icon bg-violet"><i class="icon-user"></i></div>
-                    <div class="title"><span>新<br>用户</span>
+                    <div class="icon bg-violet"><i class="icon-bill"></i></div>
+                    <div class="title"><span>浏览<br>总量</span>
                       <div class="progress">
-                        <div role="progressbar" style="width: 0%; height: 4px;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"></div>
+                        <div role="progressbar" style="width: 15%; height: 4px;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"></div>
                       </div>
                     </div>
-                    <div class="number"><strong>0</strong></div>
+                    <div class="number"><strong th:text="${totalVisitor}"></strong></div>
                   </div>
                 </div>
                 <!-- Item -->
                 <div class="col-xl-3 col-sm-6">
                   <div class="item d-flex align-items-center">
                     <div class="icon bg-red"><i class="icon-padnote"></i></div>
-                    <div class="title"><span>浏览<br>量</span>
+                    <div class="title"><span>今日<br>访客</span>
                       <div class="progress">
-                        <div role="progressbar" style="width: 0%; height: 4px;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div>
+                        <div role="progressbar" style="width: 15%; height: 4px;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div>
                       </div>
                     </div>
-                    <div class="number"><strong>0</strong></div>
+                    <div class="number"><strong th:text="${visitor}"></strong></div>
                   </div>
                 </div>
                 <!-- Item -->
                 <div class="col-xl-3 col-sm-6">
                   <div class="item d-flex align-items-center">
-                    <div class="icon bg-green"><i class="icon-bill"></i></div>
+                    <div class="icon bg-green"><i class="icon-user"></i></div>
                     <div class="title"><span>用户<br>总数</span>
                       <div class="progress">
-                        <div role="progressbar" style="width: 0%; height: 4px;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-green"></div>
+                        <div role="progressbar" style="width: 12%; height: 4px;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-green"></div>
                       </div>
                     </div>
-                    <div class="number"><strong>0</strong></div>
+                    <div class="number"><strong th:text="${totalUser}"></strong></div>
                   </div>
                 </div>
                 <!-- Item -->

@@ -5,6 +5,8 @@ import com.lingfei.admin.entity.Admin;
 import com.lingfei.admin.service.LoginService;
 import com.lingfei.admin.utils.GetMd5;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,12 +15,14 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
+@CacheConfig
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private AdminMapper adminMapper;
 
     @Override
+    @Cacheable
     public Admin returnResult(){
         return adminMapper.returnResult();
     }

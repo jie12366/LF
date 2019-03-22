@@ -107,7 +107,7 @@
                                         </table>
                                         <!--实现分页,page.pageNum是当前页数，page.pages是总页数-->
                                         <div>
-                                            <a th:href="@{/announce(start = 1)}">首页</a>
+                                            <a th:href="@{/table1(start = 1)}">首页</a>
                                             <a th:href="@{/table1(start = ${pages.pageNum - 1})}">上一页</a>
                                             <a th:href="@{/table1(start = ${pages.pageNum + 1})}">下一页</a>
                                             <a th:href="@{/table1(start = ${pages.pages})}">尾页</a>

@@ -4,6 +4,10 @@ import com.lingfei.admin.entity.Announce;
 import com.lingfei.admin.mapper.AnnounceMapper;
 import com.lingfei.admin.service.AnnounceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,7 @@ import java.util.List;
  */
 
 @Service
+@CacheConfig
 public class AnnounceServiceImpl implements AnnounceService {
 
     @Autowired
@@ -26,6 +31,7 @@ public class AnnounceServiceImpl implements AnnounceService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
+    @Cacheable(cacheNames = "announce")
     public int save(Announce announce){
         Date date = new Date();
         Timestamp date1 = new Timestamp(date.getTime());
@@ -37,11 +43,13 @@ public class AnnounceServiceImpl implements AnnounceService {
     }
 
     @Override
+    @Cacheable(cacheNames = "announce")
     public List<Announce> getAllResult(){
          return announceMapper.getAllResult();
     }
 
     @Override
+    @Cacheable(cacheNames = "announce")
     public Announce getAnnounceById(int id){
         if(id > 0){
             return announceMapper.getAnnounceById(id);
@@ -50,6 +58,7 @@ public class AnnounceServiceImpl implements AnnounceService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "announce")
     public int deleteAnnounce(int id){
         if(id > 0){
             return announceMapper.deleteAnnounce(id);
@@ -58,11 +67,13 @@ public class AnnounceServiceImpl implements AnnounceService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "announce")
     public int batchDelete(List<Announce> announces){
         return announceMapper.batchDeleteAnnounce(announces);
     }
 
     @Override
+    @CachePut(cacheNames = "announce")
     public int updateAnnounce(Announce announce){
         Date date = new Date();
         Timestamp date2 = new Timestamp(date.getTime());

@@ -1,10 +1,15 @@
 package com.lingfei.admin.control;
 
 import com.lingfei.admin.entity.Admin;
+import com.lingfei.admin.entity.CountVisitor;
 import com.lingfei.admin.service.impl.LoginServiceImpl;
+import com.lingfei.admin.service.impl.UserServiceImpl;
+import com.lingfei.admin.service.impl.VisitorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -19,6 +24,10 @@ public class AdminLoginControl {
 
     @Autowired
     LoginServiceImpl loginService;
+    @Autowired
+    VisitorServiceImpl visitorService;
+    @Autowired
+    UserServiceImpl userService;
 
     /**
      * 直接跳转
@@ -34,11 +43,17 @@ public class AdminLoginControl {
      * @param admin com.lingfei.admin.entity.Admin
      * @return 如果信息验证无误就跳转到admin.html，如果有误就服务端跳转login.html
      */
-    @RequestMapping("/")
-    public String loginIn(Admin admin, HttpSession session){
+    @PostMapping("/")
+    public String loginIn(Admin admin, HttpSession session, Model model){
         if(loginService.adminLogin(admin)){
             session.setAttribute("user",admin.getUserName());
-            return "admin";
+            System.out.println(visitorService.getVisitorByDate());
+            if(visitorService.getVisitorByDate() == null) {
+                visitorService.saveVisitor();
+            }else {
+                visitorService.updateVisitor();
+            }
+            return "redirect:admin";
         }
         return "redirect:adminLogin";
     }

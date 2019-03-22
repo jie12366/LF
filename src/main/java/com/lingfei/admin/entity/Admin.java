@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @author 熊义杰
  * @date 2019-3-16
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "admin")
-public class Admin extends BaseModel {
+public class Admin extends BaseModel implements Serializable {
 
     @Column(name = "userName",type = MySqlTypeConstant.VARCHAR,length = 10)
     private String userName;
