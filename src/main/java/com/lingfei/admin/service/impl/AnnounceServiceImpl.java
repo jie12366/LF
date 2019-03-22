@@ -43,7 +43,6 @@ public class AnnounceServiceImpl implements AnnounceService {
     }
 
     @Override
-    @Cacheable(cacheNames = "announce")
     public List<Announce> getAllResult(){
          return announceMapper.getAllResult();
     }

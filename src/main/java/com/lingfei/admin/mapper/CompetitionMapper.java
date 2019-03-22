@@ -1,6 +1,7 @@
 package com.lingfei.admin.mapper;
 
 import com.lingfei.admin.entity.Competition;
+import com.lingfei.admin.utils.Provide;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -59,5 +60,11 @@ public interface CompetitionMapper {
     @Delete("delete from competition where id=#{id}")
     int deleteCompetition(int id);
 
-
+    /**
+     * 批量删除
+     * @param competitions Competition
+     * @return 是否删除成功
+     */
+    @DeleteProvider(type = Provide.class,method = "batchDeleteCompetition")
+    int batchDeleteCompetition(List<Competition> competitions);
 }

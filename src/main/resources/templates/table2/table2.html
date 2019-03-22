@@ -64,7 +64,7 @@
                                         <button type="button" id="closeCard4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
                                         <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow">
                                             <a href="/getExcel3" class="dropdown-item"> <i class="fa fa-mail-forward"></i>导出</a>
-                                            <button onclick="DelSelect()" class="dropdown-item button-color"><i class="fa fa-times"></i>&nbsp;&nbsp;&nbsp;删除</button>
+                                            <button onclick="DelSelect3()" class="dropdown-item button-color"><i class="fa fa-times"></i>&nbsp;&nbsp;&nbsp;删除</button>
                                         </div>
                                     </div>
                                 </div>
@@ -82,17 +82,28 @@
                                                 <th>班级</th>
                                                 <th>QQ</th>
                                                 <th>电话</th>
+                                                <th>编辑</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <!--<th scope="row">1</th>
-                                                <td>Mark</td>
-                                                <td>Otto</td>
-                                                <td>@mdo</td>-->
+                                            <tr th:each="competition:${pages.list}">
+                                                <td style="CURSOR: hand; HEIGHT: 10px" align="center" width="4"><input type="checkbox" th:value="${competition.id}" id="check" value="" name="check"> </td>
+                                                <td th:text="${competition.id}"></td>
+                                                <td th:text="${competition.name}"></td>
+                                                <td th:text="${competition.stuClass}"></td>
+                                                <td th:text="${competition.qq}"></td>
+                                                <td th:text="${competition.phone}"></td>
+                                                <td><a th:href="@{/editCompetition(id=${competition.id})}">编辑</a></td>
                                             </tr>
                                             </tbody>
                                         </table>
+                                        <!--实现分页,page.pageNum是当前页数，page.pages是总页数-->
+                                        <div>
+                                            <a th:href="@{/table2(start = 1)}">首页</a>
+                                            <a th:href="@{/table2(start = ${pages.pageNum - 1})}">上一页</a>
+                                            <a th:href="@{/table2(start = ${pages.pageNum + 1})}">下一页</a>
+                                            <a th:href="@{/table2(start = ${pages.pages})}">尾页</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -106,7 +117,44 @@
     </div>
 </div>
 <!-- JavaScript files-->
-<script src="../../static/js/my.js"></script>
+<script>
+    //全选
+    function ckAll(){
+        var flag=document.getElementById("allChecks").checked;
+        var cks=document.getElementsByName("check");
+        for(var i = 0;i<cks.length;i++){
+            cks[i].checked=flag;
+        }
+    }
+    //批量删除user
+    function DelSelect3() {
+        var Checkbox = false;
+        $("input[name='check']").each(function() {
+            if (this.checked == true) {
+                Checkbox = true;
+            }
+        });
+        if (Checkbox) {
+            var t = confirm("您确认要删除选中的内容吗？");
+            if (t == false) {
+                return false;
+            } else {
+                var checkedID="";
+                $("input[name='check']").each(function() {
+                    if (this.checked == true) {
+                        checkedID += this.value + ",";
+
+                    }
+                });
+                checkedID = checkedID.substring(0,checkedID.length-1);
+                window.location.replace("/deleteCompetition?id="+checkedID);
+            }
+        } else {
+            alert("请选择您要删除的内容!");
+            return false;
+        }
+    }
+</script>
 <script src="../../static/vendor/jquery/jquery.min.js"></script>
 <script src="../../static/vendor/popper.js/umd/popper.min.js"> </script>
 <script src="../../static/vendor/bootstrap/js/bootstrap.min.js"></script>

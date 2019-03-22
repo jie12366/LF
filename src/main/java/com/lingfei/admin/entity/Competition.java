@@ -3,10 +3,13 @@ package com.lingfei.admin.entity;
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
+import com.gitee.sunchenbin.mybatis.actable.command.BaseModel;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  * @author www.xyjz123.xyz
@@ -17,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="competition")
-public class Competition {
+public class Competition extends BaseModel implements Serializable {
 
     @Excel(name = "序号",orderNum = "0")
     @Column(name = "id",type = MySqlTypeConstant.INT,isKey = true,isAutoIncrement = true,length = 5)

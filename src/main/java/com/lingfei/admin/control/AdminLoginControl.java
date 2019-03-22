@@ -74,11 +74,6 @@ public class AdminLoginControl {
      * @return 表的路径
      */
 
-    @GetMapping("/table2")
-    public String table2(){
-        return "table2/table2";
-    }
-
     @GetMapping("/table3")
     public String table3(){
         return "table3/table3";

@@ -13,7 +13,7 @@ import java.util.Map;
  * @author www.xyjz123.xyz
  * @date 2019/3/18 14:01
  */
-public class Provide{
+public class Provide {
 
     /**
      * 批量增加
@@ -37,14 +37,13 @@ public class Provide{
     }
 
     /**
-     * 批量删除announce表
-     * @param maps Map
-     * @return 批量删除的Sql语句
+     * 批量删除的模板
+     * @param map Map
+     * @return 模板Sql
      */
-    public String batchDeleteAnnounce(Map maps) {
-        List<Announce> students = (List<Announce>) maps.get("list");
+    public String batchDelete(Map map){
+        List<Announce> students = (List<Announce>) map.get("list");
         StringBuffer sbs = new StringBuffer();
-        sbs.append("delete from announce where id in (");
         for (int i = 0; i < students.size(); i++) {
             sbs.append("'").append(students.get(i).getId()).append("'");
             if (i < students.size() - 1) {
@@ -56,22 +55,39 @@ public class Provide{
     }
 
     /**
+     * 批量删除announce表
+     * @param maps Map
+     * @return 批量删除的Sql语句
+     */
+    public String batchDeleteAnnounce(Map maps) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("delete from announce where id in (");
+        sb.append(batchDelete(maps));
+        return sb.toString();
+    }
+
+    /**
      * 批量删除user表
      * @param map Map
      * @return 批量删除的Sql语句
      */
     public String batchDeleteUser(Map map) {
-        List<User> users = (List<User>) map.get("list");
         StringBuffer sb = new StringBuffer();
         sb.append("delete from user where id in (");
-        for (int i = 0; i < users.size(); i++) {
-            sb.append("'").append(users.get(i).getId()).append("'");
-            if (i < users.size() - 1) {
-                sb.append(",");
-            }
-        }
-        sb.append(")");
+        sb.append(batchDelete(map));
         return sb.toString();
+    }
+
+    /**
+     * 批量删除competition表
+     * @param map Map
+     * @return 批量删除的sql语句
+     */
+    public String batchDeleteCompetition(Map map){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("delete from competition where id in (");
+        stringBuilder.append(batchDelete(map));
+        return stringBuilder.toString();
     }
 
     /**

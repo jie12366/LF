@@ -1,8 +1,10 @@
 package com.lingfei.admin.control;
 
 import com.lingfei.admin.entity.Announce;
+import com.lingfei.admin.entity.Competition;
 import com.lingfei.admin.entity.User;
 import com.lingfei.admin.service.impl.AnnounceServiceImpl;
+import com.lingfei.admin.service.impl.CompetitionServiceImpl;
 import com.lingfei.admin.service.impl.UserServiceImpl;
 import com.lingfei.admin.utils.ExcelUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,14 +50,17 @@ public class AdminExcelControl {
         ExcelUtils.exportExcel(users,"成员信息表","jie",User.class,"会员信息表.xls",response);
     }
 
-    /*@GetMapping("/getExcel3")
+    @Autowired
+    CompetitionServiceImpl competitionService;
+
+    @GetMapping("/getExcel3")
     public void export3(HttpServletResponse response){
-        List<Announce> announces = announceService.getAllResult();
+        List<Competition> competitions = competitionService.listCompetition();
         //导出到Excel
-        ExcelUtils.exportExcel(announces,"公告记录","jie",Announce.class,"测试.xls",response);
+        ExcelUtils.exportExcel(competitions,"报名表","jie",Competition.class,"报名表.xls",response);
     }
 
-    @GetMapping("/getExcel4")
+    /*@GetMapping("/getExcel4")
     public void export4(HttpServletResponse response){
         List<Announce> announces = announceService.getAllResult();
         //导出到Excel

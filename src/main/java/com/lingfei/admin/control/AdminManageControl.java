@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import com.lingfei.admin.entity.Announce;
 import com.lingfei.admin.entity.CountVisitor;
 import com.lingfei.admin.entity.User;
-import com.lingfei.admin.service.VisitorService;
 import com.lingfei.admin.service.impl.AnnounceServiceImpl;
 import com.lingfei.admin.service.impl.UserServiceImpl;
 import com.lingfei.admin.service.impl.VisitorServiceImpl;
@@ -104,7 +103,7 @@ public class AdminManageControl {
     @Autowired
     VisitorServiceImpl visitorService;
     /**
-     * 直接跳转
+     * 直接跳转,并设置访客数以及浏览数
      * @return admin.html
      */
     @GetMapping("/admin")
@@ -177,7 +176,7 @@ public class AdminManageControl {
     }
 
     /**
-     * 获取要刚刚选择的群发的对象
+     * 获取刚刚选择的群发的对象
      * @param id int
      * @param session HttpSession
      * @return sendEmail.html

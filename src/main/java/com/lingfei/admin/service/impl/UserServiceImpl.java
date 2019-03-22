@@ -24,7 +24,6 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Override
-    @Cacheable(cacheNames = "user")
     public List<User> listUser(){
         return userMapper.listUser();
     }
