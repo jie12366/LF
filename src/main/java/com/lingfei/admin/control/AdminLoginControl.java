@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
  */
 
 @Controller
+@RequestMapping("/admin")
 public class AdminLoginControl {
 
     @Autowired
@@ -33,7 +34,7 @@ public class AdminLoginControl {
      * 直接跳转
      * @return login.html
      */
-    @GetMapping("/adminLogin")
+    @GetMapping("/login")
     public String login(){
         return "adminLogin";
     }
@@ -44,24 +45,23 @@ public class AdminLoginControl {
      * @return 如果信息验证无误就跳转到admin.html，如果有误就服务端跳转login.html
      */
     @PostMapping("/")
-    public String loginIn(Admin admin, HttpSession session, Model model){
+    public String loginIn(Admin admin, HttpSession session){
         if(loginService.adminLogin(admin)){
-            session.setAttribute("user",admin.getUserName());
-            System.out.println(visitorService.getVisitorByDate());
+            session.setAttribute("admin",admin.getUserName());
             if(visitorService.getVisitorByDate() == null) {
                 visitorService.saveVisitor();
             }else {
                 visitorService.updateVisitor();
             }
-            return "redirect:admin";
+            return "redirect:index";
         }
-        return "redirect:adminLogin";
+        return "redirect:login";
     }
 
     @GetMapping("/loginOut")
     public String loginOut(HttpSession session){
-        session.removeAttribute("user");
-        return "/adminLogin";
+        session.removeAttribute("admin");
+        return "adminLogin";
     }
 
     @GetMapping("/form")

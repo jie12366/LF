@@ -48,7 +48,6 @@ public class AnnounceServiceImpl implements AnnounceService {
     }
 
     @Override
-    @Cacheable(cacheNames = "announce")
     public Announce getAnnounceById(int id){
         if(id > 0){
             return announceMapper.getAnnounceById(id);

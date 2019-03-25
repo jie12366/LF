@@ -4,9 +4,6 @@ import com.lingfei.admin.entity.CountVisitor;
 import com.lingfei.admin.mapper.VisitorMapper;
 import com.lingfei.admin.service.VisitorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -18,21 +15,18 @@ import java.util.Date;
  */
 
 @Service
-@CacheConfig
 public class VisitorServiceImpl implements VisitorService {
 
     @Autowired
     VisitorMapper visitorMapper;
 
     @Override
-    @Cacheable("visitor")
     public int saveVisitor(){
         visitorMapper.saveVisitor(1,this.getDate());
         return 0;
     }
 
     @Override
-    @CachePut("visitor")
     public int updateVisitor(){
         int visitor = this.getVisitorByDate().getVisitor();
         return visitorMapper.updateVisitor(visitor + 1,this.getDate());
@@ -44,7 +38,6 @@ public class VisitorServiceImpl implements VisitorService {
     }
 
     @Override
-    @Cacheable(value = "visitor",key = "0")
     public int getAllVisitor(){
         return visitorMapper.getAllVisitor();
     }

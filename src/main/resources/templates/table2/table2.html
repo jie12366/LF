@@ -50,7 +50,7 @@
             <!-- Breadcrumb-->
             <div class="breadcrumb-holder container-fluid">
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/admin">主界面</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/index">主界面</a></li>
                     <li class="breadcrumb-item active">报名表            </li>
                 </ul>
             </div>
@@ -93,7 +93,7 @@
                                                 <td th:text="${competition.stuClass}"></td>
                                                 <td th:text="${competition.qq}"></td>
                                                 <td th:text="${competition.phone}"></td>
-                                                <td><a th:href="@{/editCompetition(id=${competition.id})}">编辑</a></td>
+                                                <td><a th:href="@{/competition/edit(id=${competition.id})}">编辑</a></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -147,7 +147,7 @@
                     }
                 });
                 checkedID = checkedID.substring(0,checkedID.length-1);
-                window.location.replace("/deleteCompetition?id="+checkedID);
+                window.location.replace("/competition/delete?id="+checkedID);
             }
         } else {
             alert("请选择您要删除的内容!");

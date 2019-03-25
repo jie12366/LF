@@ -39,7 +39,7 @@ public class CompetitionControl {
      * @param model Model
      * @return editCompetition.html
      */
-    @GetMapping("/editCompetition")
+    @GetMapping("/competition/edit")
     public String editCompetition(int id,Model model){
         Competition competition =  competitionService.getCompetitionById(id);
         if(competition != null){
@@ -50,11 +50,22 @@ public class CompetitionControl {
     }
 
     /**
+     * 接受post方法，将表单传来的数据插入
+     * @param competition com.lingfei.admin.entity.Competition
+     * @return 服务端跳转到announce.html
+     */
+    @PostMapping("/competition/add")
+    public String addCompetition(Competition competition){
+        competitionService.saveCompetition(competition);
+        return "redirect:table2";
+    }
+
+    /**
      * 编辑完数据后，提交到这进行数据库的更新
      * @param competition Competition
      * @return 返回table2表
      */
-    @PostMapping("/updateCompetition")
+    @PostMapping("/competition/update")
     public String updateCompetition(Competition competition){
         competitionService.updateCompetition(competition);
         return "redirect:table2";
@@ -65,7 +76,7 @@ public class CompetitionControl {
      * @param id inr
      * @return 返回table2表
      */
-    @GetMapping("/deleteCompetition")
+    @GetMapping("/competition/delete")
     public String deleteCompetition(String id){
         if(!id.matches(",")){
             int i = Integer.parseInt(id);

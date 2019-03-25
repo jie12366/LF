@@ -43,12 +43,23 @@ public class UserManageControl {
     }
 
     /**
+     * 接受post方法，将表单传来的数据插入
+     * @param user com.lingfei.admin.entity.User
+     * @return 服务端跳转到announce.html
+     */
+    @PostMapping("/user/add")
+    public String addUser(User user){
+        userService.saveUser(user);
+        return "redirect:table1";
+    }
+
+    /**
      * 根据传来的id更改对应的数据
      * @param id int
      * @param model Model
      * @return editUser.html
      */
-    @GetMapping("/editUser")
+    @GetMapping("/user/edit")
     public String editUser(int id,Model model){
         User user =  userService.getUser(id);
         if(user != null){
@@ -63,7 +74,7 @@ public class UserManageControl {
      * @param user User
      * @return 返回table1表
      */
-    @PostMapping("/updateUser")
+    @PostMapping("/user/update")
     public String updateUser(User user){
         userService.updateDynamicUser(user);
         return "redirect:table1";
@@ -74,7 +85,7 @@ public class UserManageControl {
      * @param id inr
      * @return 返回table1表
      */
-    @GetMapping("/deleteUser")
+    @GetMapping("/user/delete")
     public String deleteUser(String id){
         if(!id.matches(",")){
             int i = Integer.parseInt(id);

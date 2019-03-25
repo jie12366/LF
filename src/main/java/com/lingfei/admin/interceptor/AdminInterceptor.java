@@ -15,18 +15,18 @@ import org.springframework.web.servlet.ModelAndView;
  */
 
 @Component
-public class MyInterceptor implements HandlerInterceptor {
+public class AdminInterceptor implements HandlerInterceptor {
     /**
      * 在请求处理之前进行调用（Controller方法调用之前)
      */
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         HttpSession session = httpServletRequest.getSession();
-        Object sessions = session.getAttribute("user");
+        Object sessions = session.getAttribute("admin");
         if(sessions != null){
             return true;
         }
-        httpServletResponse.sendRedirect("/adminLogin");
+        httpServletResponse.sendRedirect("/admin/login");
         return false;
     }
 

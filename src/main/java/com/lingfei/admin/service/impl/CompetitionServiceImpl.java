@@ -25,10 +25,10 @@ public class CompetitionServiceImpl implements CompetitionService {
     CompetitionMapper competitionMapper;
 
     @Override
-    @Cacheable("competition")
+    @Cacheable(value = "competition",key = "#competition")
     public int saveCompetition(Competition competition){
         if(competition != null){
-            return competitionMapper.saveCompetition(competition.getName(),competition.getStuClass(),competition.getQq(),competition.getPhone());
+            return competitionMapper.saveCompetition(competition.getName(),competition.getStuClass(),competition.getQq() + "@qq.com",competition.getPhone());
         }
         return 0;
     }

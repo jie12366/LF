@@ -46,9 +46,9 @@
             <!-- Breadcrumb-->
             <div class="breadcrumb-holder container-fluid">
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/admin">主界面</a></li>
-                    <li class="breadcrumb-item active"><a href="/announce">公告栏</a></li>
-                    <li class="breadcrumb-item active"><a href="/toEmail">群发邮件</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/index">主界面</a></li>
+                    <li class="breadcrumb-item active"><a href="/admin/announce">公告栏</a></li>
+                    <li class="breadcrumb-item active"><a href="/admin/toEmail">群发邮件</a></li>
                     <li class="breadcrumb-item active">选择对象 </li>
                 </ul>
             </div>
@@ -61,6 +61,7 @@
                                     <button type="button" class="btn btn-primary" onclick="select()">确定</button>
                                 </div>
                                 <div class="card-body">
+                                    <h2>协会成员</h2>
                                     <div class="table-responsive">
                                         <table class="table table-striped table-hover">
                                             <thead>
@@ -72,8 +73,8 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:each="user:${pages.list}">
-                                                <td style="CURSOR: hand; HEIGHT: 10px" align="center" width="4"><input type="checkbox" th:value="${user.id}" id="check" value="" name="check"> </td>
+                                            <tr th:each="user:${pages1.list}">
+                                                <td style="CURSOR: hand; HEIGHT: 10px" align="center" width="4"><input type="checkbox" th:value="${user.email}" id="check" value="" name="check"> </td>
                                                 <td th:text="${user.id}"></td>
                                                 <td th:text="${user.name}"></td>
                                                 <td th:text="${user.email}"></td>
@@ -82,10 +83,40 @@
                                         </table>
                                         <!--实现分页,page.pageNum是当前页数，page.pages是总页数-->
                                         <div>
-                                            <a th:href="@{/selectUser(start = 1)}">首页</a>
-                                            <a th:href="@{/selectUser(start = ${pages.pageNum - 1})}">上一页</a>
-                                            <a th:href="@{/selectUser(start = ${pages.pageNum + 1})}">下一页</a>
-                                            <a th:href="@{/selectUser(start = ${pages.pages})}">尾页</a>
+                                            <a th:href="@{/admin/selectUser(start1 = 1)}">首页</a>
+                                            <a th:href="@{/admin/selectUser(start1 = ${pages1.pageNum - 1})}">上一页</a>
+                                            <a th:href="@{/admin/selectUser(start1 = ${pages1.pageNum + 1})}">下一页</a>
+                                            <a th:href="@{/admin/selectUser(start1 = ${pages1.pages})}">尾页</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h2>比赛报名成员</h2>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th><input type="checkbox" id="allChecks1"  onclick="ckAll()" /></th>
+                                                <th>#</th>
+                                                <th>姓名</th>
+                                                <th>QQ邮箱</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="competition:${pages2.list}">
+                                                <td style="CURSOR: hand; HEIGHT: 10px" align="center" width="4"><input type="checkbox" th:value="${competition.qq}" id="check1" value="" name="check1"> </td>
+                                                <td th:text="${competition.id}"></td>
+                                                <td th:text="${competition.name}"></td>
+                                                <td th:text="${competition.qq}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--实现分页,page.pageNum是当前页数，page.pages是总页数-->
+                                        <div>
+                                            <a th:href="@{/admin/selectUser(start2 = 1)}">首页</a>
+                                            <a th:href="@{/admin/selectUser(start2 = ${pages2.pageNum - 1})}">上一页</a>
+                                            <a th:href="@{/admin/selectUser(start2 = ${pages2.pageNum + 1})}">下一页</a>
+                                            <a th:href="@{/admin/selectUser(start2 = ${pages2.pages})}">尾页</a>
                                         </div>
                                     </div>
                                 </div>
@@ -104,9 +135,14 @@
     //全选
     function ckAll(){
         var flag=document.getElementById("allChecks").checked;
+        var flag1 = document.getElementById("allChecks1").checked;
         var cks=document.getElementsByName("check");
+        var cks1 = document.getElementsByName("check1");
         for(var i = 0;i<cks.length;i++){
             cks[i].checked=flag;
+        }
+        for(var i = 0;i<cks1.length;i++){
+            cks1[i].checked=flag1;
         }
     }
 
@@ -118,20 +154,31 @@
                 Checkbox = true;
             }
         });
+        $("input[name='check1']").each(function() {
+            if (this.checked == true) {
+                Checkbox = true;
+            }
+        });
         if (Checkbox) {
             var t = confirm("您确认要选择这些对象吗？");
             if (t == false) {
                 return false;
             } else {
-                var checkedID="";
+                var checkedEmail="";
                 $("input[name='check']").each(function() {
                     if (this.checked == true) {
-                        checkedID += this.value + ",";
+                        checkedEmail += this.value + ",";
 
                     }
                 });
-                checkedID = checkedID.substring(0,checkedID.length-1);
-                window.location.replace("/getSelect?id="+checkedID);
+                $("input[name='check1']").each(function() {
+                    if (this.checked == true) {
+                        checkedEmail += this.value + "@qq.com,";
+                    }
+                });
+                alert(checkedEmail);
+                checkedEmail = checkedEmail.substring(0,checkedEmail.length-1);
+                window.location.replace("/admin/getSelect?emails="+checkedEmail);
             }
         } else {
             alert("请选择您要发送的对象!");

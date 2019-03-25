@@ -3,9 +3,11 @@ package com.lingfei.admin.control;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lingfei.admin.entity.Announce;
+import com.lingfei.admin.entity.Competition;
 import com.lingfei.admin.entity.CountVisitor;
 import com.lingfei.admin.entity.User;
 import com.lingfei.admin.service.impl.AnnounceServiceImpl;
+import com.lingfei.admin.service.impl.CompetitionServiceImpl;
 import com.lingfei.admin.service.impl.UserServiceImpl;
 import com.lingfei.admin.service.impl.VisitorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import java.util.List;
  */
 
 @Controller
+@RequestMapping("/admin")
 public class AdminManageControl {
 
     @Autowired
@@ -77,7 +80,7 @@ public class AdminManageControl {
      * @param announce Announce
      * @return 服务端跳转回announce.html
      */
-    @PostMapping("updateContent")
+    @PostMapping("/updateContent")
     public String updateContent(Announce announce){
         announceService.updateAnnounce(announce);
         return "redirect:announce";
@@ -106,7 +109,7 @@ public class AdminManageControl {
      * 直接跳转,并设置访客数以及浏览数
      * @return admin.html
      */
-    @GetMapping("/admin")
+    @GetMapping("/index")
     public String index(Model model){
         CountVisitor visitor = visitorService.getVisitorByDate();
         int totalVisitor = visitorService.getAllVisitor();
@@ -159,37 +162,39 @@ public class AdminManageControl {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    CompetitionServiceImpl competitionService;
     /**
      * 选择要群发邮件的对象
      * @param model Model
-     * @param start 开始页
+     * @param start1 用户表开始页
+     * @param start2 报名表开始页
      * @param size 每页的大小
      * @return selectUser.html
      */
     @GetMapping("/selectUser")
-    public String selectUser(Model model, @RequestParam(value = "start",defaultValue = "1") int start, @RequestParam(value = "size",defaultValue = "5") int size){
+    public String selectUser(Model model, @RequestParam(value = "start1",defaultValue = "1") int start1,@RequestParam(value = "start2",defaultValue = "1") int start2, @RequestParam(value = "size",defaultValue = "5") int size){
         List<User> users = userService.listUser();
-        PageHelper.startPage(start,size,"id asc");
-        PageInfo<User> pageInfo = new PageInfo<>(users);
-        model.addAttribute("pages",pageInfo);
+        PageHelper.startPage(start1,size,"id asc");
+        PageInfo<User> pageInfo1 = new PageInfo<>(users);
+        model.addAttribute("pages1",pageInfo1);
+
+        List<Competition> competitions = competitionService.listCompetition();
+        PageHelper.startPage(start2,size,"id asc");
+        PageInfo<Competition> pageInfo2 = new PageInfo<>(competitions);
+        model.addAttribute("pages2",pageInfo2);
         return "announce/selectUser";
     }
 
     /**
      * 获取刚刚选择的群发的对象
-     * @param id int
+     * @param emails String
      * @param session HttpSession
      * @return sendEmail.html
      */
     @GetMapping("/getSelect")
-    public String getSelect(String id, HttpSession session){
-        String[] ids = id.split(",");
-        StringBuilder sb = new StringBuilder();
-        for(String id1 : ids){
-            int id2 = Integer.parseInt(id1);
-            sb.append(userService.getUser(id2).getEmail()).append(",");
-        }
-        String  emails = sb.toString().substring(0,sb.length() - 1);
+    public String getSelect(String emails, HttpSession session){
+        emails.substring(0,emails.length() - 1);
         session.setAttribute("tos",emails);
         return "announce/sendEmail";
     }

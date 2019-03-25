@@ -22,7 +22,7 @@ public interface CompetitionMapper {
      * @param phone 手机号
      * @return 是否成功
      */
-    @Insert("insert into competition(name,stuClass,qq,phone) values(#{name},#{stuCLass},#{qq},#{phone}")
+    @Insert("insert into competition(name,stuClass,qq,phone) values(#{name},#{stuClass},#{qq},#{phone})")
     int saveCompetition(String name,String stuClass,String qq,String phone);
 
     /**

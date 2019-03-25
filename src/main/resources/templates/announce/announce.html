@@ -50,7 +50,7 @@
             <!-- Breadcrumb-->
             <div class="breadcrumb-holder container-fluid">
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/admin">主界面</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/index">主界面</a></li>
                     <li class="breadcrumb-item">公告栏 </li>
                 </ul>
             </div>
@@ -63,9 +63,9 @@
                                 <button type="button" id="closeCard3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
                                 <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow">
                                     <a href="/getExcel1" class="dropdown-item"> <i class="fa fa-mail-forward"></i>导出</a>
-                                    <a href="/form" class="dropdown-item"> <i class="fa fa-plus"></i>增加</a>
+                                    <a href="/admin/form" class="dropdown-item"> <i class="fa fa-plus"></i>增加</a>
                                     <button onclick="DelSelect1()" class="dropdown-item button-color"><i class="fa fa-times"></i>&nbsp;&nbsp;&nbsp;删除</button>
-                                    <a href="/toEmail" class="dropdown-item"> <i class="fa fa-envelope-o"></i>邮件</a>
+                                    <a href="/admin/toEmail" class="dropdown-item"> <i class="fa fa-envelope-o"></i>邮件</a>
                                 </div>
                             </div>
                         </div>
@@ -90,16 +90,16 @@
                                         <td th:text="${page.id}"></td>
                                         <td th:text="${page.date}"></td>
                                         <td th:text="${page.content}"></td>
-                                        <td><a th:href="@{/editContent(id=${page.id})}">编辑</a></td>
+                                        <td><a th:href="@{/admin/editContent(id=${page.id})}">编辑</a></td>
                                     </tr>
                                     </tbody>
                                 </table>
                                 <!--实现分页,page.pageNum是当前页数，page.pages是总页数-->
                                 <div>
-                                    <a th:href="@{/announce(start = 1)}">首页</a>
-                                    <a th:href="@{/announce(start = ${pages.pageNum - 1})}">上一页</a>
-                                    <a th:href="@{/announce(start = ${pages.pageNum + 1})}">下一页</a>
-                                    <a th:href="@{/announce(start = ${pages.pages})}">尾页</a>
+                                    <a th:href="@{/admin/announce(start = 1)}">首页</a>
+                                    <a th:href="@{/admin/announce(start = ${pages.pageNum - 1})}">上一页</a>
+                                    <a th:href="@{/admin/announce(start = ${pages.pageNum + 1})}">下一页</a>
+                                    <a th:href="@{/admin/announce(start = ${pages.pages})}">尾页</a>
                                 </div>
                             </div>
                         </div>
@@ -143,7 +143,7 @@
                     }
                 });
                 checkedID = checkedID.substring(0,checkedID.length-1);
-                window.location.replace("/deleteContent?id="+checkedID);
+                window.location.replace("/admin/deleteContent?id="+checkedID);
             }
         } else {
             alert("请选择您要删除的内容!");

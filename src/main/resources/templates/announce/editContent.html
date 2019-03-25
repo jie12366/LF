@@ -49,14 +49,14 @@
             <!-- Breadcrumb-->
             <div class="breadcrumb-holder container-fluid">
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/admin">主界面</a></li>
-                    <li class="breadcrumb-item"><a href="/announce">公告栏 </a></li>
+                    <li class="breadcrumb-item"><a href="/admin/index">主界面</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/announce">公告栏 </a></li>
                     <li class="breadcrumb-item active">编辑公告   </li>
                 </ul>
             </div>
             <!-- Forms Section-->
             <div class="form-size">
-                <form action="/updateContent" method="post">
+                <form action="/admin/updateContent" method="post">
                     <div class="form-group">
                         <label for="content" class="label-material">内容(两百字以内)</label>
                         <input type="text" id="content" name="content" th:value="${announce.content}" class="input-material">

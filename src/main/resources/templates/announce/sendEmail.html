@@ -52,14 +52,14 @@
             <!-- Breadcrumb-->
             <div class="breadcrumb-holder container-fluid">
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/admin">主界面</a></li>
-                    <li class="breadcrumb-item"><a href="/announce">公告栏 </a></li>
+                    <li class="breadcrumb-item"><a href="/admin/index">主界面</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/announce">公告栏 </a></li>
                     <li class="breadcrumb-item active">群发邮件   </li>
                 </ul>
             </div>
             <!-- Forms Section-->
             <div class="form-size">
-                <form action="/addEmail" method="post">
+                <form action="/admin/addEmail" method="post">
                     <div class="form-group">
                         <label for="email-theme">主题</label>
                         <input id="email-theme" type="text" th:value="${theme}" name="theme" required data-msg="请输入主题" class="input-material">
@@ -68,7 +68,7 @@
                         <label for="content">内容(一百字以内)</label>
                         <textarea class="form-control" id="content"  th:value="${content}" name="content" rows="3"></textarea>
                     </div>
-                    <a href="/selectUser" type="button" class="btn btn-info btn-pos">选择对象</a>
+                    <a href="/admin/selectUser" type="button" class="btn btn-info btn-pos">选择对象</a>
                     <input type="submit" class="btn btn-primary" value="发送">
                 </form>
             </div>
