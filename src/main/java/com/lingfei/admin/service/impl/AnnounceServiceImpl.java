@@ -87,13 +87,13 @@ public class AnnounceServiceImpl implements AnnounceService {
 
     @Override
     public void sendEmail(String theme,String content,String... tos){
-        SimpleMailMessage message = new SimpleMailMessage();
-
-        message.setFrom("2263509062@qq.com");
-        message.setTo(tos);
-        message.setSubject(theme);
-        message.setText(content);
-
-        mailSender.send(message);
+        for(String to :tos){
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("2263509062@qq.com");
+            message.setTo(to);
+            message.setSubject(theme);
+            message.setText(content);
+            mailSender.send(message);
+        }
     }
 }

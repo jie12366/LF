@@ -46,7 +46,7 @@ public class CompetitionControl {
             model.addAttribute("competition",competition);
             return "table2/editCompetition";
         }
-        return "redirect:table2";
+        return "redirect:/table2";
     }
 
     /**
@@ -57,7 +57,7 @@ public class CompetitionControl {
     @PostMapping("/competition/add")
     public String addCompetition(Competition competition){
         competitionService.saveCompetition(competition);
-        return "redirect:table2";
+        return "redirect:/table2";
     }
 
     /**
@@ -68,7 +68,7 @@ public class CompetitionControl {
     @PostMapping("/competition/update")
     public String updateCompetition(Competition competition){
         competitionService.updateCompetition(competition);
-        return "redirect:table2";
+        return "redirect:/table2";
     }
 
     /**
@@ -90,6 +90,6 @@ public class CompetitionControl {
             }
             competitionService.batchDeleteCompetition(competitions);
         }
-        return "redirect:table2";
+        return "redirect:/table2";
     }
 }

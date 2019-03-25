@@ -1,0 +1,25 @@
+version: '3'
+services:
+  mysql:
+    container_name: v-mysql
+    image: mysql/mysql-server:8.0.11
+    environment:
+      MYSQL_DATABASE: lingfei
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3306:3306"
+    restart: always
+
+  admin:
+    restart: always
+    build: ./admin
+    working_dir: /admin
+    volumes:
+      - ./admin:/admin
+      - ~/.m2:/root/.m2
+    expose:
+      - "88"
+    depends_on:
+      - mysql
+    command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker

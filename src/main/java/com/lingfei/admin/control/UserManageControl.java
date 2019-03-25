@@ -50,7 +50,7 @@ public class UserManageControl {
     @PostMapping("/user/add")
     public String addUser(User user){
         userService.saveUser(user);
-        return "redirect:table1";
+        return "redirect:/table1";
     }
 
     /**
@@ -66,7 +66,7 @@ public class UserManageControl {
             model.addAttribute("user",user);
             return "table1/editUser";
         }
-        return "redirect:table1";
+        return "redirect:/table1";
     }
 
     /**
@@ -77,7 +77,7 @@ public class UserManageControl {
     @PostMapping("/user/update")
     public String updateUser(User user){
         userService.updateDynamicUser(user);
-        return "redirect:table1";
+        return "redirect:/table1";
     }
 
     /**
@@ -99,6 +99,6 @@ public class UserManageControl {
             }
             userService.batchDelete(users);
         }
-        return "redirect:table1";
+        return "redirect:/table1";
     }
 }
