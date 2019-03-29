@@ -1,25 +1,41 @@
-image: jimmyadaro/gitlab-ci-cd:latest
-Deploy:
- stage: deploy
- only:
-   — master
- when: manual
- allow_failure: false
- before_script:
- #Create .ssh directory
-   — mkdir -p ~/.ssh
- #Save the SSH private key
-   — echo “$SSH_PRIVATE_KEY” > ~/.ssh/id_rsa
-   — chmod 700 ~/.ssh
-   — chmod 600 ~/.ssh/id_rsa
-   — eval $(ssh-agent -s)
-   — ssh-add ~/.ssh/id_rsa
- script:
- #Backup everything in /var/www/html/
-   — ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $USERNAME@$HOST “zip -q -r /var/backups/www/01-Deploy-$(date +%F_%H-%M-%S).zip /var/www/html/”
- #Deploy new files to /var/www/html
-   — lftp -d -u $USERNAME, -e ‘set sftp:auto-confirm true; set sftp:connect-program “ssh -a -x -i ~/.ssh/id_rsa”; mirror -Rnev ./ /var/www/html — ignore-time — exclude-glob .git* — exclude .git/; exit’ sftp://$HOST
-   — rm -f ~/.ssh/id_rsa
-   — ‘echo Deploy done: $(date “+%F %H:%M:%S”)’
+image: docker:latest
 
+services:
+  - name: docker:dind
+    command: ["--insecure-registry=106.12.209.121"]    # 将本地Docker Registry私服设置为insecure，避免registry默认需要https才能访问
 
+stages:
+  - package
+  - build
+  - deploy
+  
+maven-package:
+  image: maven:3.5-jdk-8-alpine
+  tags:
+    - maven
+  stage: package
+  script:
+    - mvn clean install -Dmaven.test.skip=true
+  artifacts:
+    paths:
+      - target/*.jar    # 将maven构建成功的jar包作为构建产出导出，可在下一个stage的任务中使用
+
+build-master:
+  tags:
+    - docker
+  stage: build
+  script:
+    - docker build --pull -t "$CI_REGISTRY/$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY/$CI_REGISTRY_IMAGE"
+  only:
+    - master
+
+build:
+  tags:
+    - docker
+  stage: build
+  script:
+    - docker build --pull -t "$CI_REGISTRY/$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
+    - docker push "$CI_REGISTRY/$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+  except:
+    - master
