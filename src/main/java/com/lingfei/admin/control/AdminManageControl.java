@@ -2,21 +2,29 @@ package com.lingfei.admin.control;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 import com.lingfei.admin.entity.Announce;
 import com.lingfei.admin.entity.Competition;
 import com.lingfei.admin.entity.CountVisitor;
 import com.lingfei.admin.entity.User;
-import com.lingfei.admin.service.impl.AnnounceServiceImpl;
-import com.lingfei.admin.service.impl.CompetitionServiceImpl;
-import com.lingfei.admin.service.impl.UserServiceImpl;
-import com.lingfei.admin.service.impl.VisitorServiceImpl;
+import com.lingfei.admin.service.impl.*;
+import com.qiniu.common.QiniuException;
+import com.qiniu.http.Response;
+import com.qiniu.storage.model.DefaultPutRet;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,13 +56,36 @@ public class AdminManageControl {
         return "announce/announce";
     }
 
+    @Autowired
+    private UploadServiceImpl qiNiuService;
+
     /**
      * 接受post方法，将表单传来的数据插入
      * @param announce com.lingfei.admin.entity.Announce
      * @return 服务端跳转到announce.html
      */
+    @ApiOperation("插入数据")
     @PostMapping("/addContent")
-    public String addContent(Announce announce){
+    public String addContent(Announce announce, HttpServletRequest request,
+                             @RequestParam("file") MultipartFile file, Model model){
+        try{
+            //根据时间戳创建文件名
+            String fileName = System.currentTimeMillis() + file.getOriginalFilename();
+            //创建文件的实际路径
+            String destFileName = request.getServletContext().getRealPath("") + "uploaded" + File.separator + fileName;
+            //根据文件路径创建文件对应的实际文件
+            File destFile = new File(destFileName);
+            //创建文件实际路径
+            destFile.getParentFile().mkdirs();
+            //将文件传到对应的文件位置
+            file.transferTo(destFile);
+            Response response = qiNiuService.uploadFile(destFile);
+            //解析上传成功的结果
+            DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+            announce.setPicture(putRet.key);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
         announceService.save(announce);
         return "redirect:announce";
     }
@@ -98,6 +129,11 @@ public class AdminManageControl {
         for(int i = 0;i<ids.length;i++){
             int id1 = Integer.parseInt(ids[i]);
             announces.add(announceService.getAnnounceById(id1));
+            try {
+                qiNiuService.deleteFile(announceService.getAnnounceById(id1).getPicture());
+            }catch (QiniuException e){
+                e.printStackTrace();
+            }
         }
         announceService.batchDelete(announces);
         return "redirect:announce";

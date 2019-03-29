@@ -19,10 +19,11 @@ public interface AnnounceMapper {
      * 插入数据
      * @param content 字段content
      * @param date 字段date
+     * @param picture 文件名
      * @return 插入是否成功
      */
-    @Insert("insert into announce(content,date) values(#{content},#{date})")
-    int save(@Param("content") String content, @Param("date") Timestamp date);
+    @Insert("insert into announce(content,date,picture) values(#{content},#{date},#{picture})")
+    int save(@Param("content") String content, @Param("date") Timestamp date,@Param("picture") String picture);
 
     /**
      * 获取所有的结果集
@@ -60,6 +61,7 @@ public interface AnnounceMapper {
      * @param content String
      * @param date Timestamp
      * @param id int
+     * @param picture 文件名
      * @return 是否更新成功
      */
     @Update("update announce set content = #{content},date = #{date} where id = #{id}")

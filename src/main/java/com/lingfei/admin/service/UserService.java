@@ -28,10 +28,11 @@ public interface UserService{
 
     /**
      * 插入数据
-     * @param user user
+     * @param account 账号
+     * @param password 密码
      * @return 是否插入成功
      */
-    int saveUser(User user);
+    int saveAccount(String account,String password);
 
     /**
      * 根据id更新记录
@@ -67,4 +68,19 @@ public interface UserService{
      * @return 删除是否成功
      */
     int batchDelete(List<User> users);
+
+    /**
+     * 检查用户登录账号密码是否匹配
+     * @param account 账号
+     * @param password 密码
+     * @return 是否匹配
+     */
+    boolean checkLogin(String account,String password);
+
+    /**
+     * 根据用户名获取密码
+     * @param account 账号
+     * @return 密码
+     */
+    String getPassword(String account);
 }

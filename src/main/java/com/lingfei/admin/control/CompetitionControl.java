@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lingfei.admin.entity.Competition;
 import com.lingfei.admin.service.impl.CompetitionServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,6 +55,7 @@ public class CompetitionControl {
      * @param competition com.lingfei.admin.entity.Competition
      * @return 服务端跳转到announce.html
      */
+    @ApiOperation(value = "将表单传来的数据插入数据库")
     @PostMapping("/competition/add")
     public String addCompetition(Competition competition){
         competitionService.saveCompetition(competition);

@@ -37,7 +37,7 @@ public class AnnounceServiceImpl implements AnnounceService {
         Timestamp date1 = new Timestamp(date.getTime());
         announce.setDate(date1);
         if (announce != null){
-            return announceMapper.save(announce.getContent(),announce.getDate());
+            return announceMapper.save(announce.getContent(),announce.getDate(),announce.getPicture());
         }
         return 0;
     }
@@ -65,7 +65,6 @@ public class AnnounceServiceImpl implements AnnounceService {
     }
 
     @Override
-    @CacheEvict(cacheNames = "announce")
     public int batchDelete(List<Announce> announces){
         return announceMapper.batchDeleteAnnounce(announces);
     }

@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "admin")
+@Table(name = "adminUser")
 public class Admin extends BaseModel implements Serializable {
 
     @Column(name = "userName",type = MySqlTypeConstant.VARCHAR,length = 10)

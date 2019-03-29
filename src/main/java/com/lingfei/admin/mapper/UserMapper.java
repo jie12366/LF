@@ -29,18 +29,21 @@ public interface UserMapper {
     User getUser(int id);
 
     /**
-     * 向user表中插入数据
-     * @param name String 姓名
-     * @param number String 学号
-     * @param stuClass String 班级
-     * @param qq String QQ号
-     * @param email String  邮箱
-     * @param phone String 手机号
-     * @param depart String 部门
-     * @return 是否插入成功
+     * 根据用户名获取密码
+     * @param account 账号
+     * @return 密码
      */
-    @Insert("insert into user(name,number,stuClass,qq,email,phone,depart,balance) values(#{name},#{number},#{stuClass},#{qq},#{email},#{phone},#{depart},0)")
-    int saveUser(@Param("name") String name,@Param("number") String number,@Param("stuClass") String stuClass,@Param("qq") String qq,@Param("email") String email,@Param("phone") String phone,@Param("depart") String depart);
+    @Select("select password from user where account = #{account}")
+    String getPassword(String  account);
+
+    /**
+     * 插入账号密码注册
+     * @param account 账号
+     * @param password 密码
+     * @return 是否注册成功
+     */
+    @Insert("insert into user(account,password) values(#{account},#{password})")
+    int saveAccount(String account,String password);
 
     /**
      * 根据id更新记录

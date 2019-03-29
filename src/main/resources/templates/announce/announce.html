@@ -32,6 +32,9 @@
         .button-color{
             color: #6c757d;
         }
+        .img-size{
+            width: 60px;
+        }
     </style>
 </head>
 <body>
@@ -79,6 +82,7 @@
                                     <tr>
                                         <th><input type="checkbox" id="allChecks"  onclick="ckAll()" /></th>
                                         <th>#</th>
+                                        <th>封面</th>
                                         <th>时间</th>
                                         <th>内容</th>
                                         <th>编辑</th>
@@ -88,6 +92,7 @@
                                     <tr th:each="page:${pages.list}">
                                         <td style="CURSOR: hand; HEIGHT: 22px" align="center" width="4"><input type="checkbox" th:value="${page.id}" id="check" value="" name="check"> </td>
                                         <td th:text="${page.id}"></td>
+                                        <td><img class="img-size" th:src="@{http://poag7m5q9.bkt.clouddn.com/{fileName}(fileName=${page.picture})}"></td>
                                         <td th:text="${page.date}"></td>
                                         <td th:text="${page.content}"></td>
                                         <td><a th:href="@{/admin/editContent(id=${page.id})}">编辑</a></td>

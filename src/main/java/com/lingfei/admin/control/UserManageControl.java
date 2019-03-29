@@ -43,17 +43,6 @@ public class UserManageControl {
     }
 
     /**
-     * 接受post方法，将表单传来的数据插入
-     * @param user com.lingfei.admin.entity.User
-     * @return 服务端跳转到announce.html
-     */
-    @PostMapping("/user/add")
-    public String addUser(User user){
-        userService.saveUser(user);
-        return "redirect:/table1";
-    }
-
-    /**
      * 根据传来的id更改对应的数据
      * @param id int
      * @param model Model

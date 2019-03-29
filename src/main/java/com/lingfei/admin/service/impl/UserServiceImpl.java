@@ -39,9 +39,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Cacheable(cacheNames = "user")
-    public int saveUser(User user){
-        if(user != null){
-            return userMapper.saveUser(user.getName(),user.getNumber(),user.getStuClass(),user.getQq(),user.getEmail(),user.getPhone(),user.getDepart());
+    public String getPassword(String account){
+        if(account != null){
+            userMapper.getPassword(account);
+        }
+        return null;
+    }
+
+    @Override
+    public int saveAccount(String account,String password){
+        if (account != null && password != null){
+            return userMapper.saveAccount(account,password);
         }
         return 0;
     }
@@ -86,5 +94,14 @@ public class UserServiceImpl implements UserService {
             return userMapper.batchDeleteUser(users);
         }
         return 0;
+    }
+
+    @Override
+    public boolean checkLogin(String account,String pass){
+        String  password = this.getPassword(account);
+        if (pass.equals(password)){
+            return true;
+        }
+        return false;
     }
 }

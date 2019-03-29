@@ -25,6 +25,12 @@ public class User implements Serializable {
     @Excel(name = "序号",orderNum = "0")
     private int id;
 
+    @Column(name = "account",type = MySqlTypeConstant.VARCHAR, length = 20)
+    private String account;
+
+    @Column(name = "password",type = MySqlTypeConstant.VARCHAR, length = 20)
+    private String password;
+
     @Column(name = "name",type = MySqlTypeConstant.VARCHAR, length = 20)
     @Excel(name = "姓名",orderNum = "1")
     private String  name;
