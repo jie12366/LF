@@ -2,7 +2,7 @@ image: jimmyadaro/gitlab-ci-cd:latest
 Deploy:
  stage: deploy
  only:
- — ‘master’
+ — master
  when: manual
  allow_failure: false
  before_script:
