@@ -27,12 +27,27 @@ public interface UserService{
     User getUser(int id);
 
     /**
+     * 根据账号获取id
+     * @param account
+     * @return
+     */
+    int getId(String account);
+
+    /**
      * 插入数据
      * @param account 账号
      * @param password 密码
      * @return 是否插入成功
      */
     int saveAccount(String account,String password);
+
+    /**
+     * 根据邮箱重置密码
+     * @param email
+     * @param password
+     * @return
+     */
+    int resetPassword(String password,String email);
 
     /**
      * 根据id更新记录
@@ -63,13 +78,6 @@ public interface UserService{
     int deleteUser(int id);
 
     /**
-     * 删除一组数据
-     * @param users List<User>
-     * @return 删除是否成功
-     */
-    int batchDelete(List<User> users);
-
-    /**
      * 检查用户登录账号密码是否匹配
      * @param account 账号
      * @param password 密码
@@ -82,5 +90,12 @@ public interface UserService{
      * @param account 账号
      * @return 密码
      */
-    String getPassword(String account);
+    String getPasswordByAccount(String account);
+
+    /**
+     * 根据邮箱获取密码
+     * @param email
+     * @return
+     */
+    String getPasswordByEmail(String email);
 }

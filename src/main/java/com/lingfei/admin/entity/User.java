@@ -28,7 +28,7 @@ public class User implements Serializable {
     @Column(name = "account",type = MySqlTypeConstant.VARCHAR, length = 20)
     private String account;
 
-    @Column(name = "password",type = MySqlTypeConstant.VARCHAR, length = 20)
+    @Column(name = "password",type = MySqlTypeConstant.VARCHAR, length = 33)
     private String password;
 
     @Column(name = "name",type = MySqlTypeConstant.VARCHAR, length = 20)

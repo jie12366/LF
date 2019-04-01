@@ -7,7 +7,7 @@ import java.security.MessageDigest;
  * @date 2019-3-16
  */
 
-public class GetMd5 {
+public class GetString {
 
     /**
      * 将传入的字符串进行MD5加密
@@ -39,5 +39,10 @@ public class GetMd5 {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static String getCode(){
+        String code = (int)((Math.random() * 9 + 1) * 100000) + "";
+        return code;
     }
 }

@@ -29,12 +29,28 @@ public interface UserMapper {
     User getUser(int id);
 
     /**
+     * 根据账号获取id
+     * @param account
+     * @return
+     */
+    @Select("select id from user where account = #{account}")
+    int getId(String account);
+
+    /**
      * 根据用户名获取密码
      * @param account 账号
      * @return 密码
      */
     @Select("select password from user where account = #{account}")
-    String getPassword(String  account);
+    String getPasswordByAccount(String  account);
+
+    /**
+     * 根据邮箱获取密码
+     * @param email 邮箱
+     * @return
+     */
+    @Select("select password from user where email = #{email}")
+    String getPasswordByEmail(String email);
 
     /**
      * 插入账号密码注册
@@ -42,8 +58,17 @@ public interface UserMapper {
      * @param password 密码
      * @return 是否注册成功
      */
-    @Insert("insert into user(account,password) values(#{account},#{password})")
+    @Insert("insert into user(account,password) values(#{account},md5(#{password}))")
     int saveAccount(String account,String password);
+
+    /**
+     * 根据邮箱重置密码
+     * @param email 邮箱
+     * @param password
+     * @return
+     */
+    @Update("update user set password = md5(#{password}) where email = #{email}")
+    int resetPassword(String password,String email);
 
     /**
      * 根据id更新记录

@@ -2,8 +2,11 @@ package com.lingfei.admin.control;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lingfei.admin.entity.Notice;
 import com.lingfei.admin.entity.User;
+import com.lingfei.admin.service.impl.NoticeServiceImpl;
 import com.lingfei.admin.service.impl.UserServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +27,8 @@ public class UserManageControl {
 
     @Autowired
     UserServiceImpl userService;
+    @Autowired
+    NoticeServiceImpl noticeService;
 
     /**
      * 获取所有user数据，并分页
@@ -66,6 +70,10 @@ public class UserManageControl {
     @PostMapping("/user/update")
     public String updateUser(User user){
         userService.updateDynamicUser(user);
+        User user1 = userService.getUser(user.getId());
+        Notice notice = new Notice(user.getId()+"",user1.getAccount(),user.getName(),user.getNumber(),
+                user.getStuClass(),user.getQq(),user.getEmail(),user.getPhone(),user.getDepart(),user1.getBalance());
+        noticeService.save(notice);
         return "redirect:/table1";
     }
 
@@ -74,19 +82,14 @@ public class UserManageControl {
      * @param id inr
      * @return 返回table1表
      */
-    @GetMapping("/user/delete")
+    @ApiOperation("删除用户")
+    @GetMapping("/user/delet")
     public String deleteUser(String id){
-        if(!id.matches(",")){
-            int i = Integer.parseInt(id);
-            userService.deleteUser(i);
-        }else {
-            String[] id3 = id.split(",");
-            List<User> users = new ArrayList<>();
-            for (String id1:id3){
-                int id2 = Integer.parseInt(id1);
-                users.add(userService.getUser(id2));
-            }
-            userService.batchDelete(users);
+        String[] id3 = id.split(",");
+        for (String id1:id3){
+            int id2 = Integer.parseInt(id1);
+            userService.deleteUser(id2);
+            noticeService.deleteById(id1);
         }
         return "redirect:/table1";
     }

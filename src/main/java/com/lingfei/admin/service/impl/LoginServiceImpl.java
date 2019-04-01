@@ -3,7 +3,7 @@ package com.lingfei.admin.service.impl;
 import com.lingfei.admin.mapper.AdminMapper;
 import com.lingfei.admin.entity.Admin;
 import com.lingfei.admin.service.LoginService;
-import com.lingfei.admin.utils.GetMd5;
+import com.lingfei.admin.utils.GetString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -29,7 +29,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public boolean adminLogin(Admin admin){
-        String password = GetMd5.getMd5(admin.getPassword());
+        String password = GetString.getMd5(admin.getPassword());
         if(admin.getUserName().equals(returnResult().getUserName()) && password.equals(returnResult().getPassword())){
             return  true;
         }

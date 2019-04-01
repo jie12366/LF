@@ -3,6 +3,7 @@ package com.lingfei.admin.service.impl;
 import com.lingfei.admin.entity.User;
 import com.lingfei.admin.mapper.UserMapper;
 import com.lingfei.admin.service.UserService;
+import com.lingfei.admin.utils.GetString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -29,7 +30,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(cacheNames = "user")
     public User getUser(int id){
         if(id > 0){
             return userMapper.getUser(id);
@@ -38,10 +38,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int getId(String account){
+        return userMapper.getId(account);
+    }
+
+    @Override
     @Cacheable(cacheNames = "user")
-    public String getPassword(String account){
+    public String getPasswordByAccount(String account){
         if(account != null){
-            userMapper.getPassword(account);
+            userMapper.getPasswordByAccount(account);
+        }
+        return null;
+    }
+
+    @Override
+    public String getPasswordByEmail(String email){
+        if(email != null){
+            userMapper.getPasswordByEmail(email);
         }
         return null;
     }
@@ -49,7 +62,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public int saveAccount(String account,String password){
         if (account != null && password != null){
-            return userMapper.saveAccount(account,password);
+            return userMapper.saveAccount(account,password + account);
+        }
+        return 0;
+    }
+
+    @Override
+    public int resetPassword(String password,String email){
+        if (email != null){
+            return userMapper.resetPassword(password,email);
         }
         return 0;
     }
@@ -88,17 +109,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(cacheNames = "user")
-    public int batchDelete(List<User> users){
-        if(users != null){
-            return userMapper.batchDeleteUser(users);
-        }
-        return 0;
-    }
-
-    @Override
     public boolean checkLogin(String account,String pass){
-        String  password = this.getPassword(account);
+        pass = GetString.getMd5(pass + account);
+        String  password = this.getPasswordByAccount(account);
+        if ("".equals(password)){
+            password = this.getPasswordByEmail(account);
+        }
         if (pass.equals(password)){
             return true;
         }
