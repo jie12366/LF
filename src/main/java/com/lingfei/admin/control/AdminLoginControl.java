@@ -4,13 +4,13 @@ import com.lingfei.admin.entity.Admin;
 import com.lingfei.admin.service.impl.LoginServiceImpl;
 import com.lingfei.admin.service.impl.UserServiceImpl;
 import com.lingfei.admin.service.impl.VisitorServiceImpl;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -44,9 +44,9 @@ public class AdminLoginControl {
      * @return 如果信息验证无误就跳转到admin.html，如果有误就服务端跳转login.html
      */
     @PostMapping("/")
-    public String loginIn(Admin admin, HttpSession session){
+    public String loginIn(Admin admin, HttpServletRequest request){
         if(loginService.adminLogin(admin)){
-            session.setAttribute("admin",admin.getUserName());
+            request.getSession().setAttribute("admin",admin.getUserName());
             if(visitorService.getVisitorByDate() == null) {
                 visitorService.saveVisitor();
             }else {
