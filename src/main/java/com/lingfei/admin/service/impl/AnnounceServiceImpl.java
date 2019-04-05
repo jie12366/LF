@@ -11,7 +11,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -29,7 +28,6 @@ public class AnnounceServiceImpl implements AnnounceService {
     @Autowired
     AnnounceMapper announceMapper;
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     @Cacheable(cacheNames = "announce")
     public int save(Announce announce){

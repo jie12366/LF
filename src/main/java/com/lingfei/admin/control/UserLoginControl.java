@@ -13,6 +13,7 @@ import com.lingfei.admin.utils.VerifyUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author www.xyjz123.xyz
@@ -37,6 +39,8 @@ public class UserLoginControl {
     NoticeServiceImpl noticeService;
     @Autowired
     EmailServiceImpl emailService;
+    @Autowired
+    private RedisTemplate<String ,String > template;
     /**
      * 接受post方法，注册入口
      * @param account 账号
@@ -45,12 +49,20 @@ public class UserLoginControl {
      */
     @ApiOperation("注册")
     @PostMapping("/register")
-    public JsonResult addUser(@ApiParam("账号") @RequestParam String account, @ApiParam("密码") @RequestParam String password){
+    public JsonResult addUser(@ApiParam("账号") @RequestParam String account, @ApiParam("密码") @RequestParam String password,
+                              @ApiParam("验证码") String code){
         List<User> lists = userService.listUser();
         for(User user:lists){
             if(user.getAccount().equals(account)){
                 return JsonResult.errorMsg("账号已经被注册");
             }
+        }
+        String code1 = template.opsForValue().get("code");
+        if (code1 == null){
+            return JsonResult.errorMsg("验证码已过期");
+        }
+        if (!code1.equals(code)){
+            return JsonResult.errorMsg("验证码错误");
         }
         userService.saveAccount(account,password);
         int id = userService.getId(account);
@@ -66,6 +78,9 @@ public class UserLoginControl {
         String email = "您本次注册的验证码为： " + code;
         int res = emailService.sendEmail(to,"注册验证码",email);
         if (res == 1){
+            //用redis存邮件发送的验证码,设置5分钟过期
+            template.opsForValue().set("code",code);
+            template.expire("code",3000,TimeUnit.SECONDS);
             return JsonResult.ok();
         }else {
             return JsonResult.errorMsg("验证码发送错误，请重试");
@@ -76,13 +91,19 @@ public class UserLoginControl {
     @GetMapping("/reset")
     public JsonResult reset(@ApiParam("重置密码接收者") String to){
         String email = "请点击以下链接来重置你的密码，如非本人操作，请忽视。\n"
-                + " http://127.0.0.1:88/user/resetPassword";
+                + " http://127.0.0.1:88/user/resetPass";
         int res = emailService.sendEmail(to,"重置密码",email);
         if(res == 1){
             return JsonResult.ok();
         }else {
             return JsonResult.errorMsg("邮件发送失败");
         }
+    }
+
+    @ApiOperation("重置密码界面")
+    @GetMapping("resetPass")
+    public String resetPass(){
+        return "resetPass";
     }
 
     @ApiOperation("重置密码")
