@@ -5,7 +5,6 @@ import com.lingfei.admin.interceptor.FrontInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -25,7 +24,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .addPathPatterns("/admin/index","/admin/toEmail","/admin/addEmail")
                 .addPathPatterns("/admin/selectUser","/admin/getUser")
                 .addPathPatterns("/table1","/user/edit","/user/delete","/user/update")
-                .addPathPatterns("/table2","/competition/edit","/competition/update","/competition/delete");
+                .addPathPatterns("/table2","/competition/edit","/competition/update","/competition/delete")
+                .addPathPatterns("/es/user");
 
         //前台拦截
         registry.addInterceptor(new FrontInterceptor())
