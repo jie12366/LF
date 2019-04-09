@@ -25,32 +25,32 @@ public class CompetitionServiceImpl implements CompetitionService {
     CompetitionMapper competitionMapper;
 
     @Override
-    @Cacheable(value = "competition",key = "#competition")
-    public int saveCompetition(Competition competition){
-        if(competition != null){
-            return competitionMapper.saveCompetition(competition.getName(),competition.getStuClass(),competition.getQq() + "@qq.com",competition.getPhone());
+    @Cacheable(value = "competition", key = "#competition")
+    public int saveCompetition(Competition competition) {
+        if (competition != null) {
+            return competitionMapper.saveCompetition(competition.getName(), competition.getStuClass(), competition.getQq() + "@qq.com", competition.getPhone(),competition.getItem());
         }
         return 0;
     }
 
     @Override
     @CachePut("competition")
-    public int updateCompetition(Competition competition){
-        if(competition != null){
-            return competitionMapper.updateCompetition(competition.getName(),competition.getStuClass(),competition.getQq(),competition.getPhone(),competition.getId());
+    public int updateCompetition(Competition competition) {
+        if (competition != null) {
+            return competitionMapper.updateCompetition(competition.getName(), competition.getStuClass(), competition.getQq(), competition.getPhone(),competition.getItem(), competition.getId());
         }
         return 0;
     }
 
     @Override
-    public List<Competition> listCompetition(){
+    public List<Competition> listCompetition() {
         return competitionMapper.listCompetition();
     }
 
     @Override
     @CachePut("competition")
-    public Competition getCompetitionById(int id){
-        if (id  > 0){
+    public Competition getCompetitionById(int id) {
+        if (id > 0) {
             return competitionMapper.getCompetitionById(id);
         }
         return null;
@@ -58,8 +58,8 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     @CacheEvict("competition")
-    public int deleteCompetition(int id){
-        if (id > 0){
+    public int deleteCompetition(int id) {
+        if (id > 0) {
             return competitionMapper.deleteCompetition(id);
         }
         return 0;
@@ -67,8 +67,8 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     @CacheEvict("competition")
-    public int batchDeleteCompetition(List<Competition> competitions){
-        if (competitions != null){
+    public int batchDeleteCompetition(List<Competition> competitions) {
+        if (competitions != null) {
             return competitionMapper.batchDeleteCompetition(competitions);
         }
         return 0;

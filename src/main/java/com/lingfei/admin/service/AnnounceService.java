@@ -14,11 +14,12 @@ import java.util.List;
  */
 
 @Service
-@Transactional(isolation = Isolation.REPEATABLE_READ,propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+@Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public interface AnnounceService {
 
     /**
      * 检测数据是否为空并插入数据
+     *
      * @param announce com.lingfei.admin.entity.announce
      * @return 是否成功
      */
@@ -26,12 +27,14 @@ public interface AnnounceService {
 
     /**
      * 获取所有的结果集
+     *
      * @return List<Announce>
      */
     List<Announce> getAllResult();
 
     /**
      * 根据id获取记录
+     *
      * @param id int
      * @return Announce
      */
@@ -39,6 +42,7 @@ public interface AnnounceService {
 
     /**
      * 根据id删除记录
+     *
      * @param id int
      * @return 删除是否成功
      */
@@ -46,6 +50,7 @@ public interface AnnounceService {
 
     /**
      * 根据id更新记录
+     *
      * @param announce Announce
      * @return 是否更新成功
      */
@@ -53,6 +58,7 @@ public interface AnnounceService {
 
     /**
      * 批量删除
+     *
      * @param announces 传入的一组id
      * @return 是否成功
      */
@@ -60,9 +66,10 @@ public interface AnnounceService {
 
     /**
      * 群发邮件的接口
-     * @param tos 群发对象
-     * @param theme 邮件主题
+     *
+     * @param tos     群发对象
+     * @param theme   邮件主题
      * @param content 邮件内容
      */
-    void sendEmail(String theme,String content,String... tos);
+    void sendEmail(String theme, String content, String... tos);
 }

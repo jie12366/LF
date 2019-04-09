@@ -16,7 +16,7 @@ import org.thymeleaf.context.Context;
  * @date 2019/3/31 23:10
  */
 @Service
-public class EmailServiceImpl implements EmailService{
+public class EmailServiceImpl implements EmailService {
 
     private final static Logger log = LoggerFactory.getLogger(EmailServiceImpl.class);
 
@@ -33,7 +33,7 @@ public class EmailServiceImpl implements EmailService{
     TemplateEngine templateEngine;
 
     @Override
-    public int sendEmail(String to,String object,String content){
+    public int sendEmail(String to, String object, String content) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
         message.setTo(to);

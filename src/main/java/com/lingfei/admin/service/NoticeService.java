@@ -16,6 +16,7 @@ import java.util.Optional;
 public interface NoticeService {
     /**
      * 根据id获取结果
+     *
      * @param id
      * @return
      */
@@ -23,6 +24,7 @@ public interface NoticeService {
 
     /**
      * 增加记录
+     *
      * @param blog
      * @return
      */
@@ -30,24 +32,28 @@ public interface NoticeService {
 
     /**
      * 根据id删除记录
+     *
      * @param id
      */
     void deleteById(String id);
 
     /**
      * 删除记录
+     *
      * @param blog
      */
     void delete(Notice blog);
 
     /**
      * 获取所有的结果集
+     *
      * @return
      */
     List<Notice> findAll();
 
     /**
      * 根据姓名查找结果
+     *
      * @param name
      * @param pageRequest
      * @return
@@ -56,6 +62,7 @@ public interface NoticeService {
 
     /**
      * 根据学号查找结果
+     *
      * @param number
      * @param pageRequest
      * @return

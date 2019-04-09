@@ -32,7 +32,7 @@ public class MybatisTableConfig {
     private String password;
 
     @Bean
-    public PropertiesFactoryBean configProperties() throws Exception{
+    public PropertiesFactoryBean configProperties() throws Exception {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         propertiesFactoryBean.setLocations(resolver.getResources("classpath*:application.properties"));
@@ -61,7 +61,7 @@ public class MybatisTableConfig {
     }
 
     @Bean
-    public SqlSessionFactoryBean sqlSessionFactory() throws Exception{
+    public SqlSessionFactoryBean sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource());
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();

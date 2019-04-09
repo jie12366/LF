@@ -19,7 +19,7 @@ public class FrontInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         HttpSession session = httpServletRequest.getSession();
         Object sessions = session.getAttribute("user");
-        if(sessions != null){
+        if (sessions != null) {
             return true;
         }
         httpServletResponse.sendRedirect("/login");

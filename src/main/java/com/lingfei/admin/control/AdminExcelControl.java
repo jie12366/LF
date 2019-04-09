@@ -27,13 +27,14 @@ public class AdminExcelControl {
 
     /**
      * 导出公告记录表
+     *
      * @param response HttpServletResponse
      */
     @GetMapping("/getExcel1")
-    public void export1(HttpServletResponse response){
+    public void export1(HttpServletResponse response) {
         List<Announce> announces = announceService.getAllResult();
         //导出到Excel
-        ExcelUtils.exportExcel(announces,"公告记录","jie",Announce.class,"测试.xls",response);
+        ExcelUtils.exportExcel(announces, "公告记录", "jie", Announce.class, "测试.xls", response);
     }
 
     @Autowired
@@ -41,23 +42,24 @@ public class AdminExcelControl {
 
     /**
      * 导出成员信息表
+     *
      * @param response HttpServletResponse
      */
     @GetMapping("/getExcel2")
-    public void export2(HttpServletResponse response){
+    public void export2(HttpServletResponse response) {
         List<User> users = userService.listUser();
         //导出到Excel
-        ExcelUtils.exportExcel(users,"成员信息表","jie",User.class,"会员信息表.xls",response);
+        ExcelUtils.exportExcel(users, "成员信息表", "jie", User.class, "会员信息表.xls", response);
     }
 
     @Autowired
     CompetitionServiceImpl competitionService;
 
     @GetMapping("/getExcel3")
-    public void export3(HttpServletResponse response){
+    public void export3(HttpServletResponse response) {
         List<Competition> competitions = competitionService.listCompetition();
         //导出到Excel
-        ExcelUtils.exportExcel(competitions,"报名表","jie",Competition.class,"报名表.xls",response);
+        ExcelUtils.exportExcel(competitions, "报名表", "jie", Competition.class, "报名表.xls", response);
     }
 
     /*@GetMapping("/getExcel4")

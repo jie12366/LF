@@ -30,24 +30,24 @@ public class AnnounceServiceImpl implements AnnounceService {
 
     @Override
     @Cacheable(cacheNames = "announce")
-    public int save(Announce announce){
+    public int save(Announce announce) {
         Date date = new Date();
         Timestamp date1 = new Timestamp(date.getTime());
         announce.setDate(date1);
-        if (announce != null){
-            return announceMapper.save(announce.getContent(),announce.getDate(),announce.getPicture());
+        if (announce != null) {
+            return announceMapper.save(announce.getContent(), announce.getDate(), announce.getPicture());
         }
         return 0;
     }
 
     @Override
-    public List<Announce> getAllResult(){
-         return announceMapper.getAllResult();
+    public List<Announce> getAllResult() {
+        return announceMapper.getAllResult();
     }
 
     @Override
-    public Announce getAnnounceById(int id){
-        if(id > 0){
+    public Announce getAnnounceById(int id) {
+        if (id > 0) {
             return announceMapper.getAnnounceById(id);
         }
         return null;
@@ -55,26 +55,26 @@ public class AnnounceServiceImpl implements AnnounceService {
 
     @Override
     @CacheEvict(cacheNames = "announce")
-    public int deleteAnnounce(int id){
-        if(id > 0){
+    public int deleteAnnounce(int id) {
+        if (id > 0) {
             return announceMapper.deleteAnnounce(id);
         }
         return 0;
     }
 
     @Override
-    public int batchDelete(List<Announce> announces){
+    public int batchDelete(List<Announce> announces) {
         return announceMapper.batchDeleteAnnounce(announces);
     }
 
     @Override
     @CachePut(cacheNames = "announce")
-    public int updateAnnounce(Announce announce){
+    public int updateAnnounce(Announce announce) {
         Date date = new Date();
         Timestamp date2 = new Timestamp(date.getTime());
         announce.setDate(date2);
-        if(announce != null){
-            return announceMapper.updateAnnounce(announce.getContent(),announce.getDate(),announce.getId());
+        if (announce != null) {
+            return announceMapper.updateAnnounce(announce.getContent(), announce.getDate(), announce.getId());
         }
         return 0;
     }
@@ -83,8 +83,8 @@ public class AnnounceServiceImpl implements AnnounceService {
     private JavaMailSender mailSender;
 
     @Override
-    public void sendEmail(String theme,String content,String... tos){
-        for(String to :tos){
+    public void sendEmail(String theme, String content, String... tos) {
+        for (String to : tos) {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom("2263509062@qq.com");
             message.setTo(to);

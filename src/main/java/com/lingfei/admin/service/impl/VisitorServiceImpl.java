@@ -21,29 +21,29 @@ public class VisitorServiceImpl implements VisitorService {
     VisitorMapper visitorMapper;
 
     @Override
-    public int saveVisitor(){
-        visitorMapper.saveVisitor(1,this.getDate());
+    public int saveVisitor() {
+        visitorMapper.saveVisitor(1, this.getDate());
         return 0;
     }
 
     @Override
-    public int updateVisitor(){
+    public int updateVisitor() {
         int visitor = this.getVisitorByDate().getVisitor();
-        return visitorMapper.updateVisitor(visitor + 1,this.getDate());
+        return visitorMapper.updateVisitor(visitor + 1, this.getDate());
     }
 
     @Override
-    public CountVisitor getVisitorByDate(){
+    public CountVisitor getVisitorByDate() {
         return visitorMapper.getVisitorByDate(this.getDate());
     }
 
     @Override
-    public int getAllVisitor(){
+    public int getAllVisitor() {
         return visitorMapper.getAllVisitor();
     }
 
     @Override
-    public String getDate(){
+    public String getDate() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(date);

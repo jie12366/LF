@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 public interface LoginService {
     /**
      * 判断是否是管理员用户
+     *
      * @param admin com.lingfei.admin.entity.admin
      * @return true or false
      */
@@ -19,6 +20,7 @@ public interface LoginService {
 
     /**
      * 返回结果集
+     *
      * @return com.lingfei.admin.entity.admin
      */
     Admin returnResult();

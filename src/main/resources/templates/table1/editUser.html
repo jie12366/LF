@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html  xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,15 +16,17 @@
     <!-- Google fonts - Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
     <!-- theme stylesheet-->
-    <link rel="stylesheet" href="http://poag7m5q9.bkt.clouddn.com/style.default.css" id="theme-stylesheet">    <!-- Favicon-->
+    <link rel="stylesheet" href="http://poag7m5q9.bkt.clouddn.com/style.default.css" id="theme-stylesheet">
+    <!-- Favicon-->
     <link rel="shortcut icon" href="../../static/img/favicon.ico">
     <style>
-        .form-size{
+        .form-size {
             padding-top: 30px;
-            margin:auto;
+            margin: auto;
             width: 500px;
         }
-        .btn-class{
+
+        .btn-class {
             width: 100px;
             margin-left: 200px;
             margin-bottom: 50px;
@@ -49,49 +51,56 @@
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/admin/index">主界面</a></li>
                     <li class="breadcrumb-item"><a href="/table1">协会成员信息表 </a></li>
-                    <li class="breadcrumb-item active">修改成员信息   </li>
+                    <li class="breadcrumb-item active">修改成员信息</li>
                 </ul>
             </div>
             <!-- Forms Section-->
             <div class="form-size">
-                        <form method="post" class="form-validate" action="/user/update">
-                            <div class="row">
-                            <div class="col-lg-6">
+                <form method="post" class="form-validate" action="/user/update">
+                    <div class="row">
+                        <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="name" class="label-material">姓名</label>
-                                <input id="name" type="text" name="name" th:value="${user.name}" required data-msg="请输入姓名" class="input-material">
+                                <input id="name" type="text" name="name" th:value="${user.name}" required
+                                       data-msg="请输入姓名" class="input-material">
                             </div>
                             <div class="form-group">
                                 <label for="number" class="label-material">学号</label>
-                                <input id="number" type="text" name="number" th:value="${user.number}" required data-msg="请输入学号" class="input-material">
+                                <input id="number" type="text" name="number" th:value="${user.number}" required
+                                       data-msg="请输入学号" class="input-material">
                             </div>
                             <div class="form-group">
                                 <label for="stuClass" class="label-material">班级</label>
-                                <input id="stuClass" type="text" name="stuClass" th:value="${user.stuClass}" required data-msg="请输入班级" class="input-material">
+                                <input id="stuClass" type="text" name="stuClass" th:value="${user.stuClass}" required
+                                       data-msg="请输入班级" class="input-material">
                             </div>
-                            </div>
-                            <div class="col-lg-6">
+                        </div>
+                        <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="qq" class="label-material">QQ</label>
-                                <input id="qq" type="text" name="qq" th:value="${user.qq}" required data-msg="请输入QQ" class="input-material">
+                                <input id="qq" type="text" name="qq" th:value="${user.qq}" required data-msg="请输入QQ"
+                                       class="input-material">
                             </div>
                             <div class="form-group">
                                 <label for="email" class="label-material">邮箱</label>
-                                <input id="email" type="text" name="email" th:value="${user.email}" required data-msg="请输入邮箱" class="input-material">
+                                <input id="email" type="text" name="email" th:value="${user.email}" required
+                                       data-msg="请输入邮箱" class="input-material">
                             </div>
                             <div class="form-group">
                                 <label for="phone" class="label-material">手机号</label>
-                                <input id="phone" type="text" name="phone" th:value="${user.phone}" required data-msg="请输入手机号" class="input-material">
+                                <input id="phone" type="text" name="phone" th:value="${user.phone}" required
+                                       data-msg="请输入手机号" class="input-material">
                             </div>
-                            </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="depart" class="label-material">部门</label>
-                                <input id="depart" type="text" name="depart" th:value="${user.depart}" required data-msg="请输入部门" class="input-material">
-                            </div>
-                            <input type="hidden" name="id" th:value="${user.id}">
-                            <input type="submit" class="btn btn-primary btn-class" value="提交">
-                        </form>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="depart" class="label-material">部门</label>
+                        <input id="depart" type="text" name="depart" th:value="${user.depart}" required data-msg="请输入部门"
+                               class="input-material">
+                    </div>
+                    <input type="hidden" name="id" th:value="${user.id}">
+                    <input type="submit" class="btn btn-primary btn-class" value="提交">
+                </form>
             </div>
         </div>
     </div>

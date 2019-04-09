@@ -20,31 +20,30 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="competition")
+@Table(name = "competition")
 public class Competition extends BaseModel implements Serializable {
 
-    @Excel(name = "序号",orderNum = "0")
-    @Column(name = "id",type = MySqlTypeConstant.INT,isKey = true,isAutoIncrement = true,length = 5)
-    @ApiModelProperty("序号")
+    @Excel(name = "序号", orderNum = "0")
+    @Column(name = "id", type = MySqlTypeConstant.INT, isKey = true, isAutoIncrement = true, length = 5)
     private int id;
 
-    @Excel(name = "姓名",orderNum = "1")
-    @Column(name = "name",type = MySqlTypeConstant.VARCHAR,length = 20)
-    @ApiModelProperty("姓名")
-    private String  name;
+    @Excel(name = "姓名", orderNum = "1")
+    @Column(name = "name", type = MySqlTypeConstant.VARCHAR, length = 20)
+    private String name;
 
-    @Excel(name = "班级",orderNum = "2")
-    @Column(name = "stuClass",type = MySqlTypeConstant.VARCHAR,length = 20)
-    @ApiModelProperty("班级")
-    private String  stuClass;
+    @Excel(name = "班级", orderNum = "2")
+    @Column(name = "stuClass", type = MySqlTypeConstant.VARCHAR, length = 20)
+    private String stuClass;
 
-    @Excel(name = "QQ",orderNum = "3")
-    @Column(name = "qq",type = MySqlTypeConstant.VARCHAR,length = 20)
-    @ApiModelProperty("QQ")
-    private String  qq;
+    @Excel(name = "QQ", orderNum = "3")
+    @Column(name = "qq", type = MySqlTypeConstant.VARCHAR, length = 20)
+    private String qq;
 
-    @Excel(name = "手机号",orderNum = "4")
-    @Column(name = "phone",type = MySqlTypeConstant.VARCHAR,length = 20)
-    @ApiModelProperty("手机号")
-    private String  phone;
+    @Excel(name = "手机号", orderNum = "4")
+    @Column(name = "phone", type = MySqlTypeConstant.VARCHAR, length = 20)
+    private String phone;
+
+    @Excel(name = "项目", orderNum = "5")
+    @Column(name = "item", type = MySqlTypeConstant.VARCHAR, length = 20)
+    private String item;
 }

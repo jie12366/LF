@@ -14,15 +14,16 @@ import javax.servlet.http.HttpServletRequest;
 public class ErrorControl implements ErrorController {
 
     @GetMapping("/error")
-    public String handleError(HttpServletRequest request){
+    public String handleError(HttpServletRequest request) {
         //获取statusCode(404,500)
-        Integer statusCode = (Integer)request.getAttribute("javax.servlet.error.status_code");
+        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         Integer status1 = 404;
-        if (statusCode.equals(status1)){
+        if (statusCode.equals(status1)) {
             return "404";
         }
         return "500";
     }
+
     @Override
     public String getErrorPath() {
         return "/error";

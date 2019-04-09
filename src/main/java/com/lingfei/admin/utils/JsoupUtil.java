@@ -22,10 +22,10 @@ public class JsoupUtil {
 
     static {
         //富文本编辑时一些样式是使用style来进行实现的 比如红色字体 style="color:red;" 所以需要给所有标签添加style属性
-        WHITELIST.addAttributes(":all","style");
+        WHITELIST.addAttributes(":all", "style");
     }
 
-    public static String clean(String content){
-        return Jsoup.clean(content,"",WHITELIST,OUTPUT_SETTINGS);
+    public static String clean(String content) {
+        return Jsoup.clean(content, "", WHITELIST, OUTPUT_SETTINGS);
     }
 }

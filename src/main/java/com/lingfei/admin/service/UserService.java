@@ -14,18 +14,20 @@ import java.util.List;
  */
 
 @Service
-@Transactional(isolation = Isolation.REPEATABLE_READ,propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+@Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 
-public interface UserService{
+public interface UserService {
 
     /**
      * 返回所有结果
+     *
      * @return List<User>
      */
     List<User> listUser();
 
     /**
      * 根据id返回结果
+     *
      * @param id int
      * @return user
      */
@@ -33,6 +35,7 @@ public interface UserService{
 
     /**
      * 根据账号获取id
+     *
      * @param account
      * @return
      */
@@ -40,22 +43,25 @@ public interface UserService{
 
     /**
      * 插入数据
-     * @param account 账号
+     *
+     * @param account  账号
      * @param password 密码
      * @return 是否插入成功
      */
-    int saveAccount(String account,String password);
+    int saveAccount(String account, String password);
 
     /**
      * 根据邮箱重置密码
+     *
      * @param email
      * @param password
      * @return
      */
-    int resetPassword(String password,String email);
+    int resetPassword(String password, String email);
 
     /**
      * 根据id更新记录
+     *
      * @param user User
      * @return 更新是否成功
      */
@@ -63,6 +69,7 @@ public interface UserService{
 
     /**
      * 根据用户id更新余额
+     *
      * @param user User
      * @return 更新是否成功
      */
@@ -70,6 +77,7 @@ public interface UserService{
 
     /**
      * 动态修改user表
+     *
      * @param user User
      * @return 是否成功
      */
@@ -77,6 +85,7 @@ public interface UserService{
 
     /**
      * 根据id删除记录
+     *
      * @param id int
      * @return 删除是否成功
      */
@@ -84,14 +93,16 @@ public interface UserService{
 
     /**
      * 检查用户登录账号密码是否匹配
-     * @param account 账号
+     *
+     * @param account  账号
      * @param password 密码
      * @return 是否匹配
      */
-    boolean checkLogin(String account,String password);
+    boolean checkLogin(String account, String password);
 
     /**
      * 根据用户名获取密码
+     *
      * @param account 账号
      * @return 密码
      */
@@ -99,6 +110,7 @@ public interface UserService{
 
     /**
      * 根据邮箱获取密码
+     *
      * @param email
      * @return
      */

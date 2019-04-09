@@ -17,8 +17,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
+
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.Servlet;
+
 /**
  * @author www.xyjz123.xyz
  * @date 2019/3/28 15:41
@@ -34,9 +36,11 @@ public class FileUploadConfig {
     @Autowired
     private QiniuUtil qiNiuProperties;
     private final MultipartProperties multipartProperties;
+
     public FileUploadConfig(MultipartProperties multipartProperties) {
         this.multipartProperties = multipartProperties;
     }
+
     /**
      * 上传配置
      */
@@ -45,6 +49,7 @@ public class FileUploadConfig {
     public MultipartConfigElement multipartConfigElement() {
         return this.multipartProperties.createMultipartConfig();
     }
+
     /**
      * 注册解析器
      */
@@ -55,6 +60,7 @@ public class FileUploadConfig {
         multipartResolver.setResolveLazily(this.multipartProperties.isResolveLazily());
         return multipartResolver;
     }
+
     /**
      * 华东   Zone.zone0()
      * 华北   Zone.zone1()
@@ -66,6 +72,7 @@ public class FileUploadConfig {
         //华东
         return new com.qiniu.storage.Configuration(Zone.zone0());
     }
+
     /**
      * 构建一个七牛上传工具实例
      */
@@ -73,6 +80,7 @@ public class FileUploadConfig {
     public UploadManager uploadManager() {
         return new UploadManager(qiniuConfig());
     }
+
     /**
      * 认证信息实例
      *
@@ -83,6 +91,7 @@ public class FileUploadConfig {
         return Auth.create(qiNiuProperties.getAccessKey(),
                 qiNiuProperties.getSecretKey());
     }
+
     /**
      * 构建七牛空间管理实例
      */
@@ -90,6 +99,7 @@ public class FileUploadConfig {
     public BucketManager bucketManager() {
         return new BucketManager(auth(), qiniuConfig());
     }
+
     /**
      * 配置gson为json解析工具
      *

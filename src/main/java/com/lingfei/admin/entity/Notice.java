@@ -15,7 +15,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "user", type = "msg",shards = 3)
+@Document(indexName = "user", type = "msg", shards = 3)
 public class Notice {
 
     @Id

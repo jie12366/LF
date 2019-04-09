@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 创建拦截器实现接口
+ *
  * @author www.xyjz123.xyz
  * @date 2019/3/17 22:26
  */
@@ -23,7 +24,7 @@ public class AdminInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         HttpSession session = httpServletRequest.getSession();
         Object sessions = session.getAttribute("admin");
-        if(sessions != null){
+        if (sessions != null) {
             return true;
         }
         httpServletResponse.sendRedirect("/admin/login");

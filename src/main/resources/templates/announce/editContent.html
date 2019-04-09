@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html  xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,10 +16,11 @@
     <!-- Google fonts - Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
     <!-- theme stylesheet-->
-    <link rel="stylesheet" href="http://poag7m5q9.bkt.clouddn.com/style.default.css" id="theme-stylesheet">    <!-- Favicon-->
+    <link rel="stylesheet" href="http://poag7m5q9.bkt.clouddn.com/style.default.css" id="theme-stylesheet">
+    <!-- Favicon-->
     <link rel="shortcut icon" href="../../static/img/favicon.ico">
     <style>
-        .form-size{
+        .form-size {
             padding-top: 50px;
             margin: auto;
             width: 500px;
@@ -45,7 +46,7 @@
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/admin/index">主界面</a></li>
                     <li class="breadcrumb-item"><a href="/admin/announce">公告栏 </a></li>
-                    <li class="breadcrumb-item active">编辑公告   </li>
+                    <li class="breadcrumb-item active">编辑公告</li>
                 </ul>
             </div>
             <!-- Forms Section-->
@@ -53,7 +54,8 @@
                 <form action="/admin/updateContent" method="post">
                     <div class="form-group">
                         <label for="content" class="label-material">内容(两百字以内)</label>
-                        <input type="text" id="content" name="content" th:value="${announce.content}" class="input-material">
+                        <input type="text" id="content" name="content" th:value="${announce.content}"
+                               class="input-material">
                         <input type="hidden" name="id" th:value="${announce.id}">
                     </div>
                     <input type="submit" class="btn btn-primary" value="提交修改">

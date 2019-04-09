@@ -24,17 +24,17 @@ import java.sql.Timestamp;
 public class Announce extends BaseModel implements Serializable {
 
     @Excel(name = "序号", orderNum = "0")
-    @Column(name = "id",type = MySqlTypeConstant.INT, length = 10,isKey = true,isAutoIncrement = true)
+    @Column(name = "id", type = MySqlTypeConstant.INT, length = 10, isKey = true, isAutoIncrement = true)
     private int id;
 
     @Excel(name = "内容", orderNum = "1")
-    @Column(name = "content",type = MySqlTypeConstant.VARCHAR,length = 400)
+    @Column(name = "content", type = MySqlTypeConstant.VARCHAR, length = 400)
     private String content;
 
-    @Column(name = "picture",type = MySqlTypeConstant.VARCHAR,length = 30)
+    @Column(name = "picture", type = MySqlTypeConstant.VARCHAR, length = 30)
     private String picture;
 
-    @Excel(name = "时间", exportFormat = "yyyy-MM-dd hh:mm" ,orderNum = "2")
-    @Column(name = "date",type = MySqlTypeConstant.DATETIME)
+    @Excel(name = "时间", exportFormat = "yyyy-MM-dd hh:mm", orderNum = "2")
+    @Column(name = "date", type = MySqlTypeConstant.DATETIME)
     private Timestamp date;
 }

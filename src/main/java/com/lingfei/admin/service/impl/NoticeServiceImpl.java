@@ -35,7 +35,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public void deleteById(String id){
+    public void deleteById(String id) {
         noticeMapper.deleteById(id);
     }
 
@@ -51,12 +51,12 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public Page<Notice> findByName(String name, PageRequest pageRequest) {
-        return noticeMapper.findByName(name,pageRequest);
+        return noticeMapper.findByName(name, pageRequest);
     }
 
     @Override
     public Page<Notice> findByNumber(String title, PageRequest pageRequest) {
-        return noticeMapper.findByNumber(title,pageRequest);
+        return noticeMapper.findByNumber(title, pageRequest);
     }
 
 }

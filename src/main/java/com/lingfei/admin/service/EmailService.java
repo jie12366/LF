@@ -11,9 +11,10 @@ public interface EmailService {
 
     /**
      * 邮件发送
-     * @param to 接受者
-     * @param object 主题
+     *
+     * @param to      接受者
+     * @param object  主题
      * @param content 验证码
      */
-    int sendEmail(String to,String object,String content);
+    int sendEmail(String to, String object, String content);
 }

@@ -8,7 +8,7 @@ stages:
   - package
   - build
   - deploy
-  
+
 maven-package:
   image: maven:3.5-jdk-8-alpine
   tags:

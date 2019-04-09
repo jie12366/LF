@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class MyBatisMapperScannerConfig {
 
     @Bean
-    public MapperScannerConfigurer mapperScannerConfigurer() throws Exception{
+    public MapperScannerConfigurer mapperScannerConfigurer() throws Exception {
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
         mapperScannerConfigurer.setBasePackage("com.lingfei.admin.mapper.*;com.gitee.sunchenbin.mybatis.actable.dao.*");
         mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");

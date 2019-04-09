@@ -14,6 +14,7 @@ public interface AdminMapper {
 
     /**
      * 取出管理员的用户名和密码
+     *
      * @return 返回结果集
      */
     @Select("select userName,password from adminUser")

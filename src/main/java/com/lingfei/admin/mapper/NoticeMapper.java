@@ -11,11 +11,12 @@ import org.springframework.stereotype.Component;
  * @date 2019/3/31 0:19
  */
 @Component
-public interface NoticeMapper extends ElasticsearchRepository<Notice, String>{
+public interface NoticeMapper extends ElasticsearchRepository<Notice, String> {
 
     /**
      * 根据姓名查找并分页
-     * @param name 姓名
+     *
+     * @param name     姓名
      * @param pageable
      * @return
      */
@@ -23,6 +24,7 @@ public interface NoticeMapper extends ElasticsearchRepository<Notice, String>{
 
     /**
      * 根据学号查找并分页
+     *
      * @param number
      * @param pageable
      * @return

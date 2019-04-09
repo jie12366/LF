@@ -33,7 +33,7 @@ public class RedisConfig {
      * 定义缓存数据 key 生成策略的bean 包名+类名+方法名+所有参数
      */
     @Bean
-    public KeyGenerator wiselyKeyGenerator(){
+    public KeyGenerator wiselyKeyGenerator() {
         return new KeyGenerator() {
             @Override
             public Object generate(Object target, Method method, Object... params) {

@@ -18,11 +18,11 @@ public class AdminApplicationTests {
     RedisTemplate redisTemplate;
 
     @Test
-    public void get(){
+    public void get() {
 
         String key = "balabala";
-        redisTemplate.opsForValue().set(key,"lalala");
-        final String k2 = (String)redisTemplate.opsForValue().get(key);
-        log.info("[自定义的字符缓存结果] - [{}]",k2);
+        redisTemplate.opsForValue().set(key, "lalala");
+        final String k2 = (String) redisTemplate.opsForValue().get(key);
+        log.info("[自定义的字符缓存结果] - [{}]", k2);
     }
 }

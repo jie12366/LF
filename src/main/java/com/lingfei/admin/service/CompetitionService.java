@@ -14,12 +14,13 @@ import java.util.List;
  */
 
 @Service
-@Transactional(isolation = Isolation.REPEATABLE_READ,propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+@Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 
 public interface CompetitionService {
 
     /**
      * 插入数据
+     *
      * @param competition Competition
      * @return 是否插入成功
      */
@@ -27,6 +28,7 @@ public interface CompetitionService {
 
     /**
      * 根据id更新数据
+     *
      * @param competition Competition
      * @return 是否更新成功
      */
@@ -34,12 +36,14 @@ public interface CompetitionService {
 
     /**
      * 查询所有的数据
+     *
      * @return List<Competition>
      */
     List<Competition> listCompetition();
 
     /**
      * 根据id查询数据
+     *
      * @param id int
      * @return Competition
      */
@@ -47,6 +51,7 @@ public interface CompetitionService {
 
     /**
      * 根据id删除数据
+     *
      * @param id int
      * @return 是否删除成功
      */
@@ -54,6 +59,7 @@ public interface CompetitionService {
 
     /**
      * 批量删除数据
+     *
      * @param competitions List<Competition>
      * @return 是否删除成功
      */

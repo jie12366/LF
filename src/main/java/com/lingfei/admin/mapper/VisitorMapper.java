@@ -15,32 +15,36 @@ public interface VisitorMapper {
 
     /**
      * 插入
+     *
      * @param visitor int
-     * @param  date String
+     * @param date    String
      * @return
      */
     @Insert("insert into countv(visitor,date) values(#{visitor},#{date})")
-    int saveVisitor(int visitor,String date);
+    int saveVisitor(int visitor, String date);
 
     /**
      * 根据时间更新
+     *
      * @param visitor int
-     * @param date String
+     * @param date    String
      * @return
      */
     @Update("update countv set visitor = #{visitor} where date =#{date}")
-    int updateVisitor(int visitor,String date);
+    int updateVisitor(int visitor, String date);
 
     /**
      * 根据时间查询
+     *
      * @param date String
      * @return
      */
     @Select("select * from countv where date = #{date}")
-    CountVisitor getVisitorByDate(String  date);
+    CountVisitor getVisitorByDate(String date);
 
     /**
      * 查询总的访客数
+     *
      * @return
      */
     @Select("select sum(visitor) from countv")

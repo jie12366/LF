@@ -14,24 +14,26 @@ public class FrontControl {
 
     /**
      * 直接跳转到主界面
+     *
      * @return
      */
     @GetMapping("")
-    public String toIndex(){
+    public String toIndex() {
         return "front/index";
     }
+
     @GetMapping("/")
-    public String index(){
+    public String index() {
         return "front/index";
     }
 
     @GetMapping("/index/about")
-    public String toAbout(){
+    public String toAbout() {
         return "front/about";
     }
 
     @GetMapping("/index/competition")
-    public String toCompetition(){
+    public String toCompetition() {
         return "front/competition";
     }
 }

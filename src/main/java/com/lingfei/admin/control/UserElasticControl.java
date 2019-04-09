@@ -22,9 +22,9 @@ public class UserElasticControl {
     private NoticeService noticeService;
 
     @GetMapping("/user")
-    public String  getUserById(String name, Model model){
-        Page<Notice> page = noticeService.findByName(name,PageRequest.of(0,10));
-        model.addAttribute("pages",page.getContent());
+    public String getUserById(String name, Model model) {
+        Page<Notice> page = noticeService.findByName(name, PageRequest.of(0, 10));
+        model.addAttribute("pages", page.getContent());
         return "table1/esTable1";
     }
 }

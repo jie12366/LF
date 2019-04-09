@@ -23,15 +23,15 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     @Cacheable
-    public Admin returnResult(){
+    public Admin returnResult() {
         return adminMapper.returnResult();
     }
 
     @Override
-    public boolean adminLogin(Admin admin){
+    public boolean adminLogin(Admin admin) {
         String password = GetString.getMd5(admin.getPassword());
-        if(admin.getUserName().equals(returnResult().getUserName()) && password.equals(returnResult().getPassword())){
-            return  true;
+        if (admin.getUserName().equals(returnResult().getUserName()) && password.equals(returnResult().getPassword())) {
+            return true;
         }
         return false;
     }

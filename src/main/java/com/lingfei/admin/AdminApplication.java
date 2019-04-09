@@ -11,6 +11,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 /**
  * 主程序入口
+ *
  * @author 熊义杰
  * @date 2019-3-16
  */

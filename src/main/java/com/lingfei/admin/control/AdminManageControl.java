@@ -42,17 +42,18 @@ public class AdminManageControl {
 
     /**
      * 接受get或者post方法
+     *
      * @param model Model
      * @param start 开始页码数
-     * @param size 每页的大小
+     * @param size  每页的大小
      * @return announce.html
      */
     @RequestMapping("/announce")
-    public String getContent(Model model, @RequestParam(value = "start",defaultValue = "1") int start, @RequestParam(value = "size",defaultValue = "5") int size){
-        PageHelper.startPage(start,size,"id asc");
-        List<Announce> lists =  announceService.getAllResult();
+    public String getContent(Model model, @RequestParam(value = "start", defaultValue = "1") int start, @RequestParam(value = "size", defaultValue = "5") int size) {
+        PageHelper.startPage(start, size, "id asc");
+        List<Announce> lists = announceService.getAllResult();
         PageInfo<Announce> pageInfo = new PageInfo<>(lists);
-        model.addAttribute("pages",pageInfo);
+        model.addAttribute("pages", pageInfo);
         return "announce/announce";
     }
 
@@ -61,14 +62,15 @@ public class AdminManageControl {
 
     /**
      * 接受post方法，将表单传来的数据插入
+     *
      * @param announce com.lingfei.admin.entity.Announce
      * @return 服务端跳转到announce.html
      */
     @ApiOperation("插入数据")
     @PostMapping("/addContent")
     public String addContent(Announce announce, HttpServletRequest request,
-                             @RequestParam("file") MultipartFile file, Model model){
-        try{
+                             @RequestParam("file") MultipartFile file, Model model) {
+        try {
             //根据时间戳创建文件名
             String fileName = System.currentTimeMillis() + file.getOriginalFilename();
             //创建文件的实际路径
@@ -83,7 +85,7 @@ public class AdminManageControl {
             //解析上传成功的结果
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
             announce.setPicture(putRet.key);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         announceService.save(announce);
@@ -92,15 +94,16 @@ public class AdminManageControl {
 
     /**
      * 接受post传来的id，修改该id的数据
-     * @param id int
+     *
+     * @param id    int
      * @param model Model
      * @return 编辑的页面
      */
     @GetMapping("/editContent")
-    public String editContent(int id,Model model){
+    public String editContent(int id, Model model) {
         Announce announce = announceService.getAnnounceById(id);
-        if(announce != null){
-            model.addAttribute("announce",announce);
+        if (announce != null) {
+            model.addAttribute("announce", announce);
             return "announce/editContent";
         }
         return "redirect:announce";
@@ -108,30 +111,32 @@ public class AdminManageControl {
 
     /**
      * 编辑完后，更新数据库的记录
+     *
      * @param announce Announce
      * @return 服务端跳转回announce.html
      */
     @PostMapping("/updateContent")
-    public String updateContent(Announce announce){
+    public String updateContent(Announce announce) {
         announceService.updateAnnounce(announce);
         return "redirect:announce";
     }
 
     /**
      * 根据传来的id删除对应的记录
+     *
      * @param id int
      * @return 服务端跳转回announce.html
      */
     @GetMapping("/deleteContent")
-    public String deleteContent(String id){
+    public String deleteContent(String id) {
         String[] ids = id.split(",");
         List<Announce> announces = new ArrayList<>();
-        for(int i = 0;i<ids.length;i++){
+        for (int i = 0; i < ids.length; i++) {
             int id1 = Integer.parseInt(ids[i]);
             announces.add(announceService.getAnnounceById(id1));
             try {
                 qiNiuService.deleteFile(announceService.getAnnounceById(id1).getPicture());
-            }catch (QiniuException e){
+            } catch (QiniuException e) {
                 e.printStackTrace();
             }
         }
@@ -141,57 +146,61 @@ public class AdminManageControl {
 
     @Autowired
     VisitorServiceImpl visitorService;
+
     /**
      * 直接跳转,并设置访客数以及浏览数
+     *
      * @return admin.html
      */
     @GetMapping("/index")
-    public String index(Model model){
+    public String index(Model model) {
         CountVisitor visitor = visitorService.getVisitorByDate();
         int totalVisitor = visitorService.getAllVisitor();
         int totalUser = userService.listUser().size();
-        if(visitor == null){
-            model.addAttribute("visitor",0);
-        }else {
-            model.addAttribute("visitor",visitor.getVisitor());
+        if (visitor == null) {
+            model.addAttribute("visitor", 0);
+        } else {
+            model.addAttribute("visitor", visitor.getVisitor());
         }
-        if (totalVisitor == 0){
-            model.addAttribute("totalVisitor",0);
-        }else {
-            model.addAttribute("totalVisitor",totalVisitor);
+        if (totalVisitor == 0) {
+            model.addAttribute("totalVisitor", 0);
+        } else {
+            model.addAttribute("totalVisitor", totalVisitor);
         }
-        if(totalUser == 0){
-            model.addAttribute("totalUser",0);
-        }else {
-            model.addAttribute("totalUser",totalUser);
+        if (totalUser == 0) {
+            model.addAttribute("totalUser", 0);
+        } else {
+            model.addAttribute("totalUser", totalUser);
         }
         return "admin";
     }
 
     /**
      * 直接跳转
+     *
      * @return sendEmail.html
      */
     @GetMapping("/toEmail")
-    public String toEmail(){
+    public String toEmail() {
         return "announce/sendEmail";
     }
 
     /**
      * 添加发送邮件的信息
+     *
      * @param request HttpServletRequest
      * @return 服务端跳转到/announce
      * @throws Exception
      */
     @RequestMapping("/addEmail")
-    public String  addEmail(HttpServletRequest request) throws Exception{
+    public String addEmail(HttpServletRequest request) throws Exception {
 
         String theme = request.getParameter("theme");
         String text = request.getParameter("content");
         HttpSession session = request.getSession();
         String emails = session.getAttribute("tos").toString();
         String[] to = emails.split(",");
-        announceService.sendEmail(theme,text,to);
+        announceService.sendEmail(theme, text, to);
         return "redirect:announce";
     }
 
@@ -200,38 +209,41 @@ public class AdminManageControl {
 
     @Autowired
     CompetitionServiceImpl competitionService;
+
     /**
      * 选择要群发邮件的对象
-     * @param model Model
+     *
+     * @param model  Model
      * @param start1 用户表开始页
      * @param start2 报名表开始页
-     * @param size 每页的大小
+     * @param size   每页的大小
      * @return selectUser.html
      */
     @GetMapping("/selectUser")
-    public String selectUser(Model model, @RequestParam(value = "start1",defaultValue = "1") int start1,@RequestParam(value = "start2",defaultValue = "1") int start2, @RequestParam(value = "size",defaultValue = "5") int size){
+    public String selectUser(Model model, @RequestParam(value = "start1", defaultValue = "1") int start1, @RequestParam(value = "start2", defaultValue = "1") int start2, @RequestParam(value = "size", defaultValue = "5") int size) {
         List<User> users = userService.listUser();
-        PageHelper.startPage(start1,size,"id asc");
+        PageHelper.startPage(start1, size, "id asc");
         PageInfo<User> pageInfo1 = new PageInfo<>(users);
-        model.addAttribute("pages1",pageInfo1);
+        model.addAttribute("pages1", pageInfo1);
 
         List<Competition> competitions = competitionService.listCompetition();
-        PageHelper.startPage(start2,size,"id asc");
+        PageHelper.startPage(start2, size, "id asc");
         PageInfo<Competition> pageInfo2 = new PageInfo<>(competitions);
-        model.addAttribute("pages2",pageInfo2);
+        model.addAttribute("pages2", pageInfo2);
         return "announce/selectUser";
     }
 
     /**
      * 获取刚刚选择的群发的对象
-     * @param emails String
+     *
+     * @param emails  String
      * @param session HttpSession
      * @return sendEmail.html
      */
     @GetMapping("/getSelect")
-    public String getSelect(String emails, HttpSession session){
-        emails.substring(0,emails.length() - 1);
-        session.setAttribute("tos",emails);
+    public String getSelect(String emails, HttpSession session) {
+        emails.substring(0, emails.length() - 1);
+        session.setAttribute("tos", emails);
         return "announce/sendEmail";
     }
 }

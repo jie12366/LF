@@ -21,9 +21,9 @@ import java.io.Serializable;
 @Table(name = "adminUser")
 public class Admin extends BaseModel implements Serializable {
 
-    @Column(name = "userName",type = MySqlTypeConstant.VARCHAR,length = 10)
+    @Column(name = "userName", type = MySqlTypeConstant.VARCHAR, length = 10)
     private String userName;
 
-    @Column(name = "password",type = MySqlTypeConstant.VARCHAR,length = 40)
+    @Column(name = "password", type = MySqlTypeConstant.VARCHAR, length = 40)
     private String password;
 }

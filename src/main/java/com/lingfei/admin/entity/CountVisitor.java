@@ -18,13 +18,13 @@ import java.sql.Timestamp;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="countv")
+@Table(name = "countv")
 public class CountVisitor implements Serializable {
 
-    @Column(name = "visitor",type = MySqlTypeConstant.INT,length = 6)
+    @Column(name = "visitor", type = MySqlTypeConstant.INT, length = 6)
     private int visitor;
 
-    @Column(name = "date",type = MySqlTypeConstant.VARCHAR)
+    @Column(name = "date", type = MySqlTypeConstant.VARCHAR)
     private String date;
 
 }

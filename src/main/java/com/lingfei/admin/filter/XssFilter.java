@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  * @description Xss攻击过滤器
  * @date 2019/4/5 16:27
  */
-public class XssFilter implements Filter{
+public class XssFilter implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(XssFilter.class);
     /**
@@ -36,45 +36,45 @@ public class XssFilter implements Filter{
     public void init(FilterConfig filterConfig) throws ServletException {
         log.info("------XssFilter init-------");
         String isIncludeRichText = filterConfig.getInitParameter("isIncludeRichText");
-        if(StringUtils.isNotBlank(isIncludeRichText)){
+        if (StringUtils.isNotBlank(isIncludeRichText)) {
             IS_INCLUDE_RICH_TEXT = BooleanUtils.toBoolean(isIncludeRichText);
         }
         String temp = filterConfig.getInitParameter("excludes");
-        if (temp != null){
+        if (temp != null) {
             String[] url = temp.split(",");
-            for(int i = 0;url != null && i < url.length;i++){
+            for (int i = 0; url != null && i < url.length; i++) {
                 excludes.add(url[i]);
             }
         }
     }
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res,FilterChain chain)
-                        throws IOException,ServletException {
-        HttpServletRequest request = (HttpServletRequest)req;
-        HttpServletResponse response = (HttpServletResponse)res;
-        if(handleExcludeUrl(request,response)){
-            chain.doFilter(req,res);
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
+        if (handleExcludeUrl(request, response)) {
+            chain.doFilter(req, res);
             return;
         }
-        XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper(request,IS_INCLUDE_RICH_TEXT);
-        chain.doFilter(xssRequest,res);
+        XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper(request, IS_INCLUDE_RICH_TEXT);
+        chain.doFilter(xssRequest, res);
     }
 
     @Override
-    public void destroy(){
+    public void destroy() {
         log.info("-------xssFilter destroy -------");
     }
 
-    public boolean handleExcludeUrl(HttpServletRequest request,HttpServletResponse response){
-        if(excludes == null && excludes.isEmpty()){
+    public boolean handleExcludeUrl(HttpServletRequest request, HttpServletResponse response) {
+        if (excludes == null && excludes.isEmpty()) {
             return false;
         }
         String url = request.getServletPath();
-        for(String pattern : excludes){
+        for (String pattern : excludes) {
             Pattern p = Pattern.compile("^" + pattern);
             Matcher m = p.matcher(url);
-            if (m.find()){
+            if (m.find()) {
                 return true;
             }
         }

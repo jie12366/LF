@@ -30,6 +30,7 @@ public class UploadServiceImpl implements UploadService, InitializingBean {
     private QiniuUtil qiNiuProperties;
     private StringMap putPolicy;
     String key = null;
+
     @Override
     public Response uploadFile(File file) throws QiniuException {
         Response response = this.uploadManager.put(file, key, getUploadToken());
@@ -40,11 +41,13 @@ public class UploadServiceImpl implements UploadService, InitializingBean {
         }
         return response;
     }
+
     @Override
     public void afterPropertiesSet() throws Exception {
         this.putPolicy = new StringMap();
         putPolicy.put("returnBody", "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\",\"width\":$(imageInfo.width), \"height\":${imageInfo.height}}");
     }
+
     /**
      * 获取上传凭证
      *
@@ -55,7 +58,7 @@ public class UploadServiceImpl implements UploadService, InitializingBean {
     }
 
     @Override
-    public void deleteFile(String key) throws QiniuException{
-        bucketManager.delete(qiNiuProperties.getBucket(),key);
+    public void deleteFile(String key) throws QiniuException {
+        bucketManager.delete(qiNiuProperties.getBucket(), key);
     }
 }

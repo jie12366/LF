@@ -11,10 +11,11 @@ public class GetString {
 
     /**
      * 将传入的字符串进行MD5加密
+     *
      * @param key 传入的字符串
      * @return 加密后的16进制的md5串
      */
-    public static String getMd5(String key){
+    public static String getMd5(String key) {
         char[] hexDigits = {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
         };
@@ -41,8 +42,8 @@ public class GetString {
         }
     }
 
-    public static String getCode(){
-        String code = (int)((Math.random() * 9 + 1) * 100000) + "";
+    public static String getCode() {
+        String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
         return code;
     }
 }

@@ -24,7 +24,7 @@ import lombok.Data;
 public class JsonResult {
 
     /**
-    *定义jackson对象
+     * 定义jackson对象
      */
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
