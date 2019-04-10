@@ -3,7 +3,6 @@ package com.lingfei.admin.control;
 import com.lingfei.admin.entity.Admin;
 import com.lingfei.admin.service.impl.LoginServiceImpl;
 import com.lingfei.admin.service.impl.UserServiceImpl;
-import com.lingfei.admin.service.impl.VisitorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +23,6 @@ public class AdminLoginControl {
 
     @Autowired
     LoginServiceImpl loginService;
-    @Autowired
-    VisitorServiceImpl visitorService;
     @Autowired
     UserServiceImpl userService;
 
@@ -49,11 +46,6 @@ public class AdminLoginControl {
     public String loginIn(Admin admin, HttpServletRequest request) {
         if (loginService.adminLogin(admin)) {
             request.getSession().setAttribute("admin", admin.getUserName());
-            if (visitorService.getVisitorByDate() == null) {
-                visitorService.saveVisitor();
-            } else {
-                visitorService.updateVisitor();
-            }
             return "redirect:index";
         }
         return "redirect:login";

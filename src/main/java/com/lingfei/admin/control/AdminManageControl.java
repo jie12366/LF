@@ -147,6 +147,8 @@ public class AdminManageControl {
     @Autowired
     VisitorServiceImpl visitorService;
 
+    @Autowired
+    CompetitionServiceImpl competitionService;
     /**
      * 直接跳转,并设置访客数以及浏览数
      *
@@ -156,7 +158,7 @@ public class AdminManageControl {
     public String index(Model model) {
         CountVisitor visitor = visitorService.getVisitorByDate();
         int totalVisitor = visitorService.getAllVisitor();
-        int totalUser = userService.listUser().size();
+        int totalUser = competitionService.listCompetition().size();
         if (visitor == null) {
             model.addAttribute("visitor", 0);
         } else {
@@ -206,9 +208,6 @@ public class AdminManageControl {
 
     @Autowired
     private UserServiceImpl userService;
-
-    @Autowired
-    CompetitionServiceImpl competitionService;
 
     /**
      * 选择要群发邮件的对象
