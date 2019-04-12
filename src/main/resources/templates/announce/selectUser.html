@@ -68,7 +68,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:each="user:${pages1.list}">
+                                            <tr th:each="user:${pages1}">
                                                 <td style="CURSOR: hand; HEIGHT: 10px" align="center" width="4"><input
                                                         type="checkbox" th:value="${user.email}" id="check" value=""
                                                         name="check"></td>
@@ -78,14 +78,6 @@
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <!--实现分页,page.pageNum是当前页数，page.pages是总页数-->
-                                        <div>
-                                            <a th:href="@{/admin/selectUser(start1 = 1)}">首页</a>
-                                            <a th:href="@{/admin/selectUser(start1 = ${pages1.pageNum - 1})}">上一页</a>
-                                            <a th:href="@{/admin/selectUser(start1 = ${pages1.pageNum + 1})}">下一页</a>
-                                            <a th:href="@{/admin/selectUser(start1 = ${pages1.pages})}">尾页</a>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <h2>比赛报名成员</h2>
@@ -100,7 +92,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:each="competition:${pages2.list}">
+                                            <tr th:each="competition:${pages2}">
                                                 <td style="CURSOR: hand; HEIGHT: 10px" align="center" width="4"><input
                                                         type="checkbox" th:value="${competition.qq}" id="check1"
                                                         value="" name="check1"></td>
@@ -110,13 +102,6 @@
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <!--实现分页,page.pageNum是当前页数，page.pages是总页数-->
-                                        <div>
-                                            <a th:href="@{/admin/selectUser(start2 = 1)}">首页</a>
-                                            <a th:href="@{/admin/selectUser(start2 = ${pages2.pageNum - 1})}">上一页</a>
-                                            <a th:href="@{/admin/selectUser(start2 = ${pages2.pageNum + 1})}">下一页</a>
-                                            <a th:href="@{/admin/selectUser(start2 = ${pages2.pages})}">尾页</a>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

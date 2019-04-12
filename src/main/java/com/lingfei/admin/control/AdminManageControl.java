@@ -219,16 +219,11 @@ public class AdminManageControl {
      * @return selectUser.html
      */
     @GetMapping("/selectUser")
-    public String selectUser(Model model, @RequestParam(value = "start1", defaultValue = "1") int start1, @RequestParam(value = "start2", defaultValue = "1") int start2, @RequestParam(value = "size", defaultValue = "5") int size) {
+    public String selectUser(Model model) {
         List<User> users = userService.listUser();
-        PageHelper.startPage(start1, size, "id asc");
-        PageInfo<User> pageInfo1 = new PageInfo<>(users);
-        model.addAttribute("pages1", pageInfo1);
-
+        model.addAttribute("pages1", users);
         List<Competition> competitions = competitionService.listCompetition();
-        PageHelper.startPage(start2, size, "id asc");
-        PageInfo<Competition> pageInfo2 = new PageInfo<>(competitions);
-        model.addAttribute("pages2", pageInfo2);
+        model.addAttribute("pages2", competitions);
         return "announce/selectUser";
     }
 
