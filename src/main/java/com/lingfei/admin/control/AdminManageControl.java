@@ -7,6 +7,7 @@ import com.lingfei.admin.entity.Announce;
 import com.lingfei.admin.entity.Competition;
 import com.lingfei.admin.entity.CountVisitor;
 import com.lingfei.admin.entity.User;
+import com.lingfei.admin.service.UserService;
 import com.lingfei.admin.service.impl.*;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
@@ -148,6 +149,9 @@ public class AdminManageControl {
 
     @Autowired
     CompetitionServiceImpl competitionService;
+
+    @Autowired
+    UserService userService;
     /**
      * 直接跳转,并设置访客数以及浏览数
      *
@@ -158,6 +162,7 @@ public class AdminManageControl {
         CountVisitor visitor = visitorService.getVisitorByDate();
         Object totalVisitor = visitorService.getAllVisitor();
         int totalUser = competitionService.listCompetition().size();
+        int users = userService.listUser().size();
         if (visitor == null) {
             model.addAttribute("visitor", 0);
         } else {
@@ -172,6 +177,11 @@ public class AdminManageControl {
             model.addAttribute("totalUser", 0);
         } else {
             model.addAttribute("totalUser", totalUser);
+        }
+        if (users == 0){
+            model.addAttribute("users", 0);
+        } else {
+            model.addAttribute("users", users);
         }
         return "admin";
     }
@@ -204,9 +214,6 @@ public class AdminManageControl {
         announceService.sendEmail(theme, text, to);
         return "redirect:announce";
     }
-
-    @Autowired
-    private UserServiceImpl userService;
 
     /**
      * 选择要群发邮件的对象
