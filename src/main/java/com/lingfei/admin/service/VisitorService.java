@@ -42,7 +42,7 @@ public interface VisitorService {
      *
      * @return
      */
-    int getAllVisitor();
+    Object getAllVisitor();
 
     /**
      * 获取当前时间

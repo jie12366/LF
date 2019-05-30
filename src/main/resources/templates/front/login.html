@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>登录界面</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="Keywords" content="网站关键词">
+    <meta name="Description" content="网站介绍">
+    <link rel="stylesheet" href="../../static/css/base.css">
+    <link rel="stylesheet" href="../../static/css/iconfont.css">
+    <link rel="stylesheet" href="../../static/css/reg.css">
+    <link rel="shortcut icon" href="../../static/img/favicon.ico">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        .title{
+            margin-left: 180px;
+            margin-top: -50px;
+        }
+    </style>
+</head>
+<body>
+<div id="ajax-hook"></div>
+<div class="wrap">
+    <div class="wpn">
+        <div class="form-data pos">
+            <h2 class="title">凌飞羽协</h2>
+            <form>
+                <div class="form1">
+                    <p class="p-input pos">
+                        <label for="num">手机号/用户名/UID/邮箱</label>
+                        <input type="text" id="num" name="account">
+                        <span class="tel-warn num-err hide"><em>账号或密码错误，请重新输入</em><i class="icon-warn"></i></span>
+                    </p>
+                    <p class="p-input pos">
+                        <label for="pass">请输入密码</label>
+                        <input type="password" style="display:none"/>
+                        <input type="password" id="pass" name="password" autocomplete="new-password">
+                        <span class="tel-warn pass-err hide"><em>账号或密码错误，请重新输入</em><i class="icon-warn"></i></span>
+                    </p>
+                    <p class="p-input pos code">
+                        <label for="imageCode">请输入验证码</label>
+                        <input type="text" class="l_check" id="imageCode" name="code"/>
+                        <img src="/user/getCode">
+                        <span class="tel-warn img-err hide"><em>账号或密码错误，请重新输入</em><i class="icon-warn"></i></span>
+                    </p>
+                </div>
+                <div class="r-forget cl">
+                    <a href="/index/register" class="z">账号注册</a>
+                    <a href="/index/getPass" class="y">忘记密码</a>
+                </div>
+                <button class="lang-btn" id="log-btn" type="button">登录</button>
+            </form>
+            <div class="third-party">
+                <a href="#" class="log-qq icon-qq-round"></a>
+                <a href="#" class="log-qq icon-weixin"></a>
+                <a href="#" class="log-qq icon-sina1"></a>
+            </div>
+            <p class="right">Powered by © 2018</p>
+        </div>
+    </div>
+</div>
+<script>
+    $("#log-btn").click(function () {
+        // var type = 'phone';
+        var inp = $.trim($('#num').val());
+        var pass = $.trim($('#pass').val());
+        var code = $.trim($('#imageCode').val());
+        if (checkAccount(inp) && checkPass(pass) && checkPhoneCode(code)) {
+            var ldata = {account: inp, password: pass,code:code};
+            $.ajax({
+                url: '/user/login',
+                type: 'post',
+                dataType: 'json',
+                async: true,
+                data: ldata,
+                success: function (data) {
+                    console.log(data)
+                    if (data.status == 500){
+                        if (data.msg == "1"){
+                            $('.img-err').removeClass('hide').find("em").text('验证码过期');
+                        }else if(data.msg == "2"){
+                            $('.img-err').removeClass('hide').find("em").text('验证码错误');
+                        }else if (data.msg == "3"){
+                            $('.pass-err').removeClass('hide').text('账号或密码错误');
+                        }
+                    }else if(data.status == 200){
+                        alert("登录成功")
+                        window.location.href = "/"
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        } else {
+            return false;
+        }
+    })
+
+    function checkAccount(username){
+        if (username == '') {
+            $('.num-err').removeClass('hide').find("em").text('请输入账户');
+            return false;
+        } else {
+            $('.num-err').addClass('hide');
+            return true;
+        }
+    }
+
+    function checkPass(pass){
+        if (pass == '') {
+            $('.pass-err').removeClass('hide').text('请输入密码');
+            return false;
+        } else {
+            $('.pass-err').addClass('hide');
+            return true;
+        }
+    }
+    function checkPhoneCode(pCode){
+        if (pCode == '') {
+            $('.img-err').removeClass('hide').text('请输入验证码');
+            return false;
+        } else {
+            $('.img-err').addClass('hide');
+            return true;
+        }
+    }
+</script>
+<script src="../../static/js/agree.js"></script>
+<script src="../../static/js/login.js"></script>
+
+</body>
+</html>

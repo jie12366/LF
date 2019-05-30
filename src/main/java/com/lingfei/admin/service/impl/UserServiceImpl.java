@@ -38,15 +38,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getUserByName(String name) {
+        if (name != null){
+            return userMapper.getUserByName(name);
+        }
+        return null;
+    }
+
+    @Override
     public int getId(String account) {
         return userMapper.getId(account);
     }
 
     @Override
-    @Cacheable(cacheNames = "user")
     public String getPasswordByAccount(String account) {
         if (account != null) {
-            userMapper.getPasswordByAccount(account);
+            return userMapper.getPasswordByAccount(account);
         }
         return null;
     }
@@ -54,7 +61,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getPasswordByEmail(String email) {
         if (email != null) {
-            userMapper.getPasswordByEmail(email);
+            return userMapper.getPasswordByEmail(email);
         }
         return null;
     }
@@ -62,7 +69,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public int saveAccount(String account, String password) {
         if (account != null && password != null) {
-            return userMapper.saveAccount(account, password + account);
+            System.out.println(password);
+            return userMapper.saveAccount(account, GetString.getMd5(password));
         }
         return 0;
     }
@@ -78,7 +86,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @CachePut(cacheNames = "user")
     public int updateUser(User user) {
-        return userMapper.updateUser(user.getName(), user.getNumber(), user.getStuClass(), user.getQq(), user.getEmail(), user.getPhone(), user.getDepart(), user.getId());
+        return userMapper.updateUser(user.getName(), user.getNumber(), user.getStuClass(), user.getQq(), user.getEmail(), user.getDepart(), user.getId());
     }
 
     @Override
@@ -110,11 +118,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkLogin(String account, String pass) {
-        pass = GetString.getMd5(pass + account);
-        String password = this.getPasswordByAccount(account);
-        if ("".equals(password)) {
+        System.out.println(account+pass);
+        pass = GetString.getMd5(pass);
+        String password = getPasswordByAccount(account);
+
+        if (password == null) {
             password = this.getPasswordByEmail(account);
         }
+        System.out.println(password + " "+pass);
         if (pass.equals(password)) {
             return true;
         }

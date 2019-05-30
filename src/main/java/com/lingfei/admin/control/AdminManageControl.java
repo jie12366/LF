@@ -42,7 +42,6 @@ public class AdminManageControl {
 
     /**
      * 接受get或者post方法
-     *
      * @param model Model
      * @param start 开始页码数
      * @param size  每页的大小
@@ -157,14 +156,14 @@ public class AdminManageControl {
     @GetMapping("/index")
     public String index(Model model) {
         CountVisitor visitor = visitorService.getVisitorByDate();
-        int totalVisitor = visitorService.getAllVisitor();
+        Object totalVisitor = visitorService.getAllVisitor();
         int totalUser = competitionService.listCompetition().size();
         if (visitor == null) {
             model.addAttribute("visitor", 0);
         } else {
             model.addAttribute("visitor", visitor.getVisitor());
         }
-        if (totalVisitor == 0) {
+        if (totalVisitor == null) {
             model.addAttribute("totalVisitor", 0);
         } else {
             model.addAttribute("totalVisitor", totalVisitor);
@@ -213,9 +212,6 @@ public class AdminManageControl {
      * 选择要群发邮件的对象
      *
      * @param model  Model
-     * @param start1 用户表开始页
-     * @param start2 报名表开始页
-     * @param size   每页的大小
      * @return selectUser.html
      */
     @GetMapping("/selectUser")

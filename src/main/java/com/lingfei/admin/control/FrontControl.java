@@ -17,21 +17,6 @@ public class FrontControl {
     @Autowired
     VisitorServiceImpl visitorService;
 
-    /**
-     * 直接跳转到主界面
-     *
-     * @return
-     */
-    @GetMapping("")
-    public String toIndex() {
-        if (visitorService.getVisitorByDate() == null) {
-            visitorService.saveVisitor();
-        } else {
-            visitorService.updateVisitor();
-        }
-        return "front/index";
-    }
-
     @GetMapping("/")
     public String index() {
         if (visitorService.getVisitorByDate() == null) {
@@ -60,5 +45,25 @@ public class FrontControl {
             visitorService.updateVisitor();
         }
         return "front/competition";
+    }
+
+    @GetMapping("/index/login")
+    public String toLogin(){
+        return "front/login";
+    }
+
+    @GetMapping("/index/register")
+    public String toRegister(){
+        return "front/reg";
+    }
+
+    @GetMapping("/index/getPass")
+    public String toGetPass(){
+        return "front/getpass";
+    }
+
+    @GetMapping("/index/prefect")
+    public String toPrefect(){
+        return "front/prefect";
     }
 }

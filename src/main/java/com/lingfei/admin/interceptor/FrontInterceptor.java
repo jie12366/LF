@@ -1,5 +1,6 @@
 package com.lingfei.admin.interceptor;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpSession;
  * @author www.xyjz123.xyz
  * @date 2019/3/25 13:36
  */
+@Component
 public class FrontInterceptor implements HandlerInterceptor {
     /**
      * 在请求处理之前进行调用（Controller方法调用之前)
@@ -22,7 +24,7 @@ public class FrontInterceptor implements HandlerInterceptor {
         if (sessions != null) {
             return true;
         }
-        httpServletResponse.sendRedirect("/login");
+        httpServletResponse.sendRedirect("/index/login");
         return false;
     }
 

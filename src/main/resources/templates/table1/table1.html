@@ -16,7 +16,7 @@
     <!-- Google fonts - Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
     <!-- theme stylesheet-->
-    <link rel="stylesheet" href="http://www.jie12366.xyz/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="http://cdn.jie12366.xyz/style.default.css" id="theme-stylesheet">
     <!-- Favicon-->
     <link rel="shortcut icon" href="../../static/img/favicon.ico">
     <style>
@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="card-header d-flex align-items-center">
                                     <h3 class="h4">协会人员信息表</h3>
-                                    <form action="/es/user">
+                                    <form action="/user/find">
                                         <input type="text" class="input-pos" name="name" placeholder="请输入姓名">
                                         <input type="submit" class="btn btn-info" value="搜索">
                                     </form>
@@ -110,7 +110,7 @@
                                                 <td th:text="${user.stuClass}"></td>
                                                 <td th:text="${user.qq}"></td>
                                                 <td th:text="${user.email}"></td>
-                                                <td th:text="${user.phone}"></td>
+                                                <td th:text="${user.account}"></td>
                                                 <td th:text="${user.depart}"></td>
                                                 <td th:text="${user.balance}"></td>
                                                 <td><a th:href="@{/user/edit(id=${user.id})}">编辑</a></td>

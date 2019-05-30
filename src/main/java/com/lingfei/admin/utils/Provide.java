@@ -120,9 +120,6 @@ public class Provide {
             if (user.getEmail() != null) {
                 SET("email = #{email}");
             }
-            if (user.getPhone() != null) {
-                SET("phone = #{phone}");
-            }
             if (user.getDepart() != null) {
                 SET("depart = #{depart}");
             }

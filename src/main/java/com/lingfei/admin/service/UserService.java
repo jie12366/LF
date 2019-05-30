@@ -26,6 +26,13 @@ public interface UserService {
     List<User> listUser();
 
     /**
+     * 根据名字模糊搜索
+     * @param name 名字
+     * @return
+     */
+    List<User> getUserByName(String name);
+
+    /**
      * 根据id返回结果
      *
      * @param id int

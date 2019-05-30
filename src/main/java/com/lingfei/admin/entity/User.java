@@ -51,10 +51,6 @@ public class User implements Serializable {
     @Excel(name = "邮箱", orderNum = "5")
     private String email;
 
-    @Column(name = "phone", type = MySqlTypeConstant.VARCHAR, length = 20)
-    @Excel(name = "手机号", orderNum = "6")
-    private String phone;
-
     @Column(name = "depart", type = MySqlTypeConstant.VARCHAR, length = 20)
     @Excel(name = "部门", orderNum = "7")
     private String depart;

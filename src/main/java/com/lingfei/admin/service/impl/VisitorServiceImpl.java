@@ -38,7 +38,10 @@ public class VisitorServiceImpl implements VisitorService {
     }
 
     @Override
-    public int getAllVisitor() {
+    public Object getAllVisitor() {
+        if(visitorMapper.getAllVisitor() == null){
+            return null;
+        }
         return visitorMapper.getAllVisitor();
     }
 

@@ -48,5 +48,5 @@ public interface VisitorMapper {
      * @return
      */
     @Select("select sum(visitor) from countv")
-    int getAllVisitor();
+    Object getAllVisitor();
 }

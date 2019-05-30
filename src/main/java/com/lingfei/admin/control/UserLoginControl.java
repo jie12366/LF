@@ -1,29 +1,25 @@
 package com.lingfei.admin.control;
 
-import com.google.code.kaptcha.Constants;
-import com.google.code.kaptcha.Producer;
-import com.lingfei.admin.entity.Notice;
+import com.lingfei.admin.entity.ImageCode;
 import com.lingfei.admin.entity.User;
 import com.lingfei.admin.service.impl.EmailServiceImpl;
-import com.lingfei.admin.service.impl.NoticeServiceImpl;
 import com.lingfei.admin.service.impl.UserServiceImpl;
+import com.lingfei.admin.utils.CreateImageCode;
 import com.lingfei.admin.utils.GetString;
 import com.lingfei.admin.utils.JsonResult;
-import com.lingfei.admin.utils.VerifyUtil;
+import com.zhenzi.sms.ZhenziSmsClient;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author www.xyjz123.xyz
@@ -36,11 +32,22 @@ public class UserLoginControl {
     @Autowired
     UserServiceImpl userService;
     @Autowired
-    NoticeServiceImpl noticeService;
-    @Autowired
     EmailServiceImpl emailService;
-    @Autowired
-    private RedisTemplate<String, String> template;
+
+    @PostMapping("/checkSmsCode")
+    public JsonResult checkSmsCode(@ApiParam("验证码") @RequestParam("code") String code,
+                                   HttpServletRequest request){
+
+        JSONObject imageCode =  (JSONObject) request.getServletContext().getAttribute("smsCode");
+        if (imageCode == null){
+            return JsonResult.errorMsg("1");
+        }else if (!StringUtils.equalsIgnoreCase((String) imageCode.get("code"),code)){
+            return JsonResult.errorMsg("2");
+        }else {
+            request.getServletContext().removeAttribute("smsCode");
+            return JsonResult.ok();
+        }
+    }
 
     /**
      * 接受post方法，注册入口
@@ -51,71 +58,84 @@ public class UserLoginControl {
      */
     @ApiOperation("注册")
     @PostMapping("/register")
-    public JsonResult addUser(@ApiParam("账号") @RequestParam String account, @ApiParam("密码") @RequestParam String password,
-                              @ApiParam("验证码") String code) {
+    public JsonResult addUser(@ApiParam("账号") @RequestParam("account") String account,
+                              @ApiParam("密码") @RequestParam("password") String password) {
+
         List<User> lists = userService.listUser();
         for (User user : lists) {
             if (user.getAccount().equals(account)) {
-                return JsonResult.errorMsg("账号已经被注册");
+                return JsonResult.errorMsg("1");
             }
         }
-        String code1 = template.opsForValue().get("code");
-        if (code1 == null) {
-            return JsonResult.errorMsg("验证码已过期");
-        }
-        if (!code1.equals(code)) {
-            return JsonResult.errorMsg("验证码错误");
-        }
+
         userService.saveAccount(account, password);
-        int id = userService.getId(account);
-        Notice notice = new Notice(id + "", account, null, null, null, null, null, null, null, 0);
-        noticeService.save(notice);
-        return JsonResult.ok(notice);
+        return JsonResult.ok();
     }
 
-    @ApiOperation("生成注册验证码")
-    @GetMapping("/getRegisterCode")
-    public JsonResult getRegisterCode(@ApiParam("验证码接收者") String to) {
+    @ApiOperation("短信验证码")
+    @GetMapping("/sendMsg")
+    public JsonResult sendMsg(HttpServletRequest request, @RequestParam("phone") String phone) throws Exception{
+        System.out.println(phone);
+        //榛子短信的SDK
+        ZhenziSmsClient client = new ZhenziSmsClient("https://sms_developer.zhenzikj.com", "101348", "ZGZmNjM3MWYtZDVjMS00YWUyLWE4NmUtZDI5NjNmOGRjNTA1");
         String code = GetString.getCode();
-        String email = "您本次注册的验证码为： " + code;
-        int res = emailService.sendEmail(to, "注册验证码", email);
-        if (res == 1) {
-            //用redis存邮件发送的验证码,设置5分钟过期
-            template.opsForValue().set("code", code);
-            template.expire("code", 3000, TimeUnit.SECONDS);
-            return JsonResult.ok();
-        } else {
-            return JsonResult.errorMsg("验证码发送错误，请重试");
+        String result = client.send(phone, "您的验证码为" + code + "\n" + "如果不是本人操作，请忽略。");
+        JSONObject jsonObject = JSONObject.fromObject(result);
+        if (jsonObject.getInt("code") != 0){
+            return JsonResult.errorMsg("验证码发送失败");
         }
+        //设置验证码5分钟后过期
+        JSONObject smsCode = new JSONObject();
+        smsCode.put("code",code);
+        smsCode.put("time",System.currentTimeMillis());
+
+        request.getServletContext().setAttribute("smsCode",smsCode);
+
+        return JsonResult.ok();
     }
 
     @ApiOperation("重置密码邮件")
-    @GetMapping("/reset")
-    public JsonResult reset(@ApiParam("重置密码接收者") String to) {
-        String email = "请点击以下链接来重置你的密码，如非本人操作，请忽视。\n"
-                + " http://127.0.0.1:88/user/resetPass";
+    @PostMapping("/reset")
+    public JsonResult reset(@ApiParam("重置密码接收者") @RequestParam("to") String to,
+                            HttpServletRequest request) {
+        String code = GetString.getCode();
+        String email = "您的重置密码的验证码为 " + code +  " 如非本人操作，请忽视。";
         int res = emailService.sendEmail(to, "重置密码", email);
         if (res == 1) {
+            request.getServletContext().setAttribute("emailCode",code);
             return JsonResult.ok();
         } else {
             return JsonResult.errorMsg("邮件发送失败");
         }
     }
 
-    @ApiOperation("重置密码界面")
-    @GetMapping("resetPass")
-    public String resetPass() {
-        return "resetPass";
+    @ApiOperation("检查验证码是否正确")
+    @PostMapping("/checkCode")
+    public JsonResult checkCode(@ApiParam("验证码") @RequestParam("code") String code,
+                                HttpServletRequest request){
+
+        String code1 = (String) request.getServletContext().getAttribute("emailCode");
+
+        if(code1 == null){
+            return JsonResult.errorMsg("1");
+        } else if (!StringUtils.equalsIgnoreCase(code1,code)){
+            return JsonResult.errorMsg("2");
+        }else {
+            request.getServletContext().removeAttribute("emailCode");
+            return JsonResult.ok();
+        }
     }
 
     @ApiOperation("重置密码")
     @PostMapping("/resetPassword")
-    public JsonResult resetPassword(@ApiParam("邮箱") String email, @ApiParam("新密码") String password) {
+    public JsonResult resetPassword(@ApiParam("邮箱")@RequestParam("email") String email,
+                                    @ApiParam("新密码")@RequestParam("password") String password) {
+
         int res = userService.resetPassword(password, email);
         if (res == 1) {
             return JsonResult.ok();
         } else {
-            return JsonResult.errorMsg("邮箱错误，请重新填写");
+            return JsonResult.errorMsg("1");
         }
     }
 
@@ -127,43 +147,31 @@ public class UserLoginControl {
      */
     @ApiOperation("登录")
     @PostMapping("/login")
-    public JsonResult adminLoginByPassword(@ApiParam("账号") @RequestParam String account,
-                                           @ApiParam("密码") @RequestParam String password, HttpServletRequest request) {
-        if (VerifyUtil.checkVerifyCode(request)) {
-            boolean user = userService.checkLogin(account, password);
-            if (!user) {
-                return JsonResult.errorMsg("账号或者密码错误");
-            } else {
-                return JsonResult.ok(user);
-            }
-        } else {
-            return JsonResult.errorMsg("验证码错误");
+    public JsonResult adminLoginByPassword(@ApiParam("账号") @RequestParam("account") String account,
+                                           @ApiParam("密码") @RequestParam("password") String password,
+                                           @ApiParam("密码") @RequestParam("code") String code,
+                                           HttpServletRequest request) {
+
+        ImageCode imageCode =  (ImageCode) request.getServletContext().getAttribute("code");
+        if (imageCode.isExpired()){
+            return JsonResult.errorMsg("1");
+        }else if (!StringUtils.equalsIgnoreCase(imageCode.getCode(),code)){
+            return JsonResult.errorMsg("2");
+        }else if (!userService.checkLogin(account,password)){
+            return JsonResult.errorMsg("3");
+        }else {
+            request.getSession().setAttribute("user",account);
+            return JsonResult.ok("登录成功");
         }
     }
 
-    @Autowired
-    private Producer captchaProducer = null;
+    @ApiOperation("图形验证码")
+    @GetMapping(value = "/getCode",produces = "image/jpeg")
+    public void getCode(HttpServletRequest request,HttpServletResponse response) throws IOException {
 
-    @ApiOperation("生成登录验证码")
-    @GetMapping("/getLoginCode")
-    public void getCode(HttpServletResponse response, HttpServletRequest request) throws Exception {
-        HttpSession session = request.getSession();
-        response.setDateHeader("Expires", 0);
-        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
-        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-        response.setHeader("Pragma", "no-cache");
-        response.setContentType("image/jpeg");
-        //生成验证码
-        String capText = captchaProducer.createText();
-        session.setAttribute(Constants.KAPTCHA_SESSION_KEY, capText);
-        //向客户端写出
-        BufferedImage bi = captchaProducer.createImage(capText);
-        ServletOutputStream out = response.getOutputStream();
-        ImageIO.write(bi, "jpg", out);
-        try {
-            out.flush();
-        } finally {
-            out.close();
-        }
+        ImageCode imageCode = CreateImageCode.createImagecode();
+        request.getServletContext().setAttribute("code",imageCode);
+
+        ImageIO.write(imageCode.getImage(),"JPEG",response.getOutputStream());
     }
 }

@@ -22,6 +22,14 @@ public interface UserMapper {
     List<User> listUser();
 
     /**
+     * 根据名字模糊搜索
+     * @param name 名字
+     * @return
+     */
+    @Select("select * from user where name like '%${_parameter}%'")
+    List<User> getUserByName(String name);
+
+    /**
      * 根据id 获取记录
      *
      * @param id
@@ -64,12 +72,11 @@ public interface UserMapper {
      * @param password 密码
      * @return 是否注册成功
      */
-    @Insert("insert into user(account,password) values(#{account},md5(#{password}))")
+    @Insert("insert into user(account,password) values(#{account},#{password})")
     int saveAccount(String account, String password);
 
     /**
      * 根据邮箱重置密码
-     *
      * @param email    邮箱
      * @param password
      * @return
@@ -85,13 +92,12 @@ public interface UserMapper {
      * @param stuClass String 班级
      * @param qq       String QQ号
      * @param email    String 邮箱
-     * @param phone    String 手机号
      * @param depart   String 部门
      * @param id       int 序号
      * @return 是否更新成功
      */
-    @Update("update user set name = #{name},number = #{number},stuClass = #{stuClass},qq = #{qq},email = #{email},phone = #{phone},depart = #{depart} where id = #{id}")
-    int updateUser(String name, String number, String stuClass, String qq, String email, String phone, String depart, int id);
+    @Update("update user set name = #{name},number = #{number},stuClass = #{stuClass},qq = #{qq},email = #{email},depart = #{depart} where id = #{id}")
+    int updateUser(String name, String number, String stuClass, String qq, String email, String depart, int id);
 
     /**
      * 根据用户id更新余额

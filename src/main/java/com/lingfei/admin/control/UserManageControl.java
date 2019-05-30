@@ -2,10 +2,8 @@ package com.lingfei.admin.control;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lingfei.admin.entity.Notice;
 import com.lingfei.admin.entity.User;
-import com.lingfei.admin.service.impl.NoticeServiceImpl;
-import com.lingfei.admin.service.impl.UserServiceImpl;
+import com.lingfei.admin.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,9 +24,7 @@ import java.util.List;
 public class UserManageControl {
 
     @Autowired
-    UserServiceImpl userService;
-    @Autowired
-    NoticeServiceImpl noticeService;
+    UserService userService;
 
     /**
      * 获取所有user数据，并分页
@@ -64,6 +60,24 @@ public class UserManageControl {
         return "redirect:/table1";
     }
 
+    @GetMapping("/user/find")
+    public String editUser(String name, Model model) {
+        List<User> users = userService.getUserByName(name);
+        PageInfo<User> pageInfo = new PageInfo<>(users);
+        if (pageInfo != null) {
+            model.addAttribute("pages", pageInfo);
+        }
+        return "redirect:/table1";
+    }
+
+    @PostMapping("/user/prefect")
+    public String prefectUser(User user){
+        int id = userService.getId(user.getAccount());
+        user.setId(id);
+        userService.updateUser(user);
+        return "front/login";
+    }
+
     /**
      * 编辑完数据后，提交到这进行数据库的更新
      *
@@ -73,10 +87,6 @@ public class UserManageControl {
     @PostMapping("/user/update")
     public String updateUser(User user) {
         userService.updateDynamicUser(user);
-        User user1 = userService.getUser(user.getId());
-        Notice notice = new Notice(user.getId() + "", user1.getAccount(), user.getName(), user.getNumber(),
-                user.getStuClass(), user.getQq(), user.getEmail(), user.getPhone(), user.getDepart(), user1.getBalance());
-        noticeService.save(notice);
         return "redirect:/table1";
     }
 
@@ -93,7 +103,6 @@ public class UserManageControl {
         for (String id1 : id3) {
             int id2 = Integer.parseInt(id1);
             userService.deleteUser(id2);
-            noticeService.deleteById(id1);
         }
         return "redirect:/table1";
     }
