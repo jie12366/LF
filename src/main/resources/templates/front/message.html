@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>精英赛报名</title>
+    <title>公告</title>
     <!-- custom-theme -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -17,33 +17,42 @@
     <!--css links-->
     <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <!--bootstrap-->
-    <link href="https://cdn.bootcss.com/font-awesome/5.8.1/css/all.css" rel="stylesheet"><!--font-awesome-->
     <link href="../../static/css/style.css" rel="stylesheet" type="text/css" media="all"/><!--stylesheet-->
-    <!--//css links-->
-    <!--fonts-->
-    <link href="http://fonts.googleapis.com/css?family=Raleway:200,300,400,500,600,700" rel="stylesheet">
-    <link href="http://fonts.googleapis.com/css?family=PT+Serif:400,700" rel="stylesheet">
     <!-- Favicon-->
     <link rel="shortcut icon" href="../../static/img/favicon.ico">
     <style>
-        .img-size{
-            width: 28rem;
+        .hide{
+            display: none;
         }
-        .title-w3{
-            margin-top: 50px;
-            margin-bottom: 50px;
-            color: #0accff;
-            font-size: 40px;
+        .contains{
+            margin-left: 430px;
+            margin-right: 300px;
+            margin-top: 30px;
         }
-        .input-pos{
-            margin-left: 60px;
-            margin-bottom: 50px;
-            width: 350px;
+        .btn-class{
+            margin-left: 1100px;
+            margin-top: 30px;
         }
-        .btn-pos{
-            width: 80px;
-            margin-left: 100px;
-            margin-bottom: 30px;
+        @media only screen and (min-width: 930px) and (max-width: 1200px){
+            .contains{
+                margin-left: 150px;
+                margin-right: 150px;
+                margin-top: 30px;
+            }
+        }
+        @media only screen and (min-width: 768px) and (max-width: 930px){
+            .contains{
+                margin-left: 150px;
+                margin-right: 150px;
+                margin-top: 30px;
+            }
+        }
+        @media only screen and (max-width: 768px){
+            .contains{
+                margin-left: 50px;
+                margin-right: 50px;
+                margin-top: 20px;
+            }
         }
     </style>
     <!--//fonts-->
@@ -87,71 +96,74 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/">主页面</a></li>
                     <li><a href="/index/about">关于我们</a></li>
-                    <li><a href="/index/competition" class="active">比赛报名</a></li>
+                    <li><a href="/index/competition">比赛报名</a></li>
                     <li><a href="/index/announce">公告</a></li>
-                    <li><a href="/index/message">个人信息</a></li>
+                    <li><a href="/index/message" class="active">个人信息</a></li>
                 </ul>
             </div>
         </nav>
     </div>
 </div>
-<div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <h5 class="title-w3">凌飞羽协第四届羽毛球精英赛欢迎你的加入!</h5>
-                        <form action="/competition/add" method="post">
-                            <div class="form-group input-pos">
-                                <label for="name" class="label-material">姓名</label>
-                                <input id="name" type="text" name="name" required
-                                       data-msg="请输入姓名" class="input-material">
-                            </div>
-                            <div class="form-group input-pos">
-                                <label for="stuClass" class="label-material">班级</label>
-                                <input id="stuClass" type="text" name="stuClass" required
-                                       data-msg="请输入班级" class="input-material">
-                            </div>
-                            <div class="form-group input-pos">
-                                <label for="QQ" class="label-material">QQ&nbsp;&nbsp;&nbsp;</label>
-                                <input id="QQ" type="number" name="qq" required
-                                       data-msg="请输入QQ" class="input-material">
-                            </div>
-                            <div class="form-group input-pos">
-                                <label for="phone" class="label-material">电话</label>
-                                <input id="phone" type="number" name="phone" required
-                                       data-msg="请输入电话" class="input-material">
-                            </div>
-                            <div class="form-group input-pos">
-                                <input type="radio" name="item" value="男单">男单
-                                <input type="radio" name="item" value="女单">女单
-                            </div>
-                            <input type="submit" class="btn btn-primary btn-pos" value="提交">
-                        </form>
-                    </div>
-                    <div class="col-md-6">
-                        <img class="img-size" src="../../static/img/psb.jpg">
-                    </div>
+<div class="form-size">
+    <button onclick="toEdit()" class="btn btn-info btn-class">编辑</button>
+    <form method="post" class="form-validate" action="/user/edit">
+        <div class="row contains">
+            <div class="col-lg-6 col-md-6">
+                <div class="form-group">
+                    <label for="name" class="label-material">姓名</label>
+                    <input id="name" type="text" name="name" readonly th:value="${user.name}" required
+                           data-msg="请输入姓名" class="input-material">
                 </div>
+                <div class="form-group">
+                    <label for="number" class="label-material">学号</label>
+                    <input id="number" type="text" name="number" readonly th:value="${user.number}" required
+                           data-msg="请输入学号" class="input-material">
+                </div>
+                <div class="form-group">
+                    <label for="stuClass" class="label-material">班级</label>
+                    <input id="stuClass" type="text" name="stuClass" readonly th:value="${user.stuClass}" required
+                           data-msg="请输入班级" class="input-material">
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="form-group">
+                    <label for="qq" class="label-material">QQ</label>
+                    <input id="qq" type="text" name="qq" readonly th:value="${user.qq}" required data-msg="请输入QQ"
+                           class="input-material">
+                </div>
+                <div class="form-group">
+                    <label for="email" class="label-material">邮箱</label>
+                    <input id="email" type="text" name="email" readonly th:value="${user.email}" required
+                           data-msg="请输入邮箱" class="input-material">
+                </div>
+                <div class="form-group">
+                    <label for="depart" class="label-material">部门</label>
+                    <input id="depart" type="text" name="depart" readonly th:value="${user.depart}" required data-msg="请输入部门"
+                           class="input-material">
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="id" th:value="${user.id}">
+        <input type="submit" class="btn btn-primary btn-class hide" value="提交">
+    </form>
 </div>
+<script>
+    function toEdit() {
+        $('#name').attr("readOnly",false)
+        $('#number').attr("readOnly",false)
+        $('#stuClass').attr("readOnly",false)
+        $('#qq').attr("readOnly",false)
+        $('#email').attr("readOnly",false)
+        $('#depart').attr("readOnly",false)
+        $('.btn-class').removeClass('hide')
+    }
+</script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <!--//js -->
 <script src="https://cdn.bootcss.com/smoothscroll/1.4.8/SmoothScroll.min.js"></script>
 <!--Scrolling-top -->
 <script type="text/javascript" src="../../static/js/move-top.js"></script>
 <script src="https://cdn.bootcss.com/jquery-easing/1.4.1/jquery.easing.compatibility.js"></script>
-<script type="text/javascript">
-    jQuery(document).ready(function ($) {
-        $(".scroll").click(function (event) {
-            event.preventDefault();
-            $('html,body').animate({scrollTop: $(this.hash).offset().top}, 1000);
-        });
-    });
-</script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $().UItoTop({easingType: 'easeOutQuart'});
-    });
-</script>
-<a href="#home" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
 <!-- //smooth scrolling -->
 <script src="https://cdn.bootcss.com/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </body>

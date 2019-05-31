@@ -96,7 +96,8 @@ public interface UserMapper {
      * @param id       int 序号
      * @return 是否更新成功
      */
-    @Update("update user set name = #{name},number = #{number},stuClass = #{stuClass},qq = #{qq},email = #{email},depart = #{depart} where id = #{id}")
+    @Update("update user set name = #{name},number = #{number},stuClass = #{stuClass},qq = #{qq}," +
+            "email = #{email},depart = #{depart} where id = #{id}")
     int updateUser(String name, String number, String stuClass, String qq, String email, String depart, int id);
 
     /**

@@ -3,14 +3,18 @@ package com.lingfei.admin.control;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lingfei.admin.entity.Announce;
+import com.lingfei.admin.entity.User;
 import com.lingfei.admin.service.AnnounceService;
+import com.lingfei.admin.service.UserService;
 import com.lingfei.admin.service.impl.VisitorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -26,6 +30,8 @@ public class FrontControl {
     VisitorServiceImpl visitorService;
     @Autowired
     AnnounceService announceService;
+    @Autowired
+    UserService userService;
 
     @GetMapping("/")
     public String index() {
@@ -39,21 +45,11 @@ public class FrontControl {
 
     @GetMapping("/index/about")
     public String toAbout() {
-        if (visitorService.getVisitorByDate() == null) {
-            visitorService.saveVisitor();
-        } else {
-            visitorService.updateVisitor();
-        }
         return "front/about";
     }
 
     @GetMapping("/index/competition")
     public String toCompetition() {
-        if (visitorService.getVisitorByDate() == null) {
-            visitorService.saveVisitor();
-        } else {
-            visitorService.updateVisitor();
-        }
         return "front/competition";
     }
 
@@ -84,5 +80,19 @@ public class FrontControl {
         PageInfo<Announce> pageInfo = new PageInfo<>(lists);
         model.addAttribute("announces", pageInfo);
         return "front/announce";
+    }
+
+    @GetMapping("/index/message")
+    public String toMessage(Model model, HttpServletRequest request){
+        String user1 = (String)request.getSession().getAttribute("user");
+        User user = userService.getUser(userService.getId(user1));
+        model.addAttribute("user", user);
+        return "front/message";
+    }
+
+    @PostMapping("/user/edit")
+    public String updateUser(User user) {
+        userService.updateDynamicUser(user);
+        return "front/message";
     }
 }

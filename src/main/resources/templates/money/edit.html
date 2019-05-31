@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>更新记录</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/4.3.0/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="../../static/vendor/font-awesome/css/font-awesome.min.css">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="../../static/css/fontastic.css">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="http://cdn.jie12366.xyz/style.default.css" id="theme-stylesheet">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="../../static/img/favicon.ico">
+    <style>
+        .form-size{
+            margin: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <!-- Main Navbar-->
+    <header th:replace="header::header"></header>
+    <div class="page-content d-flex align-items-stretch">
+        <nav class="side-navbar">
+            <!-- Sidebar Header-->
+            <div class="sidebar-header d-flex align-items-center">
+                <div class="avatar"><img src="../../static/img/pikaqiu.jpg" alt="..." class="img-fluid rounded-circle"></div>
+                <div class="title">
+                    <h1 class="h4">Monkey_jie</h1>
+                    <p>管理员</p>
+                </div>
+            </div>
+            <!-- Sidebar Navidation Menus--><span class="heading">主目录</span>
+            <ul class="list-unstyled">
+                <li><a href="/admin/index"> <i class="icon-home"></i>主界面 </a></li>
+                <li><a href="/admin/announce"> <i class="icon-padnote"></i>公告栏 </a></li>
+                <li class="active"><a href="/moneyManage/show"> <i class="icon-padnote"></i>财务栏 </a></li>
+                <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i
+                        class="icon-interface-windows"></i>表格 </a>
+                    <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
+                        <li><a href="/table1">会员信息</a></li>
+                        <li><a href="/table2">比赛报名</a></li>
+                        <li><a href="/admin/table3">招新报名</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div class="content-inner">
+            <!-- Page Header-->
+            <header class="page-header">
+                <div class="container-fluid">
+                    <h2 class="no-margin-bottom">财务管理栏</h2>
+                </div>
+            </header>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-holder container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/index">主界面</a></li>
+                    <li class="breadcrumb-item"><a href="/moneyManage/show">财务管理</a></li>
+                    <li class="breadcrumb-item">更新记录</li>
+                </ul>
+            </div>
+            <!-- Forms Section-->
+            <div class="form-size">
+                <form method="post" class="form-validate" action="/moneyManage/edit">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="reimburse" class="label-material">报销者</label>
+                                <input id="reimburse" type="text" name="reimburse" th:value="${moneyMange.reimburse}" required
+                                       data-msg="请输入报销者" class="input-material" >
+                            </div>
+                            <div class="form-group">
+                                <label for="deal" class="label-material">处理者</label>
+                                <input id="deal" type="text" name="deal" th:value="${moneyMange.deal}" required
+                                       data-msg="请输入处理者" class="input-material">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group purple-border">
+                                <label for="content">来源/去向</label>
+                                <input id="content" type="text" name="content" th:value="${moneyMange.content}" required
+                                       data-msg="请输入来源/去向" class="input-material">
+                            </div>
+                            <div class="form-group">
+                                <label for="spend" class="label-material">金额</label>
+                                <input id="spend" type="text" name="spend" th:value="${moneyMange.spend}"
+                                       required data-msg="请输入花费金额" class="input-material">
+                            </div>
+                        </div>
+                        <div><input type="hidden" id="id" name="id" th:value="${moneyMange.id}"></div>
+                    </div>
+                    <input type="submit" class="btn btn-primary btn-class" value="提交">
+                </form>
+            </div>
+            <!-- Page Footer-->
+            <footer th:replace="footer::footer"></footer>
+        </div>
+    </div>
+</div>
+<!-- JavaScript files-->
+<script>
+
+</script>
+<!-- JavaScript files-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.0/js/bootstrap.min.js"></script>
+<script src="../../static/js/front.js"></script>
+</body>
+</html>
