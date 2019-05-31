@@ -40,7 +40,7 @@
                     <p class="p-input pos code">
                         <label for="imageCode">请输入验证码</label>
                         <input type="text" class="l_check" id="imageCode" name="code"/>
-                        <img src="/user/getCode">
+                        <img src="/user/getCode" id="kaptcha" title="看不清可单击图片刷新">
                         <span class="tel-warn img-err hide"><em>账号或密码错误，请重新输入</em><i class="icon-warn"></i></span>
                     </p>
                 </div>
@@ -124,6 +124,29 @@
             $('.img-err').addClass('hide');
             return true;
         }
+    }
+    /*更换图形验证码*/
+    $("#kaptcha").click(function(){
+        imgcode()
+    });
+    /*函数功能：获取图形验证码*/
+    function imgcode(){
+        var xmlhttp;
+        xmlhttp=new XMLHttpRequest();
+        xmlhttp.open("GET","/user/getCode",true);
+        xmlhttp.responseType = "blob";
+        xmlhttp.onload = function(){
+            console.log(this);
+            if (this.status == 200) {
+                var blob = this.response;
+                var img = document.getElementById("kaptcha");
+                img.onload = function(e) {
+                    window.URL.revokeObjectURL(img.src);
+                };
+                img.src = window.URL.createObjectURL(blob);
+            }
+        }
+        xmlhttp.send();
     }
 </script>
 <script src="../../static/js/agree.js"></script>
