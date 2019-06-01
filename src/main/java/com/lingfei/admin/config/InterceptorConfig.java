@@ -29,7 +29,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
         //前台拦截
         registry.addInterceptor(new FrontInterceptor())
-                .addPathPatterns("/", "/index/about","/index/competition","/index/announce","/index/message");
+                .addPathPatterns("/", "/index/about","/index/announce","/index/message");
     }
 
     @Override

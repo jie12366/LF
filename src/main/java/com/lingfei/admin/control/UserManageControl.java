@@ -60,14 +60,11 @@ public class UserManageControl {
         return "redirect:/table1";
     }
 
-    @GetMapping("/user/find")
-    public String editUser(String name, Model model) {
+    @PostMapping("/user/find")
+    public String editUser(@RequestParam("name") String name, Model model) {
         List<User> users = userService.getUserByName(name);
-        PageInfo<User> pageInfo = new PageInfo<>(users);
-        if (pageInfo != null) {
-            model.addAttribute("pages", pageInfo);
-        }
-        return "redirect:/table1";
+        model.addAttribute("pages",users);
+        return "table1/esTable1";
     }
 
     @PostMapping("/user/prefect")
