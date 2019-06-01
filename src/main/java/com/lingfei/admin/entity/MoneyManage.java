@@ -30,9 +30,12 @@ public class MoneyManage {
     @Column(name = "content", type = MySqlTypeConstant.TEXT)
     private String content;
 
-    @Column(name = "spend", type = MySqlTypeConstant.DOUBLE, length = 30)
-    private float spend;
+    @Column(name = "spend", type = MySqlTypeConstant.DOUBLE, length = 30,decimalLength = 2)
+    private double spend;
 
-    @Column(name = "balance", type = MySqlTypeConstant.DOUBLE, length = 30)
-    private float balance;
+    @Column(name = "balance", type = MySqlTypeConstant.DOUBLE, length = 30,decimalLength = 2)
+    private double balance;
+
+    @Column(name = "time",type = MySqlTypeConstant.VARCHAR,length = 30)
+    private String time;
 }

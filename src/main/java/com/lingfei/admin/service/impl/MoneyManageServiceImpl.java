@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,21 +21,23 @@ import java.util.List;
 public class MoneyManageServiceImpl implements MoneyManageService {
 
     @Autowired
-    MoneyManageMapper manageMapper;
+    private MoneyManageMapper manageMapper;
 
     private final Logger logger = LoggerFactory.getLogger(MoneyManageServiceImpl.class);
 
     @Override
     public int saveMoneyManage(MoneyManage manage) {
         if (manage != null){
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
             int res =  manageMapper.saveMoneyManage(manage.getReimburse(),manage.getDeal(),manage.getContent()
-                    ,manage.getSpend(),manage.getBalance());
+                    ,manage.getSpend(),manage.getBalance(),sdf.format(date));
 
             int id = getMaxId();
             if (listManage().size() == 1){
                 return updateBalance(manage.getSpend(),id);
             }else {
-                float balance = manageMapper.getMoneyManageById(id - 1).getBalance();
+                double balance = manageMapper.getMoneyManageById(id - 1).getBalance();
                 return updateBalance(balance + manage.getSpend(),id);
             }
         }
@@ -64,7 +68,7 @@ public class MoneyManageServiceImpl implements MoneyManageService {
     }
 
     @Override
-    public int updateBalance(float balance, int id) {
+    public int updateBalance(double balance, int id) {
         if (id > 0){
             return manageMapper.updateBalance(balance, id);
         }
@@ -74,20 +78,22 @@ public class MoneyManageServiceImpl implements MoneyManageService {
 
     @Override
     public int updateManage(MoneyManage manage) {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         if (manage != null){
-            float spend = getManageById(manage.getId()).getSpend();
+            double spend = getManageById(manage.getId()).getSpend();
             if (spend == manage.getSpend()){
                 return manageMapper.updateMoneyManage(manage.getReimburse(),manage.getDeal(),manage.getContent()
-                        ,manage.getSpend(),manage.getId());
+                        ,manage.getSpend(),sdf.format(date),manage.getId());
             }else {
                 if (listManage().size() == 1){
                     manageMapper.updateMoneyManage(manage.getReimburse(),manage.getDeal(),manage.getContent()
-                            ,manage.getSpend(),manage.getId());
+                            ,manage.getSpend(),sdf.format(date),manage.getId());
                     return updateBalance(manage.getSpend(),manage.getId());
                 }else {
-                    float balance = getManageById(manage.getId() - 1).getBalance() + manage.getSpend();
+                    double balance = getManageById(manage.getId() - 1).getBalance() + manage.getSpend();
                     manageMapper.updateMoneyManage(manage.getReimburse(),manage.getDeal(),manage.getContent()
-                            ,manage.getSpend(),manage.getId());
+                            ,manage.getSpend(),sdf.format(date),manage.getId());
                     return updateBalance(balance,manage.getId());
                 }
             }
@@ -102,8 +108,8 @@ public class MoneyManageServiceImpl implements MoneyManageService {
             if (listManage().size() == 1){
                 return manageMapper.deleteMoneyManage(id);
             }else {
-                float balance = manageMapper.getMoneyManageById(id - 1).getBalance();
-                float spend = manageMapper.getMoneyManageById(id).getSpend();
+                double balance = manageMapper.getMoneyManageById(id - 1).getBalance();
+                double spend = manageMapper.getMoneyManageById(id).getSpend();
                 int res2 = updateBalance(balance - spend,id);
                 return manageMapper.deleteMoneyManage(id);
             }

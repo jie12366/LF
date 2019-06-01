@@ -78,9 +78,9 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label for="reimburse" class="label-material">报销者</label>
+                                <label for="reimburse" class="label-material">申请者</label>
                                 <input id="reimburse" type="text" name="reimburse" required
-                                       data-msg="请输入报销者" class="input-material">
+                                       data-msg="请输入申请者" class="input-material">
                             </div>
                             <div class="form-group">
                                 <label for="deal" class="label-material">处理者</label>
@@ -96,7 +96,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="spend" class="label-material">金额<span class="span-color">(去向请用负数)</span></label>
-                                <input id="spend" type="text" name="spend" required data-msg="请输入花费金额"
+                                <input id="spend" type="number" step="0.01" name="spend" required data-msg="请输入金额"
                                        class="input-material">
                             </div>
                         </div>

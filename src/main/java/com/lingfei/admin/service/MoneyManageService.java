@@ -45,7 +45,7 @@ public interface MoneyManageService {
      * @param id
      * @return
      */
-    int updateBalance(float balance,int id);
+    int updateBalance(double balance,int id);
 
     /**
      * 根据id更新数据
