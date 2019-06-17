@@ -32,6 +32,12 @@
         .input-pos {
             margin-left: 100px;
         }
+        .data-pos{
+            color: #796aee;
+            text-align: center;
+            font-size: 1.3rem;
+            margin-left: 2rem;
+        }
     </style>
 </head>
 <body>
@@ -118,12 +124,44 @@
                                             </tbody>
                                         </table>
                                         <!--实现分页,page.pageNum是当前页数，page.pages是总页数-->
-                                        <div>
-                                            <a th:href="@{/table1(start = 1)}">首页</a>
-                                            <a th:href="@{/table1(start = ${pages.pageNum - 1})}">上一页</a>
-                                            <a th:href="@{/table1(start = ${pages.pageNum + 1})}">下一页</a>
-                                            <a th:href="@{/table1(start = ${pages.pages})}">尾页</a>
-                                        </div>
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination">
+                                                <li class="page-item previous">
+                                                    <a class="page-link" id="previous" onclick="previousPage()" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <input type="hidden" id="pages" th:value="${pages.pages}">
+                                                <input type="hidden" id="pageNum" th:value="${pages.pageNum}">
+                                                <li class="page-item active"><a class="page-link" th:href="@{/table1(start = ${pages.pageNum})}">
+                                                    <span th:text="${pages.pageNum}"></span></a>
+                                                </li>
+                                                <li class="page-item"><a class="page-link" th:if="${pages.pageNum} &lt; ${pages.pages}"
+                                                                         th:href="@{/table1(start = ${pages.pageNum + 1})}">
+                                                    <span th:text="${pages.pageNum + 1}"></span></a>
+                                                </li>
+                                                <li class="page-item"><a class="page-link" th:if="${pages.pageNum + 1} &lt; ${pages.pages}"
+                                                                         th:href="@{/table1(start = ${pages.pageNum + 2})}">
+                                                    <span th:text="${pages.pageNum + 2}"></span></a>
+                                                </li>
+                                                <li class="page-item"><a class="page-link" th:if="${pages.pageNum + 2} &lt; ${pages.pages}"
+                                                                         th:href="@{/table1(start = ${pages.pageNum + 3})}">
+                                                    <span th:text="${pages.pageNum + 3}"></span></a>
+                                                </li>
+                                                <li class="page-item"><a class="page-link" th:if="${pages.pageNum + 3} &lt; ${pages.pages}"
+                                                                         th:href="@{/table1(start = ${pages.pageNum + 4})}">
+                                                    <span th:text="${pages.pageNum + 4}"></span></a>
+                                                </li>
+                                                <li class="page-item nextPage">
+                                                    <a class="page-link" id="nextPage" onclick="nextPage()" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <span class="data-pos" th:text="共+${pages.pages}+页"></span>
+                                                </li>
+                                            </ul>
+                                        </nav>
                                     </div>
                                 </div>
                             </div>
@@ -175,7 +213,33 @@
             return false;
         }
     }
+    function previousPage(){
+        var pageNum = $('#pageNum').val()
+        if (pageNum <= 1){
+            $('.previous').addClass('disabled')
+            alert("没有更前的页")
+        }else {
+            $('.previous').removeClass('disabled')
+            var previous = pageNum - 1
+            window.location.href = "/table1?start=" + previous
+        }
+    }
+
+    function nextPage(){
+        var pageNum = $('#pageNum').val()
+        var pageSize = $('#pages').val()
+        if (pageNum >= pageSize){
+            $('.nextPage').addClass('disabled')
+            alert("没有更多的页")
+        }else {
+            var next = parseInt(pageNum) + 1
+            $('.previous').removeClass('disabled')
+            $('.nextPage').removeClass('disabled')
+            window.location.href = "/table1?start=" + next
+        }
+    }
 </script>
+<script src="../../static/js/page-cut.js"></script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.0/js/bootstrap.min.js"></script>
 <script src="../../static/js/front.js"></script>

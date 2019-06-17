@@ -7,6 +7,7 @@ import com.lingfei.admin.service.impl.AnnounceServiceImpl;
 import com.lingfei.admin.service.impl.CompetitionServiceImpl;
 import com.lingfei.admin.service.impl.UserServiceImpl;
 import com.lingfei.admin.utils.ExcelUtils;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,7 @@ public class AdminExcelControl {
      *
      * @param response HttpServletResponse
      */
+    @ApiOperation("导出公告信息表")
     @GetMapping("/getExcel1")
     public void export1(HttpServletResponse response) {
         List<Announce> announces = announceService.getAllResult();
@@ -45,6 +47,7 @@ public class AdminExcelControl {
      *
      * @param response HttpServletResponse
      */
+    @ApiOperation("导出成员信息表")
     @GetMapping("/getExcel2")
     public void export2(HttpServletResponse response) {
         List<User> users = userService.listUser();
@@ -55,6 +58,7 @@ public class AdminExcelControl {
     @Autowired
     CompetitionServiceImpl competitionService;
 
+    @ApiOperation("导出比赛报名表")
     @GetMapping("/getExcel3")
     public void export3(HttpServletResponse response) {
         List<Competition> competitions = competitionService.listCompetition();

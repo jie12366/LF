@@ -25,6 +25,7 @@ public class CompetitionControl {
     @Autowired
     CompetitionServiceImpl competitionService;
 
+    @ApiOperation("比赛报名信息的分页展示")
     @GetMapping("/table2")
     public String getTable2(Model model, @RequestParam(value = "start", defaultValue = "1") int start, @RequestParam(value = "size", defaultValue = "5") int size) {
         PageHelper.startPage(start, size, "id asc");
@@ -41,6 +42,7 @@ public class CompetitionControl {
      * @param model Model
      * @return editCompetition.html
      */
+    @ApiOperation("根据传来的id获取数据，并把数据传到页面")
     @GetMapping("/competition/edit")
     public String editCompetition(int id, Model model) {
         Competition competition = competitionService.getCompetitionById(id);
@@ -70,6 +72,7 @@ public class CompetitionControl {
      * @param competition Competition
      * @return 返回table2表
      */
+    @ApiOperation(value = "将表单传来的数据更新到数据库")
     @PostMapping("/competition/update")
     public String updateCompetition(Competition competition) {
         competitionService.updateCompetition(competition);
@@ -82,6 +85,7 @@ public class CompetitionControl {
      * @param id inr
      * @return 返回table2表
      */
+    @ApiOperation(value = "根据id删除对应的比赛报名信息")
     @GetMapping("/competition/delete")
     public String deleteCompetition(String id) {
         if (!id.matches(",")) {

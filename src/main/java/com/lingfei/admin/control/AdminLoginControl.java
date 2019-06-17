@@ -3,6 +3,7 @@ package com.lingfei.admin.control;
 import com.lingfei.admin.entity.Admin;
 import com.lingfei.admin.service.impl.LoginServiceImpl;
 import com.lingfei.admin.service.impl.UserServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,7 @@ public class AdminLoginControl {
      * @param admin com.lingfei.admin.entity.Admin
      * @return 如果信息验证无误就跳转到admin.html，如果有误就服务端跳转login.html
      */
+    @ApiOperation("如果登陆信息正确，就将登陆信息保存到session并跳转到主页面")
     @PostMapping("/")
     public String loginIn(Admin admin, HttpServletRequest request) {
         if (loginService.adminLogin(admin)) {

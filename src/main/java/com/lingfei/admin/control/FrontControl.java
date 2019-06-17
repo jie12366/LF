@@ -7,6 +7,8 @@ import com.lingfei.admin.entity.User;
 import com.lingfei.admin.service.AnnounceService;
 import com.lingfei.admin.service.UserService;
 import com.lingfei.admin.service.impl.VisitorServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,7 @@ import java.util.List;
  */
 
 @Controller
+@Api("前台页面的跳转")
 public class FrontControl {
 
     @Autowired
@@ -73,6 +76,7 @@ public class FrontControl {
         return "front/prefect";
     }
 
+    @ApiOperation("公告信息分页展示")
     @GetMapping("/index/announce")
     public String toAnnounce(Model model, @RequestParam(value = "start", defaultValue = "1") int start, @RequestParam(value = "size", defaultValue = "5") int size){
         PageHelper.startPage(start, size, "id desc");
@@ -82,6 +86,7 @@ public class FrontControl {
         return "front/announce";
     }
 
+    @ApiOperation("个人信息展示")
     @GetMapping("/index/message")
     public String toMessage(Model model, HttpServletRequest request){
         String user1 = (String)request.getSession().getAttribute("user");
@@ -90,6 +95,7 @@ public class FrontControl {
         return "front/message";
     }
 
+    @ApiOperation("个人信息的修改")
     @PostMapping("/user/edit")
     public String updateUser(User user) {
         userService.updateDynamicUser(user);

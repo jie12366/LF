@@ -34,6 +34,7 @@ public class UserLoginControl {
     @Autowired
     EmailServiceImpl emailService;
 
+    @ApiOperation("检查短信验证码是否正确")
     @PostMapping("/checkSmsCode")
     public JsonResult checkSmsCode(@ApiParam("验证码") @RequestParam("code") String code,
                                    HttpServletRequest request){

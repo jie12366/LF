@@ -1,5 +1,6 @@
 package com.lingfei.admin.control;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class ErrorControl implements ErrorController {
 
+    @ApiOperation("当访问不存在的页面时，就跳转到这个页面并进行提示")
     @GetMapping("/error")
     public String handleError(HttpServletRequest request) {
         //获取statusCode(404,500)

@@ -12,6 +12,7 @@ import com.lingfei.admin.service.impl.*;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.model.DefaultPutRet;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,7 +49,8 @@ public class AdminManageControl {
      * @param size  每页的大小
      * @return announce.html
      */
-    @RequestMapping("/announce")
+    @ApiOperation("公告信息的分页展示")
+    @GetMapping("/announce")
     public String getContent(Model model, @RequestParam(value = "start", defaultValue = "1") int start, @RequestParam(value = "size", defaultValue = "5") int size) {
         PageHelper.startPage(start, size, "id asc");
         List<Announce> lists = announceService.getAllResult();
@@ -66,7 +68,7 @@ public class AdminManageControl {
      * @param announce com.lingfei.admin.entity.Announce
      * @return 服务端跳转到announce.html
      */
-    @ApiOperation("插入数据")
+    @ApiOperation("将表单传到的数据插入到数据库")
     @PostMapping("/addContent")
     public String addContent(Announce announce, HttpServletRequest request,
                              @RequestParam("file") MultipartFile file, Model model) {
@@ -99,6 +101,7 @@ public class AdminManageControl {
      * @param model Model
      * @return 编辑的页面
      */
+    @ApiOperation("根据传来的id获取数据，并把数据传到页面")
     @GetMapping("/editContent")
     public String editContent(int id, Model model) {
         Announce announce = announceService.getAnnounceById(id);
@@ -115,6 +118,7 @@ public class AdminManageControl {
      * @param announce Announce
      * @return 服务端跳转回announce.html
      */
+    @ApiOperation(value = "将表单传来的数据插入数据库")
     @PostMapping("/updateContent")
     public String updateContent(Announce announce) {
         announceService.updateAnnounce(announce);
@@ -127,6 +131,7 @@ public class AdminManageControl {
      * @param id int
      * @return 服务端跳转回announce.html
      */
+    @ApiOperation("根据id删除对应的公告信息")
     @GetMapping("/deleteContent")
     public String deleteContent(String id) {
         String[] ids = id.split(",");
@@ -157,6 +162,7 @@ public class AdminManageControl {
      *
      * @return admin.html
      */
+    @ApiOperation("跳转到主页面，并给访客量、注册人数和报名人数赋值")
     @GetMapping("/index")
     public String index(Model model) {
         CountVisitor visitor = visitorService.getVisitorByDate();
@@ -191,6 +197,7 @@ public class AdminManageControl {
      *
      * @return sendEmail.html
      */
+    @ApiOperation("跳转到发送邮件页面")
     @GetMapping("/toEmail")
     public String toEmail() {
         return "announce/sendEmail";
@@ -203,6 +210,7 @@ public class AdminManageControl {
      * @return 服务端跳转到/announce
      * @throws Exception
      */
+    @ApiOperation("添加邮件信息")
     @RequestMapping("/addEmail")
     public String addEmail(HttpServletRequest request) throws Exception {
 
@@ -221,6 +229,7 @@ public class AdminManageControl {
      * @param model  Model
      * @return selectUser.html
      */
+    @ApiOperation("跳转到一个页面，选择需要发送邮件的对象")
     @GetMapping("/selectUser")
     public String selectUser(Model model) {
         List<User> users = userService.listUser();
@@ -237,6 +246,7 @@ public class AdminManageControl {
      * @param session HttpSession
      * @return sendEmail.html
      */
+    @ApiOperation("获取刚刚选择的群发的对象")
     @GetMapping("/getSelect")
     public String getSelect(String emails, HttpSession session) {
         emails.substring(0, emails.length() - 1);
