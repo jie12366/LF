@@ -96,7 +96,7 @@ public class FrontControl {
     }
 
     @ApiOperation("个人信息的修改")
-    @PostMapping("/user/edit")
+    @PostMapping("/front/user/edit")
     public String updateUser(User user) {
         userService.updateDynamicUser(user);
         return "front/message";
