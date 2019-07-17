@@ -66,6 +66,11 @@ public class FrontControl {
         return "front/reg";
     }
 
+    @GetMapping("/index/rules")
+    public String toRules(){
+        return "front/rules";
+    }
+
     @GetMapping("/index/getPass")
     public String toGetPass(){
         return "front/getpass";
