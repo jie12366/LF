@@ -50,6 +50,15 @@ public class UserLoginControl {
         }
     }
 
+    @ApiOperation("检查账号是否已经注册")
+    @GetMapping("/check/register")
+    public JsonResult checkRegister(@ApiParam("账号") String account){
+        if (userService.isExistsAccount(account) == 1){
+            return JsonResult.errorMsg("已存在");
+        }
+        return JsonResult.ok();
+    }
+
     /**
      * 接受post方法，注册入口
      *
@@ -61,13 +70,6 @@ public class UserLoginControl {
     @PostMapping("/register")
     public JsonResult addUser(@ApiParam("账号") @RequestParam("account") String account,
                               @ApiParam("密码") @RequestParam("password") String password) {
-
-        List<User> lists = userService.listUser();
-        for (User user : lists) {
-            if (user.getAccount().equals(account)) {
-                return JsonResult.errorMsg("1");
-            }
-        }
 
         userService.saveAccount(account, password);
         return JsonResult.ok();

@@ -16,6 +16,13 @@
             margin-left: 180px;
             margin-top: -50px;
         }
+        .tel-tip{
+            position: absolute;
+            color: #33FF33;
+            font-size: 12px;
+            right: 0;
+            top: 22px;
+        }
     </style>
 </head>
 <body>
@@ -29,6 +36,7 @@
                         <label for="tel">手机号</label>
                         <input type="number" id="tel" name="account" autocomplete="off">
                         <span class="tel-warn tel-err hide"><em></em><i class="icon-warn"></i></span>
+                        <span class="tel-tip hide"><em></em></span>
                     </p>
                     <p class="p-input pos" id="sendcode">
                         <label for="code">输入验证码</label>
@@ -68,36 +76,37 @@
         </div>
     </div>
     <script>
+
+        $(function () {
+            $("#tel").blur(function () {
+                var account = $("#tel").val()
+                checkAccount(account)
+            })
+        })
+
         function checkPhone(){
             var phone = $("#tel").val()
             var status = true;
-            if (phone == '') {
-                $('.tel-err').removeClass('hide').find("em").text('请输入手机号');
-                return false;
-            }
-            var param = /^1[34578]\d{9}$/;
-            if (!param.test(phone)) {
-                // globalTip({'msg':'手机号不合法，请重新输入','setTime':3});
-                $('.tel-err').removeClass('hide');
-                $('.tel-err').text('手机号不合法，请重新输入');
-                return false;
-            }
-            $.ajax({
-                url: '/user/sendMsg',
-                type: 'get',
-                dataType: 'json',
-                async: false,
-                data: {phone:phone},
-                success:function(data){
-                    if (data.status == 200){
-                        alert("验证码发送成功")
+            if (checkAccount(phone)){
+                $.ajax({
+                    url: '/user/sendMsg',
+                    type: 'get',
+                    dataType: 'json',
+                    async: false,
+                    data: {phone:phone},
+                    success:function(data){
+                        if (data.status == 200){
+                            alert("验证码发送成功")
+                        }
+                    },
+                    error:function(){
+                        status = false;
+                        // return false;
                     }
-                },
-                error:function(){
-                    status = false;
-                    // return false;
-                }
-            });
+                });
+            } else {
+                return false;
+            }
             return status;
         }
         function sub(){
@@ -115,10 +124,8 @@
                     data: ldata,
                     success:function(data){
                         console.log(data)
-                        if (data.status == 500){
-                            if (data.msg == "1"){
-                                $('.tel-err').removeClass('hide').find("em").text('手机号已被注册');
-                            }else if (data.msg == "2"){
+                        if (data.satus == 500){
+                            if (data.msg == "2"){
                                 $('.error').removeClass('hide').find("em").text('请发送验证码');
                             }else if(data.msg == "4"){
                                 $('.error').removeClass('hide').find("em").text('验证码错误');
@@ -168,9 +175,38 @@
             if (username == '') {
                 $('.tel-err').removeClass('hide').find("em").text('请输入账户');
                 return false;
-            } else {
-                $('.tel-err').addClass('hide');
-                return true;
+            }
+            else {
+                var param = /^1[34578]\d{9}$/;
+                if (!param.test(username)) {
+                    // globalTip({'msg':'手机号不合法，请重新输入','setTime':3});
+                    $('.tel-err').removeClass('hide');
+                    $('.tel-err').text('手机号不合法，请重新输入');
+                    return false;
+                }
+
+                $.ajax({
+                    url:"/user/check/register",
+                    type:"get",
+                    dataType:"json",
+                    async:false,
+                    data:{account:username},
+                    success:function (data) {
+                        console.log(data)
+                        if (data.status == 500){
+                            if (data.msg == "已存在"){
+                                $('.tel-tip').addClass('hide')
+                                $('.tel-err').addClass('hide');
+                                $('.tel-err').removeClass('hide').find("em").text('手机号已被注册');
+                                return false;
+                            }
+                        }else if(data.status == 200){
+                            $('.tel-err').addClass('hide')
+                            $('.tel-tip').removeClass('hide').find("em").text('手机号可以注册');
+                            return true;
+                        }
+                    }
+                })
             }
         }
 

@@ -49,7 +49,14 @@ public interface UserService {
     int getId(String account);
 
     /**
-     * 插入数据
+     * 判断账号是否存在
+     * @param account 账号
+     * @return 存在返回1，不存在返回0
+     */
+    int isExistsAccount(String account);
+
+    /**
+     * 插入数据，注册
      *
      * @param account  账号
      * @param password 密码

@@ -67,6 +67,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int isExistsAccount(String account) {
+        return userMapper.isExistsAccount(account);
+    }
+
+    @Override
     public int saveAccount(String account, String password) {
         if (account != null && password != null) {
             System.out.println(password);
