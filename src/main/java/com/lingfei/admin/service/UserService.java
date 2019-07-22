@@ -13,9 +13,7 @@ import java.util.List;
  * @date 2019/3/19 21:46
  */
 
-@Service
 @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-
 public interface UserService {
 
     /**
