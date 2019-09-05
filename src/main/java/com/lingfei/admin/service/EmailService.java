@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
  * @author www.xyjz123.xyz
  * @date 2019/3/31 23:07
  */
-@Service
 public interface EmailService {
 
     /**

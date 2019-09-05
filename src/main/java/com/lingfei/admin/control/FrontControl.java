@@ -56,6 +56,11 @@ public class FrontControl {
         return "front/competition";
     }
 
+    @GetMapping("/index/introduce")
+    public String toIntroduce() {
+        return "front/introduce";
+    }
+
     @GetMapping("/index/login")
     public String toLogin(){
         return "front/login";
@@ -64,6 +69,11 @@ public class FrontControl {
     @GetMapping("/index/register")
     public String toRegister(){
         return "front/reg";
+    }
+
+    @GetMapping("/index/rules")
+    public String toRules(){
+        return "front/rules";
     }
 
     @GetMapping("/index/getPass")

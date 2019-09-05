@@ -13,7 +13,6 @@ import java.util.List;
  * @date 2019/3/22 13:07
  */
 
-@Service
 @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 
 public interface CompetitionService {

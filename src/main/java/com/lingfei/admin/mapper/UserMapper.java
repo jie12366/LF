@@ -58,12 +58,19 @@ public interface UserMapper {
 
     /**
      * 根据邮箱获取密码
-     *
      * @param email 邮箱
      * @return
      */
     @Select("select password from user where email = #{email}")
     String getPasswordByEmail(String email);
+
+    /**
+     * 判断账号是否存在
+     * @param account
+     * @return 存在返回1，不存在返回0
+     */
+    @Select("select count(*) from user where account=#{account}")
+    int isExistsAccount(String account);
 
     /**
      * 插入账号密码注册

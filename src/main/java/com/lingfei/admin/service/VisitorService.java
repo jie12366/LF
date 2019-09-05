@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 2019/3/21 22:33
  */
 
-@Service
 @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 
 public interface VisitorService {

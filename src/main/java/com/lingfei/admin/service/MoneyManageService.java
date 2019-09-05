@@ -10,7 +10,6 @@ import java.util.List;
  * @description
  * @date 2019/5/31 12:03
  */
-@Service
 public interface MoneyManageService {
 
     /**

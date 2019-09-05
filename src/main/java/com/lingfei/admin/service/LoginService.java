@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
  * @date 2019-3-16
  */
 
-@Service
 public interface LoginService {
     /**
      * 判断是否是管理员用户
