@@ -101,4 +101,9 @@ public class FrontControl {
         userService.updateDynamicUser(user);
         return "front/message";
     }
+
+    @GetMapping("/chan-huo-hen-mang")
+    public String toChanhuo1(){
+        return "front/chanhuohenmang";
+    }
 }
