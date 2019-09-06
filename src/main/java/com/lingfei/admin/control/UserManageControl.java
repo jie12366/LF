@@ -62,7 +62,7 @@ public class UserManageControl {
         return "redirect:/table1";
     }
 
-    @ApiOperation("根据传来的name模糊查询会员信息")
+    @ApiOperation("根据传来的name模糊查询部门成员")
     @PostMapping("/user/find")
     public String editUser(@RequestParam("name") String name, Model model) {
         List<User> users = userService.getUserByName(name);

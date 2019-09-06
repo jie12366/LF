@@ -26,7 +26,7 @@ public interface UserMapper {
      * @param name 名字
      * @return
      */
-    @Select("select * from user where name like '%${_parameter}%'")
+    @Select("select * from user where depart like '%${_parameter}%'")
     List<User> getUserByName(String name);
 
     /**
