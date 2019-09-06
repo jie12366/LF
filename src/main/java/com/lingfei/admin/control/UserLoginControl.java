@@ -1,7 +1,6 @@
 package com.lingfei.admin.control;
 
 import com.lingfei.admin.entity.ImageCode;
-import com.lingfei.admin.entity.User;
 import com.lingfei.admin.service.impl.EmailServiceImpl;
 import com.lingfei.admin.service.impl.UserServiceImpl;
 import com.lingfei.admin.utils.CreateImageCode;
@@ -19,7 +18,6 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author www.xyjz123.xyz
@@ -91,6 +89,7 @@ public class UserLoginControl {
         JSONObject smsCode = new JSONObject();
         smsCode.put("code",code);
         smsCode.put("time",System.currentTimeMillis());
+        System.out.println(code);
 
         request.getServletContext().setAttribute("smsCode",smsCode);
 
