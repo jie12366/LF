@@ -219,6 +219,9 @@ public class AdminManageControl {
         HttpSession session = request.getSession();
         String emails = session.getAttribute("tos").toString();
         String[] to = emails.split(",");
+        for (String tos : to){
+            System.out.println(tos);
+        }
         announceService.sendEmail(theme, text, to);
         return "redirect:announce";
     }
@@ -250,6 +253,7 @@ public class AdminManageControl {
     @GetMapping("/getSelect")
     public String getSelect(String emails, HttpSession session) {
         emails.substring(0, emails.length() - 1);
+        System.out.println(emails);
         session.setAttribute("tos", emails);
         return "announce/sendEmail";
     }
