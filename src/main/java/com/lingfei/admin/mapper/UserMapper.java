@@ -108,14 +108,14 @@ public interface UserMapper {
     int updateUser(String name, String number, String stuClass, String qq, String email, String depart, int id);
 
     /**
-     * 根据用户id更新余额
+     * 根据用户id更新约球次数
      *
-     * @param balance Double
+     * @param count 次数
      * @param id      int
      * @return 更新是否成功
      */
-    @Update("update user set balance = #{balance} where id = #{id}")
-    int updateBalance(double balance, int id);
+    @Update("update user set orderCount = orderCount + #{count} where id = #{id}")
+    int updateCount(int count, int id);
 
     /**
      * 动态修改user表

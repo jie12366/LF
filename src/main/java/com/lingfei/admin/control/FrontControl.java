@@ -5,8 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.lingfei.admin.entity.Announce;
 import com.lingfei.admin.entity.User;
 import com.lingfei.admin.service.AnnounceService;
+import com.lingfei.admin.service.OrderBallService;
 import com.lingfei.admin.service.UserService;
 import com.lingfei.admin.service.impl.VisitorServiceImpl;
+import com.lingfei.admin.utils.JsonResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -48,7 +51,7 @@ public class FrontControl {
 
     @GetMapping("/index/about")
     public String toAbout() {
-        return "front/about";
+        return "front/introduce";
     }
 
     @GetMapping("/index/competition")
@@ -116,4 +119,12 @@ public class FrontControl {
     public String toChanhuo1(){
         return "front/chanhuohenmang";
     }
+
+    @GetMapping("/order-ball")
+    public String ball(){
+        return "front/order-ball";
+    }
+
+    @Resource
+    OrderBallService orderBallService;
 }

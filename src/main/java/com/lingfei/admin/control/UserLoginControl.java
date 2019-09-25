@@ -163,7 +163,7 @@ public class UserLoginControl {
             return JsonResult.errorMsg("3");
         }else {
             request.getSession().setAttribute("user",account);
-            return JsonResult.ok("登录成功");
+            return JsonResult.ok(userService.getId(account));
         }
     }
 

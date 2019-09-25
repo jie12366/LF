@@ -80,12 +80,12 @@ public interface UserService {
     int updateUser(User user);
 
     /**
-     * 根据用户id更新余额
+     * 根据用户id更新约球次数
      *
-     * @param user User
+     * @param count 次数
      * @return 更新是否成功
      */
-    int updateBalance(User user);
+    int updateCount(int count,int uid);
 
     /**
      * 动态修改user表

@@ -94,10 +94,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CachePut(cacheNames = "user")
-    public int updateBalance(User user) {
-        if (user != null) {
-            return userMapper.updateBalance(user.getBalance(), user.getId());
+    public int updateCount(int count,int uid) {
+        if (count != 0) {
+            return userMapper.updateCount(count,uid);
         }
         return 0;
     }

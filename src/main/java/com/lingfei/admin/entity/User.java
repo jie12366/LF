@@ -55,7 +55,7 @@ public class User implements Serializable {
     @Excel(name = "部门", orderNum = "7")
     private String depart;
 
-    @Column(name = "balance", type = MySqlTypeConstant.DOUBLE, length = 10)
-    @Excel(name = "余额", orderNum = "8")
-    private double balance;
+    @Column(name = "orderCount", type = MySqlTypeConstant.INT, length = 10)
+    @Excel(name = "约球次数", orderNum = "8")
+    private int orderCount;
 }
