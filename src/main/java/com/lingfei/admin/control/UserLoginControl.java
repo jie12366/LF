@@ -96,44 +96,12 @@ public class UserLoginControl {
         return JsonResult.ok();
     }
 
-    @ApiOperation("重置密码邮件")
-    @PostMapping("/reset")
-    public JsonResult reset(@ApiParam("重置密码接收者") @RequestParam("to") String to,
-                            HttpServletRequest request) {
-        String code = GetString.getCode();
-        String email = "您的重置密码的验证码为 " + code +  " 如非本人操作，请忽视。";
-        int res = emailService.sendEmail(to, "重置密码", email);
-        if (res == 1) {
-            request.getServletContext().setAttribute("emailCode",code);
-            return JsonResult.ok();
-        } else {
-            return JsonResult.errorMsg("邮件发送失败");
-        }
-    }
-
-    @ApiOperation("检查验证码是否正确")
-    @PostMapping("/checkCode")
-    public JsonResult checkCode(@ApiParam("验证码") @RequestParam("code") String code,
-                                HttpServletRequest request){
-
-        String code1 = (String) request.getServletContext().getAttribute("emailCode");
-
-        if(code1 == null){
-            return JsonResult.errorMsg("1");
-        } else if (!StringUtils.equalsIgnoreCase(code1,code)){
-            return JsonResult.errorMsg("2");
-        }else {
-            request.getServletContext().removeAttribute("emailCode");
-            return JsonResult.ok();
-        }
-    }
-
     @ApiOperation("重置密码")
     @PostMapping("/resetPassword")
-    public JsonResult resetPassword(@ApiParam("邮箱")@RequestParam("email") String email,
+    public JsonResult resetPassword(@ApiParam("手机号")@RequestParam("phone") String phone,
                                     @ApiParam("新密码")@RequestParam("password") String password) {
 
-        int res = userService.resetPassword(password, email);
+        int res = userService.resetPassword(password, phone);
         if (res == 1) {
             return JsonResult.ok();
         } else {

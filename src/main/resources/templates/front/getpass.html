@@ -20,9 +20,9 @@
             <h4>找回密码</h4>
             <p class="right_now">已有账号，<a href="/index/login">马上登录</a></p>
             <p class="p-input pos">
-                <label for="pc_email">邮箱</label>
+                <label for="pc_email">手机号</label>
                 <input type="text" id="pc_email">
-                <span class="tel-warn pc_tel-err hide"><em>最多五个字</em><i class="icon-warn"></i></span>
+                <span class="tel-warn pc_tel-err hide"><em>手机号格式非法</em><i class="icon-warn"></i></span>
             </p>
             <p class="p-input pos">
                 <label for="veri-code">输入验证码</label>
@@ -52,7 +52,7 @@
     function getNext() {
         var code = $.trim($('#veri-code').val());
         $.ajax({
-            url: '/user/checkCode',
+            url: '/user/checkSmsCode',
             type: 'post',
             dataType: 'json',
             async: true,
@@ -77,12 +77,12 @@
     }
 
     function sendEmail() {
-        var email = $.trim($('#pc_email').val());
-        if (checkAccount(email)) {
-            var ldata = {to: email};
+        var phone = $.trim($('#pc_email').val());
+        if (checkAccount(phone)) {
+            var ldata = {phone: phone};
             $.ajax({
-                url: '/user/reset',
-                type: 'post',
+                url: '/user/sendMsg',
+                type: 'get',
                 dataType: 'json',
                 async: true,
                 data: ldata,
@@ -99,11 +99,11 @@
     }
 
     function resetPass() {
-        var email = $.trim($('#pc_email').val());
+        var phone = $.trim($('#pc_email').val());
         var password = $.trim($('#passport').val());
         var password2 = $.trim($('#passport2').val());
-        if (checkAccount(email) && checkPass(password,password2)) {
-            var ldata = {email: email,password:password};
+        if (checkAccount(phone) && checkPass(password,password2)) {
+            var ldata = {phone: phone,password:password};
             $.ajax({
                 url: '/user/resetPassword',
                 type: 'post',
@@ -116,7 +116,7 @@
                         alert("重置密码成功")
                         location.href = "/index/login"
                     }else if (data.status == 500){
-                        $('.pc_tel-err').removeClass('hide').find("em").text('邮箱不存在');
+                        $('.pc_tel-err').removeClass('hide').find("em").text('手机号不存在');
                     }
                 }
             });
@@ -126,12 +126,12 @@
     }
 
     function checkAccount(username){
-        var pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+        var pattern = /^1[345789]\d{9}$/;
         if (username == '') {
-            $('.pc_tel-err').removeClass('hide').find("em").text('请输入邮箱');
+            $('.pc_tel-err').removeClass('hide').find("em").text('请输入手机号');
             return false;
         }else if (!pattern.test(username)){
-            $('.pc_tel-err').removeClass('hide').find("em").text('邮箱非法');
+            $('.pc_tel-err').removeClass('hide').find("em").text('手机号格式非法');
             return false;
         }
         else {

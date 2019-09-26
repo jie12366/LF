@@ -83,13 +83,13 @@ public interface UserMapper {
     int saveAccount(String account, String password);
 
     /**
-     * 根据邮箱重置密码
-     * @param email    邮箱
+     * 根据手机号重置密码
+     * @param account    手机号
      * @param password
      * @return
      */
-    @Update("update user set password = md5(#{password}) where email = #{email}")
-    int resetPassword(String password, String email);
+    @Update("update user set password = md5(#{password}) where account = #{account}")
+    int resetPassword(String password, String account);
 
     /**
      * 根据id更新记录

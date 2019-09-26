@@ -80,9 +80,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int resetPassword(String password, String email) {
-        if (email != null) {
-            return userMapper.resetPassword(password, email);
+    public int resetPassword(String password, String phone) {
+        if (phone != null) {
+            return userMapper.resetPassword(password, phone);
         }
         return 0;
     }
