@@ -96,10 +96,10 @@
                     var table = "";
                     table += "<tr>" + "<td colspan='4' style='text-align: center'>" + "按优先级排序的约球列表" + "</td>" +"</tr>"
                     for (var i = 0;i< res.data.length;i++){
-                        table += "<tr>" + "<td>" + Number(i) + Number(1) + "</td>"
+                        table += "<tr>" + "<td>" + Number(i + 1) + "</td>"
                             + "<td>" + res.data[i].name + "</td>"
                             + "<td>" + res.data[i].account + "</td>"
-                            + "<td>" + res.data[i].stuClass + "</td>"
+                            + "<td>" + res.data[i].depart + "</td>"
                             + "</tr>"
                     }
                     document.getElementById("orderList").innerHTML = table

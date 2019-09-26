@@ -47,7 +47,7 @@ public class User implements Serializable {
     @Excel(name = "QQ", orderNum = "4")
     private String qq;
 
-    @Column(name = "email", type = MySqlTypeConstant.VARCHAR, length = 20)
+    @Column(name = "email", type = MySqlTypeConstant.VARCHAR, length = 40)
     @Excel(name = "邮箱", orderNum = "5")
     private String email;
 

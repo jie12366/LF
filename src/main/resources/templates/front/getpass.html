@@ -114,6 +114,7 @@
                     console.log(data)
                     if (data.status == 200){
                         alert("重置密码成功")
+                        location.href = "/index/login"
                     }else if (data.status == 500){
                         $('.pc_tel-err').removeClass('hide').find("em").text('邮箱不存在');
                     }
