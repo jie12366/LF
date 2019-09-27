@@ -2,9 +2,9 @@ package com.lingfei.admin.control;
 
 import com.lingfei.admin.entity.User;
 import com.lingfei.admin.service.OrderBallService;
+import com.lingfei.admin.service.UserService;
 import com.lingfei.admin.utils.JsonResult;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +23,9 @@ public class OrderBallController {
 
     @Resource
     OrderBallService orderBallService;
+
+    @Resource
+    UserService userService;
 
     @ApiOperation("约球列表")
     @GetMapping("/order/list")
@@ -67,6 +70,11 @@ public class OrderBallController {
     @GetMapping("/stop/order")
     public JsonResult stopOrder(){
         orderBallService.stopOrder();
+        List<User> users = orderBallService.getListByPriority();
+        // 将未能约到球的人，取消约球
+        for (int i = 12; i < users.size(); i++){
+            userService.updateCount(-1, users.get(i).getId());
+        }
         return JsonResult.ok();
     }
 }
