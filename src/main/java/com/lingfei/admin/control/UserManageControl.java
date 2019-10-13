@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -53,7 +52,7 @@ public class UserManageControl {
      */
     @ApiOperation("根据传来的id获取数据，并把数据传到页面")
     @GetMapping("/user/edit")
-    public String editUser(int id, Model model) {
+    public String editUser(String id, Model model) {
         User user = userService.getUser(id);
         if (user != null) {
             model.addAttribute("user", user);
@@ -64,7 +63,7 @@ public class UserManageControl {
 
     @ApiOperation("根据传来的name模糊查询部门成员")
     @PostMapping("/user/find")
-    public String editUser(@RequestParam("name") String name, Model model) {
+    public String getUser(@RequestParam("name") String name, Model model) {
         List<User> users = userService.getUserByName(name);
         model.addAttribute("pages",users);
         return "table1/esTable1";
@@ -73,8 +72,8 @@ public class UserManageControl {
     @ApiOperation("将完善的个人信息更新到数据库")
     @PostMapping("/user/prefect")
     public String prefectUser(User user){
-        int id = userService.getId(user.getAccount());
-        user.setId(id);
+        String id = userService.getId(user.getAccount());
+        user.setUuid(id);
         userService.updateUser(user);
         return "front/login";
     }
@@ -103,8 +102,7 @@ public class UserManageControl {
     public String deleteUser(String id) {
         String[] id3 = id.split(",");
         for (String id1 : id3) {
-            int id2 = Integer.parseInt(id1);
-            userService.deleteUser(id2);
+            userService.deleteUser(id1);
         }
         return "redirect:/table1";
     }

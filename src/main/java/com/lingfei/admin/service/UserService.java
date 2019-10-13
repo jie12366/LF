@@ -1,7 +1,6 @@
 package com.lingfei.admin.service;
 
 import com.lingfei.admin.entity.User;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +35,7 @@ public interface UserService {
      * @param id int
      * @return user
      */
-    User getUser(int id);
+    User getUser(String id);
 
     /**
      * 根据账号获取id
@@ -44,7 +43,7 @@ public interface UserService {
      * @param account
      * @return
      */
-    int getId(String account);
+    String getId(String account);
 
     /**
      * 判断账号是否存在
@@ -52,6 +51,13 @@ public interface UserService {
      * @return 存在返回1，不存在返回0
      */
     int isExistsAccount(String account);
+
+    /**
+     * 判断uuid是否存在
+     * @param uuid 第三方登录uuid
+     * @return 存在返回1，不存在返回0
+     */
+    int isExistsUuid(String uuid);
 
     /**
      * 插入数据，注册
@@ -80,12 +86,20 @@ public interface UserService {
     int updateUser(User user);
 
     /**
+     * 存入uuid
+     * @param account 账号
+     * @param uuid 第三方登录id
+     * @return 是否成功
+     */
+    int updateUuid(String account, String uuid);
+
+    /**
      * 根据用户id更新约球次数
      *
      * @param count 次数
      * @return 更新是否成功
      */
-    int updateCount(int count,int uid);
+    int updateCount(int count,String uid);
 
     /**
      * 动态修改user表
@@ -101,7 +115,7 @@ public interface UserService {
      * @param id int
      * @return 删除是否成功
      */
-    int deleteUser(int id);
+    int deleteUser(String id);
 
     /**
      * 检查用户登录账号密码是否匹配

@@ -47,15 +47,22 @@ public class OrderBallController {
 
     @ApiOperation("约球")
     @PostMapping("/order/ball")
-    public JsonResult orderBall(@RequestParam("uid")int uid){
+    public JsonResult orderBall(@RequestParam("uid")String uid){
         int res = orderBallService.order(uid);
         return JsonResult.ok(res);
     }
 
     @ApiOperation("取消约球")
     @PostMapping("/cancel/ball")
-    public JsonResult cancelBall(@RequestParam("uid")int uid){
+    public JsonResult cancelBall(@RequestParam("uid")String uid){
         int res = orderBallService.cancelOrder(uid);
+        return JsonResult.ok(res);
+    }
+
+    @ApiOperation("管理员取消约球")
+    @PostMapping("/cancelBall")
+    public JsonResult cancelBallByManager(@RequestParam("uid")String uid){
+        int res = orderBallService.cancelOrderByManager(uid);
         return JsonResult.ok(res);
     }
 
@@ -73,7 +80,7 @@ public class OrderBallController {
         List<User> users = orderBallService.getListByPriority();
         // 将未能约到球的人，取消约球
         for (int i = 12; i < users.size(); i++){
-            userService.updateCount(-1, users.get(i).getId());
+            userService.updateCount(-1, users.get(i).getUuid());
         }
         return JsonResult.ok();
     }

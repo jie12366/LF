@@ -102,8 +102,8 @@ public class FrontControl {
     @ApiOperation("个人信息展示")
     @GetMapping("/index/message")
     public String toMessage(Model model, HttpServletRequest request){
-        String user1 = (String)request.getSession().getAttribute("user");
-        User user = userService.getUser(userService.getId(user1));
+        String account = (String)request.getSession().getAttribute("user");
+        User user = userService.getUser(userService.getId(account));
         model.addAttribute("user", user);
         return "front/message";
     }

@@ -30,13 +30,17 @@
             margin-top: 30px;
         }
         .btn-class{
-            margin-left: 1100px;
+            margin-left: 800px;
             margin-top: 30px;
         }
-        @media only screen and (min-width: 930px) and (max-width: 1200px){
+        @media only screen and (min-width: 930px) and (max-width: 1300px){
             .contains{
                 margin-left: 150px;
                 margin-right: 150px;
+                margin-top: 30px;
+            }
+            .btn-class{
+                margin-left: 500px;
                 margin-top: 30px;
             }
         }
@@ -47,7 +51,7 @@
                 margin-top: 30px;
             }
             .btn-class{
-                margin-left: 700px;
+                margin-left: 300px;
                 margin-top: 30px;
             }
         }
@@ -58,7 +62,7 @@
                 margin-top: 20px;
             }
             .btn-class{
-                margin-left: 300px;
+                margin-left: 100px;
                 margin-top: 30px;
             }
         }
@@ -113,7 +117,10 @@
     </div>
 </div>
 <div class="form-size">
-    <button onclick="toEdit()" class="btn btn-info btn-class">编辑</button>
+    <div class="btn-class">
+        <a href="http://jie12366.xyz:88/oauth/login/qq" class="btn btn-success">绑定QQ</a>
+        <button onclick="toEdit()" class="btn btn-info">编辑</button>
+    </div>
     <form method="post" class="form-validate" action="/front/user/edit">
         <div class="row contains">
             <div class="col-lg-6 col-md-6">

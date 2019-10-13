@@ -88,6 +88,7 @@
     </div>
 </div>
 <div class="main">
+    <input type="hidden" id="uid" th:value="${uid}">
     <div class="top">
         <button type="button" class="btn btn-info" onclick="order()" style="margin-right: 20px;">约球</button>
         <button type="button" class="btn btn-primary" onclick="cancelOrder()" style="margin-left: 20px;">取消约球</button>
@@ -102,6 +103,10 @@
 </div>
 <script>
     window.onload = function () {
+        var uid = $("#uid").val();
+        if (uid != null) {
+            window.localStorage.setItem("uid",uid);
+        }
         getList()
     }
 

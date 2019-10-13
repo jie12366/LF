@@ -17,9 +17,16 @@ public interface OrderBallService {
 
     List<User> getListByPriority();
 
-    int order(int uid);
+    int order(String uid);
 
-    int cancelOrder(int uid);
+    int cancelOrder(String uid);
+
+    /**
+     * 管理员手动取消约球
+     * @param uid 用户id
+     * @return 是否成功
+     */
+    int cancelOrderByManager(String uid);
 
     void stopOrder();
 }

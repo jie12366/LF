@@ -25,6 +25,12 @@ public class User implements Serializable {
     @Excel(name = "序号", orderNum = "0")
     private int id;
 
+    /**
+     * 第三方登录的uuid
+     */
+    @Column(name = "uuid", type = MySqlTypeConstant.VARCHAR, length = 40)
+    private String uuid;
+
     @Column(name = "account", type = MySqlTypeConstant.VARCHAR, length = 20)
     private String account;
 

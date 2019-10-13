@@ -72,8 +72,8 @@ public class OrderBallServiceImpl implements OrderBallService {
     }
 
     @Override
-    public int order(int uid) {
-        if (uid != 0){
+    public int order(String uid) {
+        if (uid != null){
             if (redisTemplate.opsForValue().get(START) != null){
                 User user = userService.getUser(uid);
                 OrderUser orderUser = new OrderUser(uid,user,new Date());
@@ -95,8 +95,8 @@ public class OrderBallServiceImpl implements OrderBallService {
     }
 
     @Override
-    public int cancelOrder(int uid) {
-        if (uid != 0){
+    public int cancelOrder(String uid) {
+        if (uid != null){
             if (redisTemplate.opsForValue().get(START) != null){
                 if(redisTemplate.opsForHash().get(USERS,uid) != null){
                     int res = userService.updateCount(-1,uid);
@@ -110,6 +110,20 @@ public class OrderBallServiceImpl implements OrderBallService {
             }
             // 约球还没开始
             return 3;
+        }
+        // 取消约球失败
+        return 0;
+    }
+
+    @Override
+    public int cancelOrderByManager(String uid) {
+        if (uid != null){
+            // 约球次数减1
+            int res = userService.updateCount(-1,uid);
+            if (res != 0){
+                redisTemplate.opsForHash().delete("users",uid);
+                return 2;
+            }
         }
         // 取消约球失败
         return 0;

@@ -32,11 +32,11 @@ public interface UserMapper {
     /**
      * 根据id 获取记录
      *
-     * @param id
+     * @param uuid
      * @return User
      */
-    @Select("select * from user where id = #{id}")
-    User getUser(int id);
+    @Select("select * from user where uuid = #{uuid}")
+    User getUser(String uuid);
 
     /**
      * 根据账号获取id
@@ -44,8 +44,8 @@ public interface UserMapper {
      * @param account
      * @return
      */
-    @Select("select id from user where account = #{account}")
-    int getId(String account);
+    @Select("select uuid from user where account = #{account}")
+    String getId(String account);
 
     /**
      * 根据用户名获取密码
@@ -71,6 +71,14 @@ public interface UserMapper {
      */
     @Select("select count(*) from user where account=#{account}")
     int isExistsAccount(String account);
+
+    /**
+     * 判断uuid是否存在
+     * @param uuid 第三方登录uuid
+     * @return 存在返回1，不存在返回0
+     */
+    @Select("select count(*) from user where uuid=#{uuid}")
+    int isExistsUuid(String uuid);
 
     /**
      * 插入账号密码注册
@@ -100,22 +108,31 @@ public interface UserMapper {
      * @param qq       String QQ号
      * @param email    String 邮箱
      * @param depart   String 部门
-     * @param id       int 序号
+     * @param uuid       uuid
      * @return 是否更新成功
      */
     @Update("update user set name = #{name},number = #{number},stuClass = #{stuClass},qq = #{qq}," +
-            "email = #{email},depart = #{depart} where id = #{id}")
-    int updateUser(String name, String number, String stuClass, String qq, String email, String depart, int id);
+            "email = #{email},depart = #{depart} where uuid = #{uuid}")
+    int updateUser(String name, String number, String stuClass, String qq, String email, String depart, String uuid);
+
+    /**
+     * 存入uuid
+     * @param account 账号
+     * @param uuid 第三方登录id
+     * @return 是否成功
+     */
+    @Update("update user set uuid = #{uuid} where account = #{account}")
+    int updateUuid(String account, String uuid);
 
     /**
      * 根据用户id更新约球次数
      *
      * @param count 次数
-     * @param id      int
+     * @param uuid      int
      * @return 更新是否成功
      */
-    @Update("update user set orderCount = orderCount + #{count} where id = #{id}")
-    int updateCount(int count, int id);
+    @Update("update user set orderCount = orderCount + #{count} where uuid = #{uuid}")
+    int updateCount(int count, String uuid);
 
     /**
      * 动态修改user表
@@ -129,11 +146,11 @@ public interface UserMapper {
     /**
      * 根据id删除记录
      *
-     * @param id int 序号
+     * @param uuid int 序号
      * @return 是否删除成功
      */
-    @Delete("delete from user where id = #{id}")
-    int deleteUser(int id);
+    @Delete("delete from user where uuid = #{uuid}")
+    int deleteUser(String uuid);
 
     /**
      * 删除一组数据

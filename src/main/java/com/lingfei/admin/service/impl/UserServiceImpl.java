@@ -29,8 +29,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(int id) {
-        if (id > 0) {
+    public User getUser(String id) {
+        if (id != null) {
             return userMapper.getUser(id);
         }
         return null;
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getId(String account) {
+    public String getId(String account) {
         return userMapper.getId(account);
     }
 
@@ -71,6 +71,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int isExistsUuid(String uuid) {
+        return userMapper.isExistsUuid(uuid);
+    }
+
+    @Override
     public int saveAccount(String account, String password) {
         if (account != null && password != null) {
             System.out.println(password);
@@ -90,11 +95,16 @@ public class UserServiceImpl implements UserService {
     @Override
     @CachePut(cacheNames = "user")
     public int updateUser(User user) {
-        return userMapper.updateUser(user.getName(), user.getNumber(), user.getStuClass(), user.getQq(), user.getEmail(), user.getDepart(), user.getId());
+        return userMapper.updateUser(user.getName(), user.getNumber(), user.getStuClass(), user.getQq(), user.getEmail(), user.getDepart(), user.getUuid());
     }
 
     @Override
-    public int updateCount(int count,int uid) {
+    public int updateUuid(String account, String uuid) {
+        return userMapper.updateUuid(account, uuid);
+    }
+
+    @Override
+    public int updateCount(int count,String uid) {
         if (count != 0) {
             return userMapper.updateCount(count,uid);
         }
@@ -112,8 +122,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @CacheEvict(cacheNames = "user")
-    public int deleteUser(int id) {
-        if (id > 0) {
+    public int deleteUser(String id) {
+        if (id != null) {
             return userMapper.deleteUser(id);
         }
         return 0;

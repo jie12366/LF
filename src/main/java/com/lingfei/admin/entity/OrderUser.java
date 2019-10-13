@@ -19,7 +19,7 @@ public class OrderUser implements Comparable<OrderUser> , Serializable {
 
     private static final long serialVersionUID = -5702855796239626149L;
 
-    private int id;
+    private String id;
 
     private User user;
 
