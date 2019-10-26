@@ -35,7 +35,7 @@ public interface UserMapper {
      * @param uuid
      * @return User
      */
-    @Select("select * from user where id = #{id}")
+    @Select("select * from user where uuid = #{uuid}")
     User getUser(String uuid);
 
     /**
@@ -44,7 +44,7 @@ public interface UserMapper {
      * @param account
      * @return
      */
-    @Select("select id from user where account = #{account}")
+    @Select("select uuid from user where account = #{account}")
     String getId(String account);
 
     /**
@@ -131,8 +131,8 @@ public interface UserMapper {
      * @param uuid      int
      * @return 更新是否成功
      */
-    @Update("update user set orderCount = orderCount + #{count} where id = #{id}")
-    int updateCount(int count, String id);
+    @Update("update user set orderCount = orderCount + #{count} where uuid = #{uuid}")
+    int updateCount(int count, String uuid);
 
     /**
      * 动态修改user表
