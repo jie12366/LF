@@ -104,11 +104,11 @@
 <script>
     window.onload = function () {
         var uid = $("#uid").val();
-        if (uid != null) {
+        if (uid !== "") {
             window.localStorage.setItem("uid",uid);
         }
         getList()
-    }
+    };
 
     function getList() {
         $.ajax({
@@ -139,7 +139,7 @@
     }
 
     function order() {
-        var uid = window.localStorage.getItem("uid");
+        var uid = localStorage.getItem("uid");
         console.log(uid);
         $.ajax({
             url: '/order/ball',

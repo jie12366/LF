@@ -48,6 +48,7 @@ public class OrderBallController {
     @ApiOperation("约球")
     @PostMapping("/order/ball")
     public JsonResult orderBall(@RequestParam("uid")String uid){
+        System.out.println(uid);
         int res = orderBallService.order(uid);
         return JsonResult.ok(res);
     }

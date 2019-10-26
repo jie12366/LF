@@ -77,6 +77,7 @@ public class OrderBallServiceImpl implements OrderBallService {
             if (redisTemplate.opsForValue().get(START) != null){
                 User user = userService.getUser(uid);
                 OrderUser orderUser = new OrderUser(uid,user,new Date());
+                System.out.println(redisTemplate.opsForHash().get(USERS,uid));
                 if(redisTemplate.opsForHash().get(USERS,uid) == null){
                     int res = userService.updateCount(1,uid);
                     if (res != 0){
