@@ -21,14 +21,14 @@ public class OrderUser implements Comparable<OrderUser> , Serializable {
 
     private String id;
 
-    private User user;
+    private UserInfo userInfo;
 
     private Date time;
 
     @Override
     public int compareTo(OrderUser o) {
         // 先按优先级排序
-        int i = this.user.getOrderCount() - o.user.getOrderCount();
+        int i = this.userInfo.getOrderCount() - o.userInfo.getOrderCount();
         if (i == 0){
             // 再按约球时间排序
             return this.time.compareTo(o.time);

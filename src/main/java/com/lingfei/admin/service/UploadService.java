@@ -2,7 +2,9 @@ package com.lingfei.admin.service;
 
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 
 /**
@@ -25,4 +27,12 @@ public interface UploadService {
      * @param key 文件名
      */
     void deleteFile(String key) throws QiniuException;
+
+    /**
+     * 上传文件并返回云路径
+     * @param file 要上传的文件
+     * @param request HttpServletRequest
+     * @return 返回的文件路径
+     */
+    String getPath(MultipartFile file, HttpServletRequest request);
 }

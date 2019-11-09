@@ -1,9 +1,11 @@
 package com.lingfei.admin.service.impl;
 
 import com.lingfei.admin.entity.OrderUser;
-import com.lingfei.admin.entity.User;
+import com.lingfei.admin.entity.UserInfo;
 import com.lingfei.admin.service.OrderBallService;
-import com.lingfei.admin.service.UserService;
+import com.lingfei.admin.service.UserInfoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +24,13 @@ public class OrderBallServiceImpl implements OrderBallService {
     RedisTemplate<Object ,Object> redisTemplate;
 
     @Resource
-    UserService userService;
+    UserInfoService userService;
 
     private final static String USERS = "users";
 
     private final static String START = "start";
+
+    private final static Logger log = LoggerFactory.getLogger(OrderBallServiceImpl.class);
 
     @Override
     public void startOrder() {
@@ -37,14 +41,14 @@ public class OrderBallServiceImpl implements OrderBallService {
     }
 
     @Override
-    public List<User> getList() {
+    public List<UserInfo> getList() {
         Map<Object,Object> users = redisTemplate.opsForHash().entries("users");
-        List<User> userList = new ArrayList<>(12);
+        List<UserInfo> userList = new ArrayList<>(12);
         if (users != null){
             // 遍历map集合，将对象放入list集合中
             for (Map.Entry<Object,Object> user: users.entrySet()){
                 OrderUser orderUser = (OrderUser)user.getValue();
-                userList.add(orderUser.getUser());
+                userList.add(orderUser.getUserInfo());
             }
             return userList;
         }
@@ -52,7 +56,7 @@ public class OrderBallServiceImpl implements OrderBallService {
     }
 
     @Override
-    public List<User> getListByPriority() {
+    public List<UserInfo> getListByPriority() {
         Map<Object,Object> orderUsers = redisTemplate.opsForHash().entries("users");
         List<OrderUser> list =  new ArrayList<>(12);
         if (orderUsers != null){
@@ -64,9 +68,9 @@ public class OrderBallServiceImpl implements OrderBallService {
         // 根据指定的比较规则来排序集合
         Collections.sort(list);
         // 取出user
-        List<User> users = new ArrayList<>(12);
+        List<UserInfo> users = new ArrayList<>(12);
         for (OrderUser orderUser : list){
-            users.add(orderUser.getUser());
+            users.add(orderUser.getUserInfo());
         }
         return users;
     }
@@ -75,9 +79,8 @@ public class OrderBallServiceImpl implements OrderBallService {
     public int order(String uid) {
         if (uid != null){
             if (redisTemplate.opsForValue().get(START) != null){
-                User user = userService.getUser(uid);
+                UserInfo user = userService.getUser(uid);
                 OrderUser orderUser = new OrderUser(uid,user,new Date());
-                System.out.println(redisTemplate.opsForHash().get(USERS,uid));
                 if(redisTemplate.opsForHash().get(USERS,uid) == null){
                     int res = userService.updateCount(1,uid);
                     if (res != 0){
@@ -123,7 +126,7 @@ public class OrderBallServiceImpl implements OrderBallService {
             int res = userService.updateCount(-1,uid);
             if (res != 0){
                 redisTemplate.opsForHash().delete("users",uid);
-                return 2;
+                return 1;
             }
         }
         // 取消约球失败

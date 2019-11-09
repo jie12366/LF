@@ -1,7 +1,7 @@
 package com.lingfei.admin.config;
 
-import com.lingfei.admin.interceptor.AdminInterceptor;
-import com.lingfei.admin.interceptor.FrontInterceptor;
+import com.lingfei.admin.interceptor.TokenInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -16,27 +16,21 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        //后台拦截
-        registry.addInterceptor(new AdminInterceptor())
-                .addPathPatterns("/getExcel1", "/getExcel2", "/getExcel1")
-                .addPathPatterns("/admin/form", "/admin/addContent", "/admin/announce")
-                .addPathPatterns("/admin/editContent", "/admin/deleteContent", "/admin/updateContent")
-                .addPathPatterns("/admin/index", "/admin/toEmail", "/admin/addEmail")
-                .addPathPatterns("/admin/selectUser", "/admin/getUser")
-                .addPathPatterns("/table1", "/user/edit", "/user/delete", "/user/update")
-                .addPathPatterns("/table2", "/competition/edit", "/competition/update", "/competition/delete")
-                .addPathPatterns("/es/user");
-
-        //前台拦截
-        registry.addInterceptor(new FrontInterceptor())
-                .addPathPatterns("/", "/index/about","/index/announce","/index/message","/order-ball","/oauth/login");
+        // 前台拦截
+        registry.addInterceptor(tokenInterceptor())
+                .addPathPatterns("/**");
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
         // 解决 SWAGGER 404报错
-        registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
+    @Bean
+    public TokenInterceptor tokenInterceptor(){
+        return new TokenInterceptor();
     }
 }

@@ -38,7 +38,15 @@ public interface CompetitionService {
      *
      * @return List<Competition>
      */
-    List<Competition> listCompetition();
+    List<Competition> listCompetition(int aid);
+
+    /**
+     * 根据phone查询数据
+     *
+     * @param phone int
+     * @return Competition
+     */
+    Competition getCompetitionByPhone(String phone);
 
     /**
      * 根据id查询数据
@@ -55,12 +63,4 @@ public interface CompetitionService {
      * @return 是否删除成功
      */
     int deleteCompetition(int id);
-
-    /**
-     * 批量删除数据
-     *
-     * @param competitions List<Competition>
-     * @return 是否删除成功
-     */
-    int batchDeleteCompetition(List<Competition> competitions);
 }

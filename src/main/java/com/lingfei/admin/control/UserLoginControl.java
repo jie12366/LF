@@ -1,60 +1,65 @@
 package com.lingfei.admin.control;
 
-import com.lingfei.admin.entity.ImageCode;
-import com.lingfei.admin.service.impl.EmailServiceImpl;
-import com.lingfei.admin.service.impl.UserServiceImpl;
-import com.lingfei.admin.utils.CreateImageCode;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.lingfei.admin.entity.User;
+import com.lingfei.admin.entity.UserInfo;
+import com.lingfei.admin.service.UserInfoService;
+import com.lingfei.admin.service.UserService;
 import com.lingfei.admin.utils.GetString;
 import com.lingfei.admin.utils.JsonResult;
+import com.lingfei.admin.utils.JwtUtil;
+import com.lingfei.admin.utils.ResultCode;
 import com.zhenzi.sms.ZhenziSmsClient;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author www.xyjz123.xyz
  * @date 2019/3/28 10:13
  */
 @RestController
-@RequestMapping("/user")
 public class UserLoginControl {
 
-    @Autowired
-    UserServiceImpl userService;
-    @Autowired
-    EmailServiceImpl emailService;
+    @Resource
+    UserService userService;
+    @Resource
+    UserInfoService userInfoService;
 
-    @ApiOperation("检查短信验证码是否正确")
-    @PostMapping("/checkSmsCode")
-    public JsonResult checkSmsCode(@ApiParam("验证码") @RequestParam("code") String code,
-                                   HttpServletRequest request){
+    @Resource
+    ValueOperations<String ,String> valueOperations;
 
-        JSONObject imageCode =  (JSONObject) request.getServletContext().getAttribute("smsCode");
-        if (imageCode == null){
-            return JsonResult.errorMsg("1");
-        }else if (!StringUtils.equalsIgnoreCase((String) imageCode.get("code"),code)){
-            return JsonResult.errorMsg("2");
-        }else {
-            request.getServletContext().removeAttribute("smsCode");
-            return JsonResult.ok();
+    private final static String SMS = "smsCaptcha";
+
+    @ApiOperation("发送短信验证码")
+    @PostMapping("/phone")
+    public JsonResult sendMsg(@RequestParam("phone") String phone) throws Exception{
+        System.out.println(phone);
+        String code = GetString.getCode();
+        System.out.println("code = " + code);
+        //榛子短信的SDK
+        ZhenziSmsClient client = new ZhenziSmsClient("https://sms_developer.zhenzikj.com", "101348", "ZGZmNjM3MWYtZDVjMS00YWUyLWE4NmUtZDI5NjNmOGRjNTA1");
+        String result = client.send(phone, "您的验证码为" + code + "\n" + "如果不是本人操作，请忽略。");
+        com.alibaba.fastjson.JSONObject jsonObject = com.alibaba.fastjson.JSONObject.parseObject(result);
+
+        if ((Integer) jsonObject.get("code") != 0){
+            return JsonResult.failure(ResultCode.CAPTCHA_IS_ERROR);
         }
-    }
 
-    @ApiOperation("检查账号是否已经注册")
-    @GetMapping("/check/register")
-    public JsonResult checkRegister(@ApiParam("账号") String account){
-        if (userService.isExistsAccount(account) == 1){
-            return JsonResult.errorMsg("已存在");
-        }
-        return JsonResult.ok();
+        // 设置验证码1分钟后过期
+        valueOperations.set(SMS,code,1, TimeUnit.MINUTES);
+
+        return JsonResult.success();
     }
 
     /**
@@ -66,46 +71,33 @@ public class UserLoginControl {
      */
     @ApiOperation("注册")
     @PostMapping("/register")
-    public JsonResult addUser(@ApiParam("账号") @RequestParam("account") String account,
-                              @ApiParam("密码") @RequestParam("password") String password) {
+    public JsonResult addUser(@Valid @RequestParam("code") String code,
+                              @Valid @ApiParam("账号") @RequestParam("account") String account,
+                              @Valid @ApiParam("密码") @RequestParam("password") String password) {
 
-        userService.saveAccount(account, password);
-        return JsonResult.ok();
-    }
-
-    @ApiOperation("短信验证码")
-    @GetMapping("/sendMsg")
-    public JsonResult sendMsg(HttpServletRequest request, @RequestParam("phone") String phone) throws Exception{
-        System.out.println(phone);
-        //榛子短信的SDK
-        ZhenziSmsClient client = new ZhenziSmsClient("https://sms_developer.zhenzikj.com", "101348", "ZGZmNjM3MWYtZDVjMS00YWUyLWE4NmUtZDI5NjNmOGRjNTA1");
-        String code = GetString.getCode();
-        String result = client.send(phone, "您的验证码为" + code + "\n" + "如果不是本人操作，请忽略。");
-        JSONObject jsonObject = JSONObject.fromObject(result);
-        if (jsonObject.getInt("code") != 0){
-            return JsonResult.errorMsg("验证码发送失败");
+        // 检查验证码是否正确
+        String verifyCode = valueOperations.get(SMS);
+        if (verifyCode == null){
+            return JsonResult.failure(ResultCode.CAPTCHA_HAS_EXPIRED);
         }
-        //设置验证码5分钟后过期
-        JSONObject smsCode = new JSONObject();
-        smsCode.put("code",code);
-        smsCode.put("time",System.currentTimeMillis());
-        System.out.println(code);
+        if (!StringUtils.equalsIgnoreCase(code,verifyCode)){
+            return JsonResult.failure(ResultCode.CAPTCHA_IS_ERROR);
+        }
 
-        request.getServletContext().setAttribute("smsCode",smsCode);
+        User user = userService.getUserByAccount(account);
+        if (user != null){
+            return JsonResult.failure(ResultCode.USER_HAS_EXISTED);
+        }
 
-        return JsonResult.ok();
-    }
-
-    @ApiOperation("重置密码")
-    @PostMapping("/resetPassword")
-    public JsonResult resetPassword(@ApiParam("手机号")@RequestParam("phone") String phone,
-                                    @ApiParam("新密码")@RequestParam("password") String password) {
-
-        int res = userService.resetPassword(password, phone);
-        if (res == 1) {
-            return JsonResult.ok();
-        } else {
-            return JsonResult.errorMsg("1");
+        // 存入账号信息，并初始化个人信息
+        int res = userService.saveAccount(account, password);
+        int uid = userService.getUserByAccount(account).getId();
+        UserInfo userInfo = new UserInfo(uid,String.valueOf(uid),"http://cdn.jie12366.xyz/face.jpg",0);
+        int res1 = userInfoService.save(userInfo);
+        if (res1 == 0 || res == 0){
+            return JsonResult.failure(ResultCode.SAVE_ERROR);
+        }else {
+            return JsonResult.success();
         }
     }
 
@@ -118,30 +110,29 @@ public class UserLoginControl {
     @ApiOperation("登录")
     @PostMapping("/login")
     public JsonResult adminLoginByPassword(@ApiParam("账号") @RequestParam("account") String account,
-                                           @ApiParam("密码") @RequestParam("password") String password,
-                                           @ApiParam("密码") @RequestParam("code") String code,
-                                           HttpServletRequest request) {
+                                           @ApiParam("密码") @RequestParam("password") String password) {
 
-        ImageCode imageCode =  (ImageCode) request.getServletContext().getAttribute("code");
-        if (imageCode.isExpired()){
-            return JsonResult.errorMsg("1");
-        }else if (!StringUtils.equalsIgnoreCase(imageCode.getCode(),code)){
-            return JsonResult.errorMsg("2");
-        }else if (!userService.checkLogin(account,password)){
-            return JsonResult.errorMsg("3");
-        }else {
-            request.getSession().setAttribute("user",account);
-            return JsonResult.ok(userService.getId(account));
+        // 检查用户是否存在
+        if (userService.isExistsAccount(account) == 0){
+            return JsonResult.failure(ResultCode.USER_NOT_EXIST);
         }
-    }
 
-    @ApiOperation("图形验证码")
-    @GetMapping(value = "/getCode",produces = "image/jpeg")
-    public void getCode(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        // 检查账号密码是否正确
+        if (!userService.checkLogin(account,password)){
+            return JsonResult.failure(ResultCode.USER_LOGIN_ERROR);
+        }else {
+            User users1 = userService.getUserByAccount(account);
+            //利用JWT生成token
+            String token = JwtUtil.generateToken(users1);
+            //将生成的token的签证作为redis的键
+            String key = token.split("\\.")[2];
+            //将token存入redis并设置过期时间为7小时
+            valueOperations.set(key,token,7, TimeUnit.DAYS);
 
-        ImageCode imageCode = CreateImageCode.createImagecode();
-        request.getServletContext().setAttribute("code",imageCode);
-
-        ImageIO.write(imageCode.getImage(),"JPEG",response.getOutputStream());
+            JSONObject json = JSONUtil.createObj();
+            json.put("token", token);
+            json.put("uid",userInfoService.getUuid(users1.getId()));
+            return JsonResult.success(json);
+        }
     }
 }

@@ -3,7 +3,8 @@ package com.lingfei.admin.control;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.lingfei.admin.service.UserService;
+import com.auth0.jwt.JWT;
+import com.lingfei.admin.service.UserInfoService;
 import com.xkcoding.justauth.AuthRequestFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +14,7 @@ import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.utils.AuthStateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,8 +38,7 @@ public class OauthController {
     private final AuthRequestFactory factory;
 
     @Resource
-    UserService userService;
-
+    UserInfoService userInfoService;
     /**
      * 登录
      *
@@ -60,7 +58,7 @@ public class OauthController {
      */
     @GetMapping("/{oauthType}/callback")
     public String login(@PathVariable String oauthType, AuthCallback callback,
-                        HttpServletRequest request, Model model) throws IOException{
+                        HttpServletRequest request){
         AuthRequest authRequest = factory.get(getAuthSource(oauthType));
         // 登录
         AuthResponse response = authRequest.login(callback);
@@ -72,15 +70,16 @@ public class OauthController {
         JSONObject data = jsonObject.getJSONObject("data");
         String uid = data.getString("uuid");
         // 判断是否已绑定QQ登录
-        int res = userService.isExistsUuid(uid);
+        int res = userInfoService.isExistsUuid(uid);
         // 没有绑定则存入uuid
         if (res == 0){
-            String account = (String) request.getSession().getAttribute("user");
-            userService.updateUuid(account,uid);
+            // 从请求头取到token
+            String token = request.getHeader("Authorization");
+            // 从token中取出存入的id
+            int id = Integer.parseInt(JWT.decode(token).getAudience().get(0));
+            // 将id对应的uuid替换为第三方登录id
+            userInfoService.updateUuid(id,uid);
         }
-        String account = userService.getUser(uid).getAccount();
-        request.getSession().setAttribute("user",account);
-        model.addAttribute("uid", uid);
         // 重定向到前端的约球页面
         return "front/order-ball";
     }

@@ -1,6 +1,5 @@
 package com.lingfei.admin.entity;
 
-import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
 import com.gitee.sunchenbin.mybatis.actable.command.BaseModel;
@@ -8,8 +7,6 @@ import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 /**
  * @author www.xyjz123.xyz
@@ -20,29 +17,39 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "competition")
-public class Competition extends BaseModel implements Serializable {
+public class Competition{
 
-    @Excel(name = "序号", orderNum = "0")
     @Column(name = "id", type = MySqlTypeConstant.INT, isKey = true, isAutoIncrement = true, length = 5)
     private int id;
 
-    @Excel(name = "姓名", orderNum = "1")
+    @Column(name = "aid", type = MySqlTypeConstant.INT, length = 20)
+    private int aid;
+
     @Column(name = "name", type = MySqlTypeConstant.VARCHAR, length = 20)
     private String name;
 
-    @Excel(name = "班级", orderNum = "2")
     @Column(name = "stuClass", type = MySqlTypeConstant.VARCHAR, length = 20)
     private String stuClass;
 
-    @Excel(name = "QQ", orderNum = "3")
+    @Column(name = "number", type = MySqlTypeConstant.VARCHAR, length = 20)
+    private String number;
+
     @Column(name = "qq", type = MySqlTypeConstant.VARCHAR, length = 20)
     private String qq;
 
-    @Excel(name = "手机号", orderNum = "4")
     @Column(name = "phone", type = MySqlTypeConstant.VARCHAR, length = 20)
     private String phone;
 
-    @Excel(name = "项目", orderNum = "5")
     @Column(name = "item", type = MySqlTypeConstant.VARCHAR, length = 20)
     private String item;
+
+    public Competition(int aid, String name, String stuClass, String number, String qq, String phone, String item) {
+        this.aid = aid;
+        this.name = name;
+        this.stuClass = stuClass;
+        this.number = number;
+        this.qq = qq;
+        this.phone = phone;
+        this.item = item;
+    }
 }

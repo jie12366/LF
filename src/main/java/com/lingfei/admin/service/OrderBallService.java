@@ -1,6 +1,7 @@
 package com.lingfei.admin.service;
 
 import com.lingfei.admin.entity.User;
+import com.lingfei.admin.entity.UserInfo;
 
 import java.util.List;
 
@@ -13,9 +14,9 @@ public interface OrderBallService {
 
     void startOrder();
 
-    List<User> getList();
+    List<UserInfo> getList();
 
-    List<User> getListByPriority();
+    List<UserInfo> getListByPriority();
 
     int order(String uid);
 

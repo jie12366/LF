@@ -3,13 +3,9 @@ package com.lingfei.admin.service.impl;
 import com.lingfei.admin.entity.Competition;
 import com.lingfei.admin.mapper.CompetitionMapper;
 import com.lingfei.admin.service.CompetitionService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -18,37 +14,40 @@ import java.util.List;
  */
 
 @Service
-@CacheConfig
 public class CompetitionServiceImpl implements CompetitionService {
 
-    @Autowired
+    @Resource
     CompetitionMapper competitionMapper;
 
     @Override
-    @Cacheable(value = "competition", key = "#competition")
     public int saveCompetition(Competition competition) {
         if (competition != null) {
-            return competitionMapper.saveCompetition(competition.getName(), competition.getStuClass(), competition.getQq() + "@qq.com", competition.getPhone(),competition.getItem());
+            return competitionMapper.saveCompetition(competition.getAid(),competition.getName(),
+                    competition.getStuClass(), competition.getNumber(),competition.getQq(), competition.getPhone(),competition.getItem());
         }
         return 0;
     }
 
     @Override
-    @CachePut("competition")
     public int updateCompetition(Competition competition) {
         if (competition != null) {
-            return competitionMapper.updateCompetition(competition.getName(), competition.getStuClass(), competition.getQq(), competition.getPhone(),competition.getItem(), competition.getId());
+            return competitionMapper.updateCompetition(competition.getName(), competition.getStuClass(),competition.getNumber(),
+                    competition.getQq(), competition.getPhone(),competition.getItem(), competition.getId());
         }
         return 0;
     }
 
     @Override
-    public List<Competition> listCompetition() {
-        return competitionMapper.listCompetition();
+    public List<Competition> listCompetition(int aid) {
+        return competitionMapper.listCompetition(aid);
     }
 
     @Override
-    @CachePut("competition")
+    public Competition getCompetitionByPhone(String phone) {
+        return competitionMapper.getCompetitionByPhone(phone);
+    }
+
+    @Override
     public Competition getCompetitionById(int id) {
         if (id > 0) {
             return competitionMapper.getCompetitionById(id);
@@ -57,19 +56,9 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    @CacheEvict("competition")
     public int deleteCompetition(int id) {
         if (id > 0) {
             return competitionMapper.deleteCompetition(id);
-        }
-        return 0;
-    }
-
-    @Override
-    @CacheEvict("competition")
-    public int batchDeleteCompetition(List<Competition> competitions) {
-        if (competitions != null) {
-            return competitionMapper.batchDeleteCompetition(competitions);
         }
         return 0;
     }
