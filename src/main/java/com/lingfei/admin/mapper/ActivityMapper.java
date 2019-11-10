@@ -52,6 +52,13 @@ public interface ActivityMapper {
     int deleteAnnounce(@Param("id") int id);
 
     /**
+     * 获取最新活动id
+     * @return
+     */
+    @Select("select max(id) from activity")
+    int getMaxId();
+
+    /**
      * 根据id更新记录
      *
      * @param content String

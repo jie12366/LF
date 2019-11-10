@@ -41,6 +41,11 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    public int getMaxId() {
+        return activityMapper.getMaxId();
+    }
+
+    @Override
     public int deleteAnnounce(int id) {
         if (id > 0) {
             return activityMapper.deleteAnnounce(id);

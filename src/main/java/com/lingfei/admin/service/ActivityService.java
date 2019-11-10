@@ -39,6 +39,12 @@ public interface ActivityService {
     Activity getAnnounceById(int id);
 
     /**
+     * 获取最新活动id
+     * @return
+     */
+    int getMaxId();
+
+    /**
      * 根据id删除记录
      *
      * @param id int

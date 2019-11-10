@@ -46,7 +46,7 @@ public class CompetitionController {
         if (competitions.isEmpty()){
             return JsonResult.failure(ResultCode.RESULE_DATA_NONE);
         }else {
-            return JsonResult.success();
+            return JsonResult.success(competitions);
         }
     }
 }

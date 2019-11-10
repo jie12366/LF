@@ -35,6 +35,20 @@ public class ActivityController {
         }
     }
 
+    @ApiOperation("编辑活动")
+    @PutMapping("/activity")
+    public JsonResult updateActivity(@RequestParam("title")String title,@RequestParam("zone")String zone,
+                                   @RequestParam("date")String date,@RequestParam("picture")String picture,
+                                   @RequestParam("content")String content,@RequestParam("aid")int aid){
+        Activity activity = new Activity(aid,title,zone,content,picture,date);
+        int res = activityService.updateAnnounce(activity);
+        if (res == 0){
+            return JsonResult.failure(ResultCode.UPDATE_ERROR);
+        }else {
+            return JsonResult.success();
+        }
+    }
+
     @ApiOperation("展示活动信息")
     @GetMapping("/activity")
     public JsonResult getActivity(){
@@ -46,6 +60,12 @@ public class ActivityController {
         }
     }
 
+    @ApiOperation("获取最新活动")
+    @GetMapping("/maxId")
+    public JsonResult getMaxId(){
+        return JsonResult.success(activityService.getAnnounceById(activityService.getMaxId()));
+    }
+
     @ApiOperation("获取一个活动信息")
     @GetMapping("/activity/{id}")
     public JsonResult getActivityById(@PathVariable("id") int id){
@@ -54,6 +74,17 @@ public class ActivityController {
             return JsonResult.failure(ResultCode.RESULE_DATA_NONE);
         }else {
             return JsonResult.success(activity);
+        }
+    }
+
+    @ApiOperation("删除一个活动")
+    @DeleteMapping("/activity/{id}")
+    public JsonResult deleteActivityById(@PathVariable("id") int id){
+        int res = activityService.deleteAnnounce(id);
+        if (res == 0){
+            return JsonResult.failure(ResultCode.DELETE_ERROR);
+        }else {
+            return JsonResult.success();
         }
     }
 }

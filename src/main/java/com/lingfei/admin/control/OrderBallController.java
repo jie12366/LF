@@ -83,8 +83,8 @@ public class OrderBallController {
     }
 
     @ApiOperation("管理员取消约球")
-    @PostMapping("/cancelBall")
-    public JsonResult cancelBallByManager(@RequestParam("uid")String uid){
+    @GetMapping("/cancelBall/{uid}")
+    public JsonResult cancelBallByManager(@PathVariable("uid")String uid){
         int res = orderBallService.cancelOrderByManager(uid);
         if (res == 1){
             orderItemService.saveItem(uid,new Date(),"约球被管理员取消");
