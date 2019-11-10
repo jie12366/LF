@@ -72,7 +72,6 @@ public class OrderBallController {
     @PostMapping("/order/ball")
     public JsonResult orderBall(@RequestParam("uid")String uid){
         int res = orderBallService.order(uid);
-        orderItemService.saveItem(uid,new Date(),"约球成功");
         return getBack(res);
     }
 
@@ -80,7 +79,6 @@ public class OrderBallController {
     @PostMapping("/cancel/ball")
     public JsonResult cancelBall(@RequestParam("uid")String uid){
         int res = orderBallService.cancelOrder(uid);
-        orderItemService.saveItem(uid,new Date(),"取消约球");
         return getBack(res);
     }
 
@@ -88,8 +86,8 @@ public class OrderBallController {
     @PostMapping("/cancelBall")
     public JsonResult cancelBallByManager(@RequestParam("uid")String uid){
         int res = orderBallService.cancelOrderByManager(uid);
-        orderItemService.saveItem(uid,new Date(),"约球被管理员取消");
         if (res == 1){
+            orderItemService.saveItem(uid,new Date(),"约球被管理员取消");
             return JsonResult.success(res);
         }else {
             return JsonResult.failure(ResultCode.ORDER_FAILURE);

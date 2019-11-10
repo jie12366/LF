@@ -3,6 +3,7 @@ package com.lingfei.admin.service.impl;
 import com.lingfei.admin.entity.OrderUser;
 import com.lingfei.admin.entity.UserInfo;
 import com.lingfei.admin.service.OrderBallService;
+import com.lingfei.admin.service.OrderItemService;
 import com.lingfei.admin.service.UserInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,9 @@ public class OrderBallServiceImpl implements OrderBallService {
 
     @Resource
     UserInfoService userService;
+
+    @Resource
+    OrderItemService orderItemService;
 
     private final static String USERS = "users";
 
@@ -84,6 +88,7 @@ public class OrderBallServiceImpl implements OrderBallService {
                 if(redisTemplate.opsForHash().get(USERS,uid) == null){
                     int res = userService.updateCount(1,uid);
                     if (res != 0){
+                        orderItemService.saveItem(uid,new Date(),"约球成功");
                         redisTemplate.opsForHash().put(USERS,uid,orderUser);
                         return 1;
                     }
@@ -105,6 +110,7 @@ public class OrderBallServiceImpl implements OrderBallService {
                 if(redisTemplate.opsForHash().get(USERS,uid) != null){
                     int res = userService.updateCount(-1,uid);
                     if (res != 0){
+                        orderItemService.saveItem(uid,new Date(),"取消约球");
                         redisTemplate.opsForHash().delete("users",uid);
                         return 1;
                     }
