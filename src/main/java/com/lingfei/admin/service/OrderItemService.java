@@ -14,11 +14,10 @@ public interface OrderItemService {
 
     /**
      * 存入记录
-     * @param date
      * @param msg
      * @return
      */
-    int saveItem(String uid, Date date, String msg);
+    int saveItem(String uid, String msg);
 
     /**
      * 获取记录

@@ -6,6 +6,7 @@ import com.lingfei.admin.service.OrderItemService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -21,8 +22,10 @@ public class OrderItemServiceImpl implements OrderItemService {
     OrderItemMapper orderItemMapper;
 
     @Override
-    public int saveItem(String uid, Date date, String msg) {
-        return orderItemMapper.saveItem(uid,date,msg);
+    public int saveItem(String uid, String msg) {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return orderItemMapper.saveItem(uid,sdf.format(date),msg);
     }
 
     @Override

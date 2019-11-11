@@ -2,6 +2,7 @@ package com.lingfei.admin.control;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.lingfei.admin.annotation.LoginToken;
 import com.lingfei.admin.entity.User;
 import com.lingfei.admin.entity.UserInfo;
 import com.lingfei.admin.service.UserInfoService;
@@ -15,12 +16,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.concurrent.TimeUnit;
 
@@ -44,17 +43,16 @@ public class UserLoginControl {
     @ApiOperation("发送短信验证码")
     @PostMapping("/phone")
     public JsonResult sendMsg(@RequestParam("phone") String phone) throws Exception{
-        System.out.println(phone);
         String code = GetString.getCode();
         System.out.println("code = " + code);
-        //榛子短信的SDK
-        ZhenziSmsClient client = new ZhenziSmsClient("https://sms_developer.zhenzikj.com", "101348", "ZGZmNjM3MWYtZDVjMS00YWUyLWE4NmUtZDI5NjNmOGRjNTA1");
-        String result = client.send(phone, "您的验证码为" + code + "\n" + "如果不是本人操作，请忽略。");
-        com.alibaba.fastjson.JSONObject jsonObject = com.alibaba.fastjson.JSONObject.parseObject(result);
-
-        if ((Integer) jsonObject.get("code") != 0){
-            return JsonResult.failure(ResultCode.CAPTCHA_IS_ERROR);
-        }
+//        //榛子短信的SDK
+//        ZhenziSmsClient client = new ZhenziSmsClient("https://sms_developer.zhenzikj.com", "101348", "ZGZmNjM3MWYtZDVjMS00YWUyLWE4NmUtZDI5NjNmOGRjNTA1");
+//        String result = client.send(phone, "您的验证码为" + code + "\n" + "如果不是本人操作，请忽略。");
+//        com.alibaba.fastjson.JSONObject jsonObject = com.alibaba.fastjson.JSONObject.parseObject(result);
+//
+//        if ((Integer) jsonObject.get("code") != 0){
+//            return JsonResult.failure(ResultCode.CAPTCHA_IS_ERROR);
+//        }
 
         // 设置验证码1分钟后过期
         valueOperations.set(SMS,code,1, TimeUnit.MINUTES);
@@ -74,30 +72,23 @@ public class UserLoginControl {
     public JsonResult addUser(@Valid @RequestParam("code") String code,
                               @Valid @ApiParam("账号") @RequestParam("account") String account,
                               @Valid @ApiParam("密码") @RequestParam("password") String password) {
-
-        // 检查验证码是否正确
-        String verifyCode = valueOperations.get(SMS);
-        if (verifyCode == null){
-            return JsonResult.failure(ResultCode.CAPTCHA_HAS_EXPIRED);
-        }
-        if (!StringUtils.equalsIgnoreCase(code,verifyCode)){
-            return JsonResult.failure(ResultCode.CAPTCHA_IS_ERROR);
-        }
-
-        User user = userService.getUserByAccount(account);
-        if (user != null){
-            return JsonResult.failure(ResultCode.USER_HAS_EXISTED);
-        }
-
-        // 存入账号信息，并初始化个人信息
-        int res = userService.saveAccount(account, password);
-        int uid = userService.getUserByAccount(account).getId();
-        UserInfo userInfo = new UserInfo(uid,String.valueOf(uid),"http://cdn.jie12366.xyz/face.jpg",0);
-        int res1 = userInfoService.save(userInfo);
-        if (res1 == 0 || res == 0){
-            return JsonResult.failure(ResultCode.SAVE_ERROR);
+        if (checkCode(code) == null){
+            User user = userService.getUserByAccount(account);
+            if (user != null){
+                return JsonResult.failure(ResultCode.USER_HAS_EXISTED);
+            }
+            // 存入账号信息，并初始化个人信息
+            int res = userService.saveAccount(account, password);
+            int uid = userService.getUserByAccount(account).getId();
+            UserInfo userInfo = new UserInfo(uid,String.valueOf(uid),"http://cdn.jie12366.xyz/face.jpg",0);
+            int res1 = userInfoService.save(userInfo);
+            if (res1 == 0 || res == 0){
+                return JsonResult.failure(ResultCode.SAVE_ERROR);
+            }else {
+                return JsonResult.success();
+            }
         }else {
-            return JsonResult.success();
+            return checkCode(code);
         }
     }
 
@@ -134,5 +125,61 @@ public class UserLoginControl {
             json.put("uid",userInfoService.getUuid(users1.getId()));
             return JsonResult.success(json);
         }
+    }
+
+    @ApiOperation("重置密码")
+    @PutMapping("/password")
+    public JsonResult resetPwd(@Valid @RequestParam("code") String code,
+                              @Valid @ApiParam("账号") @RequestParam("account") String account,
+                              @Valid @ApiParam("密码") @RequestParam("password") String password) {
+        if (checkCode(code) == null){
+            User user = userService.getUserByAccount(account);
+            if (user == null){
+                return JsonResult.failure(ResultCode.USER_NOT_EXIST);
+            }
+            // 重置密码
+            int res = userService.resetPassword(password,account);
+            if (res == 0){
+                return JsonResult.failure(ResultCode.UPDATE_ERROR);
+            }else {
+                return JsonResult.success();
+            }
+        }else {
+            return checkCode(code);
+        }
+    }
+
+    @LoginToken
+    @ApiOperation("注销账号")
+    @PostMapping("/logout")
+    public JsonResult adminLoginByPassword(@ApiParam("用户id") @RequestParam("uid") String uid,
+                                           HttpServletRequest request) {
+
+        String token = request.getHeader("Authorization");
+        //将生成的token的签证作为redis的键
+        String key = token.split("\\.")[2];
+        Boolean res = valueOperations.getOperations().delete(key);
+        if (res){
+            return JsonResult.success();
+        }else {
+            return JsonResult.failure(ResultCode.DELETE_ERROR);
+        }
+    }
+
+    /**
+     * 检查验证码
+     * @param code 验证码
+     * @return JsonResult
+     */
+    private JsonResult checkCode(String code){
+        // 检查验证码是否正确
+        String verifyCode = valueOperations.get(SMS);
+        if (verifyCode == null){
+            return JsonResult.failure(ResultCode.CAPTCHA_HAS_EXPIRED);
+        }
+        if (!StringUtils.equalsIgnoreCase(code,verifyCode)){
+            return JsonResult.failure(ResultCode.CAPTCHA_IS_ERROR);
+        }
+        return null;
     }
 }

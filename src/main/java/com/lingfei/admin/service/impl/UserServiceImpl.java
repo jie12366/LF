@@ -53,4 +53,9 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    @Override
+    public int resetPassword(String password, String account) {
+        return userMapper.resetPassword(password, account);
+    }
 }

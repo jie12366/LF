@@ -39,7 +39,7 @@ public class OrderBallServiceImpl implements OrderBallService {
     @Override
     public void startOrder() {
         // 清空之前的约球列表
-        redisTemplate.delete("users");
+        redisTemplate.delete(USERS);
         // 放入开始约球的标志
         redisTemplate.opsForValue().set(START,"start");
     }
@@ -61,6 +61,9 @@ public class OrderBallServiceImpl implements OrderBallService {
 
     @Override
     public List<UserInfo> getListByPriority() {
+        if (!redisTemplate.hasKey(USERS)){
+            return null;
+        }
         Map<Object,Object> orderUsers = redisTemplate.opsForHash().entries("users");
         List<OrderUser> list =  new ArrayList<>(12);
         if (orderUsers != null){
@@ -88,7 +91,7 @@ public class OrderBallServiceImpl implements OrderBallService {
                 if(redisTemplate.opsForHash().get(USERS,uid) == null){
                     int res = userService.updateCount(1,uid);
                     if (res != 0){
-                        orderItemService.saveItem(uid,new Date(),"约球成功");
+                        orderItemService.saveItem(uid,"约球成功");
                         redisTemplate.opsForHash().put(USERS,uid,orderUser);
                         return 1;
                     }
@@ -110,7 +113,7 @@ public class OrderBallServiceImpl implements OrderBallService {
                 if(redisTemplate.opsForHash().get(USERS,uid) != null){
                     int res = userService.updateCount(-1,uid);
                     if (res != 0){
-                        orderItemService.saveItem(uid,new Date(),"取消约球");
+                        orderItemService.saveItem(uid,"取消约球");
                         redisTemplate.opsForHash().delete("users",uid);
                         return 1;
                     }

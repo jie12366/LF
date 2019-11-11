@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,7 +22,7 @@ public interface OrderItemMapper {
      * @return
      */
     @Insert("insert into order_item(uid,date,msg) values(#{uid},#{date},#{msg})")
-    int saveItem(String uid,Date date, String msg);
+    int saveItem(String uid,String date, String msg);
 
     /**
      * 获取记录

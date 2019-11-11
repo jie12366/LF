@@ -1,5 +1,6 @@
 package com.lingfei.admin.control;
 
+import com.lingfei.admin.annotation.LoginToken;
 import com.lingfei.admin.entity.OrderItem;
 import com.lingfei.admin.entity.UserInfo;
 import com.lingfei.admin.service.OrderBallService;
@@ -31,6 +32,7 @@ public class OrderBallController {
     @Resource
     OrderItemService orderItemService;
 
+    @LoginToken
     @ApiOperation("约球列表")
     @GetMapping("/order/list")
     public JsonResult orderList(){
@@ -68,6 +70,7 @@ public class OrderBallController {
         }
     }
 
+    @LoginToken
     @ApiOperation("约球")
     @PostMapping("/order/ball")
     public JsonResult orderBall(@RequestParam("uid")String uid){
@@ -75,6 +78,7 @@ public class OrderBallController {
         return getBack(res);
     }
 
+    @LoginToken
     @ApiOperation("取消约球")
     @PostMapping("/cancel/ball")
     public JsonResult cancelBall(@RequestParam("uid")String uid){
@@ -87,7 +91,7 @@ public class OrderBallController {
     public JsonResult cancelBallByManager(@PathVariable("uid")String uid){
         int res = orderBallService.cancelOrderByManager(uid);
         if (res == 1){
-            orderItemService.saveItem(uid,new Date(),"约球被管理员取消");
+            orderItemService.saveItem(uid,"约球被管理员取消");
             return JsonResult.success(res);
         }else {
             return JsonResult.failure(ResultCode.ORDER_FAILURE);
@@ -109,7 +113,7 @@ public class OrderBallController {
         // 将未能约到球的人，取消约球
         for (int i = 12; i < users.size(); i++){
             userInfoService.updateCount(-1, users.get(i).getUuid());
-            orderItemService.saveItem(users.get(i).getUuid(),new Date(),"约球被规则取消");
+            orderItemService.saveItem(users.get(i).getUuid(),"约球被规则取消");
         }
         return JsonResult.success();
     }

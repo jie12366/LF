@@ -55,4 +55,12 @@ public interface UserService {
      * @return 是否匹配
      */
     boolean checkLogin(String account, String password);
+
+    /**
+     * 根据手机号重置密码
+     * @param account    手机号
+     * @param password
+     * @return
+     */
+    int resetPassword(String password, String account);
 }

@@ -32,8 +32,8 @@ public class OrderItem {
     /**
      * 时间
      */
-    @Column(name = "date", type = MySqlTypeConstant.DATETIME)
-    private Date date;
+    @Column(name = "date", type = MySqlTypeConstant.VARCHAR)
+    private String date;
 
     /**
      * 信息
